@@ -1,0 +1,557 @@
+% !TeX document-id = {75b9b59a-7629-4c4a-9bf7-6c42d160f0fe}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Masters/Doctoral Thesis
+% LaTeX Template
+% Version 1.43 (17/5/14)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original authors:
+% Steven Gunn
+% http://users.ecs.soton.ac.uk/srg/softwaretools/document/templates/
+% and
+% Sunil Patel
+% http://www.sunilpatel.co.uk/thesis-template/
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+% Note:
+% Make sure to edit document variables in the Thesis.cls file
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+\documentclass[
+english,
+oneside,
+paper=A4,
+fontsize=11pt,
+BCOR=2mm,				% Bindekorrektur: 2mm 
+DIV=default,			% Seitenaufteilung an A4 anpassen
+open=any,				% Kapitel-Anfang links oder rechts
+listof=toc, 
+bibliography=totoc,
+parskip=half			% Abstand zwischen Absätzen
+]{Thesis} % The default font size and one-sided printing (no margin offsets)
+
+\usepackage{svg}
+
+\usepackage{listings}
+
+\usepackage{multirow}
+
+\usepackage{graphicx}
+
+\usepackage{pdfpages}
+
+\usepackage{titlesec}
+
+\usepackage{enumerate}
+
+\usepackage{enumitem}
+
+\usepackage{mathtools}
+
+\usepackage[english,ngerman]{babel}
+
+\usepackage{color}
+
+\usepackage{upquote}
+
+\usepackage{listings}
+
+\usepackage{hyperref}
+\def\UrlBreaks{\do\/\do-}
+
+\usepackage{float}
+\usepackage{aliascnt}
+\newaliascnt{eqfloat}{equation}
+\newfloat{eqfloat}{h}{eqflts}
+\floatname{eqfloat}{Equation}
+
+\newcommand*{\ORGeqfloat}{}
+\let\ORGeqfloat\eqfloat
+\def\eqfloat{%
+	\let\ORIGINALcaption\caption
+	\def\caption{%
+		\addtocounter{equation}{-1}%
+		\ORIGINALcaption
+	}%
+	\ORGeqfloat
+}
+
+\definecolor{lightgray}{rgb}{0.95, 0.95, 0.95}
+\definecolor{darkgray}{rgb}{0.4, 0.4, 0.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+\definecolor{editorGray}{rgb}{0.95, 0.95, 0.95}
+\definecolor{editorOcher}{rgb}{1, 0.5, 0} % #FF7F00 -> rgb(239, 169, 0)
+\definecolor{editorGreen}{rgb}{0, 0.5, 0} % #007C00 -> rgb(0, 124, 0)
+\definecolor{orange}{rgb}{1,0.45,0.13}		
+\definecolor{olive}{rgb}{0.17,0.59,0.20}
+\definecolor{brown}{rgb}{0.69,0.31,0.31}
+\definecolor{purple}{rgb}{0.38,0.18,0.81}
+\definecolor{lightblue}{rgb}{0.1,0.57,0.7}
+\definecolor{lightred}{rgb}{1,0.4,0.5}
+
+
+\DeclarePairedDelimiter\round{\lfloor}{\rceil}
+
+%CSS
+\lstdefinelanguage{CSS}{
+	keywords={color,background-image:,margin,padding,font,weight,display,position,top,left,right,bottom,list,style,border,size,white,space,min,width, transition:, transform:, transition-property, transition-duration, transition-timing-function},	
+	sensitive=true,
+	morecomment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	morestring=[b]',
+	morestring=[b]",
+	alsoletter={:},
+	alsodigit={-}
+}
+
+% JavaScript
+\lstdefinelanguage{JavaScript}{
+	morekeywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break,class,super,let,const,this,constructor,import,from,export,default,extends,render,for,of,@Component,@Input,implements,private,@ViewChild,await,type,string},
+	morecomment=[s]{/*}{*/},
+	morecomment=[l]//,
+	morestring=[b]",
+	morestring=[b]',
+	morestring=[b]`,
+}
+
+\lstdefinelanguage{HTML5}{
+	language=html,
+	sensitive=true,	
+	alsoletter={<>=-},	
+	morecomment=[s]{<!-}{-->},
+	tag=[s],
+	otherkeywords={
+		% General
+		>,
+		% Standard tags
+		<!DOCTYPE,
+		</html, <html, <head, <title, </title, <style, </style, <link, </head, <meta, />, <ul, <li,</li, </ul, <slot,</slot,<template, </template, </my-paragraph, <my-paragraph, </custom-element, <custom-element, <awesome-explosion, </awesome-explosion,<ui5-table-placeholder,<span,</span,</ui5-table-column-placeholder,<ui5-table-column-placeholder,</ui5-table-placeholder,
+		% body
+		</body, <body,
+		% Divs
+		</div, <div, </div>, 
+		% Paragraphs
+		</p, <p, </p>,
+		% scripts
+		</script, <script,<h2,</h2,
+		% More tags...
+		<canvas, /canvas>, <svg, <rect, <animateTransform, </rect>, </svg>, <video, <source, <iframe, </iframe>, </video>, <image, </image>, <header, </header, <article, </article
+	},
+	ndkeywords={
+		% General
+		=,
+		% HTML attributes
+		charset=, src=, id=, width=, height=, style=, type=, rel=, href=,
+		% SVG attributes
+		fill=, attributeName=, begin=, dur=, from=, to=, poster=, controls=, x=, y=, repeatCount=, xlink:href=,
+		% properties
+		margin:, padding:, background-image:, border:, top:, left:, position:, width:, height:, margin-top:, margin-bottom:, font-size:, line-height:,
+		% CSS3 properties
+		transform:, -moz-transform:, -webkit-transform:,
+		animation:, -webkit-animation:,
+		transition:,  transition-duration:, transition-property:, transition-timing-function:,
+	}
+}
+
+\lstdefinestyle{htmlcssjs} {%
+	% General design
+	%  backgroundcolor=\color{editorGray},
+	basicstyle={\footnotesize\ttfamily},   
+	frame=b,
+	% line-numbers
+	xleftmargin={0.75cm},
+	numbers=left,
+	stepnumber=1,
+	firstnumber=1,
+	numberfirstline=true,	
+	% Code design
+	identifierstyle=\color{black},
+	keywordstyle=\color{blue}\bfseries,
+	ndkeywordstyle=\color{editorGreen}\bfseries,
+	stringstyle=\color{editorOcher}\ttfamily,
+	commentstyle=\color{brown}\ttfamily,
+	% Code
+	language=HTML5,
+	alsolanguage=JavaScript,
+	alsodigit={.:;},	
+	tabsize=2,
+	showtabs=false,
+	showspaces=false,
+	showstringspaces=false,
+	extendedchars=true,
+	breaklines=true,
+	% German umlauts
+	literate=%
+	{Ö}{{\"O}}1
+	{Ä}{{\"A}}1
+	{Ü}{{\"U}}1
+	{ß}{{\ss}}1
+	{ü}{{\"u}}1
+	{ä}{{\"a}}1
+	{ö}{{\"o}}1
+}
+
+%Config for YAML files
+\newcommand\YAMLcolonstyle{\color{red}\mdseries}
+\newcommand\YAMLkeystyle{\color{black}\bfseries}
+\newcommand\YAMLvaluestyle{\color{blue}\mdseries}
+
+\makeatletter
+
+% here is a macro expanding to the name of the language
+% (handy if you decide to change it further down the road)
+\newcommand\language@yaml{yaml}
+
+\expandafter\expandafter\expandafter\lstdefinelanguage
+\expandafter{\language@yaml}
+{
+	keywords={true,false,null,y,n},
+	keywordstyle=\color{darkgray}\ttfamily,                               % assuming a key comes first
+	sensitive=false,
+	comment=[l]{\#},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{purple}\ttfamily,
+	stringstyle=\color{green}\ttfamily,
+	tabsize=2,
+	moredelim=[l][\color{orange}]{\&},
+	moredelim=[l][\color{magenta}]{*},
+	moredelim=**[il][\YAMLcolonstyle{:}\YAMLvaluestyle]{:},   % switch to value style at :
+	morestring=[b]',
+	morestring=[b]",
+	literate =    {---}{{\ProcessThreeDashes}}3
+	{>}{{\textcolor{red}\textgreater}}1     
+	{|}{{\textcolor{red}\textbar}}1 
+	{\ -\ }{{\mdseries\ -\ }}3,
+}
+
+% switch to key style at EOL
+\lst@AddToHook{EveryLine}{\ifx\lst@language\language@yaml\YAMLkeystyle\fi}
+\makeatother
+
+\newcommand\ProcessThreeDashes{\llap{\color{cyan}\mdseries-{-}-}}
+
+\lstset{%
+	% Basic design
+	backgroundcolor=\color{editorGray},
+	basicstyle={\small\ttfamily},   
+	frame=l,
+	% Line numbers
+	numbers=left,
+	stepnumber=1,
+	firstnumber=1,
+	numberfirstline=true,
+	% Code design   
+	keywordstyle=\color{blue}\bfseries,
+	commentstyle=\color{darkgray}\ttfamily,
+	ndkeywordstyle=\color{editorGreen}\bfseries,
+	stringstyle=\color{editorOcher},
+	% Code
+	language=HTML5,
+	alsolanguage=JavaScript,
+	alsodigit={.:;},
+	tabsize=2,
+	showtabs=false,
+	showspaces=false,
+	showstringspaces=false,
+	extendedchars=true,
+	breaklines=true,        
+	% Support for German umlauts
+	literate=%
+	{Ö}{{\"O}}1
+	{Ä}{{\"A}}1
+	{Ü}{{\"U}}1
+	{ß}{{\ss}}1
+	{ü}{{\"u}}1
+	{ä}{{\"a}}1
+	{ö}{{\"o}}1
+}
+
+\titleformat{\chapter}[block]
+{\normalfont\huge\bfseries}{\thechapter.}{1em}{\Huge}
+\titlespacing*{\chapter}{0pt}{-19pt}{0pt}
+
+\graphicspath{{Pictures/}} % Specifies the directory where pictures are stored
+
+%\usepackage[square, numbers, comma, sort&compress]{natbib} % Use the natbib reference package - read up on this to edit the reference style; if you want text (e.g. Smith et al., 2012) for the in-text references (instead of numbers), remove 'numbers'
+%\usepackage{cite}
+\usepackage{float}
+\hypersetup{urlcolor=black, colorlinks=true}
+\hypersetup{
+	colorlinks=true,
+	%allcolors=red,
+	anchorcolor=red,
+	linkcolor=red,          % color of internal links (change box color with linkbordercolor)
+	citecolor=green,        % color of links to bibliography
+	filecolor=magenta,      % color of file links
+	runcolor=red,		    
+	urlcolor=cyan} 	        % Colors hyperlinks in blue - change to black if annoying
+\title{\ttitle} % Defines the thesis title - don't touch this
+
+\begin{document}
+	
+	\frontmatter % Use roman page numbering style (i, ii, iii, iv...) for the pre-content pages
+	
+	\setstretch{1.3} % Line spacing of 1.3
+	
+	% Define the page headers using the FancyHdr package and set up for one-sided printing
+	\fancyhead{} % Clears all page headers and footers
+	\rhead{\thepage} % Sets the right side header to show the page number
+	\lhead{} % Clears the left side page header
+	
+	\pagestyle{fancy} % Finally, use the "fancy" page style to implement the FancyHdr headers
+	
+	\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % New command to make the lines in the title page
+	
+	\newcommand{\brparagraph}[1]{\paragraph{#1}\mbox{}\\}
+	
+	\newcommand{\source}[1]{\caption*{Source: {#1}} }
+	
+	% PDF meta-data
+	\hypersetup{pdftitle={\ttitle}}
+	\hypersetup{pdfsubject=\subjectname}
+	\hypersetup{pdfauthor=\authornames}
+	\hypersetup{pdfkeywords=\keywordnames}
+	
+	%----------------------------------------------------------------------------------------
+	%	TITLE PAGE
+	%----------------------------------------------------------------------------------------
+	
+	
+	\includepdf[offset=32mm -30mm]{Figures/Thesisdeckblatt.pdf}
+	\newpage
+	
+	\section*{Eidesstattliche Erklärung}
+	
+	Ich erkläre an Eides statt, dass ich die hier vorgelegte Master-Thesis selbstständig und
+	ausschließlich unter Verwendung der angegebenen Literatur und sonstigen Hilfsmittel verfasst habe.
+	Die Arbeit wurde in gleicher oder ähnlicher Form keiner anderen Prüfungsbehörde zur Erlangung
+	eines akademischen Grades vorgelegt.
+	
+	\vspace{1.3cm}
+	
+	\noindent\rule[-0.1cm]{6cm}{0.5pt}\\
+	Karlsruhe, den \today
+	\newpage
+	%----------------------------------------------------------------------------------------
+	%	Confidentiality Agreement
+	%----------------------------------------------------------------------------------------
+	\section*{Master Thesis Confidentiality Agreement}	
+	Not required yet.
+%	Title of thesis:  \textit{Effort analysis of application porting to Kubernetes based on a prototype}
+	
+%	Name of student: 
+%	\textit{Viktor Sperling}
+%	Registration no. at university: \textit{48370}, 
+%	Course: \textit{Wirtschaftsinformatik}
+%	The student is writing a thesis in cooperation with SAP SE (herein: SAP).
+%	\textbf{Hochschule Karlsruhe für Technik und Wirtschaft}, represented by its president, and the thesis examiners
+	
+%	1. \textit{Prof. Dr. Udo Müller} (first examiner),
+	
+%	2. \textit{Prof. Dr. Rainer Neumann} (second examiner),
+	
+%	herein: Examiners
+%	acknowledge that the thesis and the confidential information about SAP that it contains are trade secrets.
+
+%	The University and the Examiners undertake to treat all unpublished company information, including without limitation technical and business information, plans, experience, knowhow, designs and other documents to which they have access in connection with the thesis as confidential and will not make it available to third parties.        
+	
+%	The abovementioned duty of confidentiality does not extend to information:
+%	1.	That they already knew before this agreement entered force
+%	2.	That they rightfully receive from third parties and that is not subject to a duty of confidentiality
+%	3.	That is or becomes public knowledge without breach of confidentiality under this agreement
+%	4.	That they develop independently
+	
+%	If university or examination regulations require other examiners to assess the thesis (for example, members of the standing examination committee or university directors), SAP must be informed of their names and they must join this agreement. 
+%	The University and the Examiners must mark this thesis as confidential and must not let anyone gain access to it. They must not publish or reproduce the thesis in whole or in part without SAP's express permission. 
+%	SAP can bring claims against the University and the Examiners on grounds of a breach of this agreement only if SAP can show their intent or gross negligence.
+%	Only German law applies. 
+
+%	First examiner:\hspace{5.4cm}Second examiner:
+	
+%	\noindent\rule[-0.1cm]{3cm}{0.5pt}\hspace{5cm}\noindent\rule[-0.1cm]{3cm}{0.5pt}\\                      		
+%	(Name: Prof. Dr. Udo Müller)\hspace{2.9cm}(Name: Prof. Dr. Rainer Neumann)
+		
+%	Place: Karlsruhe, den\hspace{4.3cm}				Place: Karlsruhe, den
+	
+%   Date: \noindent\rule[-0.1cm]{3cm}{0.5pt}\hspace{4cm}Date: \noindent\rule[-0.1cm]{3cm}{0.5pt}
+	
+	
+%	Title of thesis: \textit{Effort analysis of application porting to Kubernetes based on a prototype}
+	
+%	Name of student: \textit{Viktor Sperling}
+	
+%	The student is writing a thesis in cooperation with SAP SE. This present thesis on 
+	
+%	\textit{Effort analysis application porting to Kubernetes based on a prototype}
+	
+%	contains trade secrets of SAP SE.
+%	This thesis has been identified as confidential. Unauthorized persons and organizations are not granted access to this thesis. With the exception of the thesis supervisor, second examiner, and the examining committee of Hochschule Karlsruhe für Technik und Wirtschaft university, no third party is granted access to the thesis or any part of it. The thesis must not be published or reproduced in whole or in part.
+	
+%	The thesis must not be published, reproduced, or transmitted in whole or in part without the express permission of SAP SE. Only the examiners and the members of the examining committee of Hochschule Karlsruhe für Technik und Wirtschaft university are granted access to this thesis.
+%	The confidentiality of the thesis ends no earlier than three months after the publication  and no later than five years after the examination processes are completed.
+	
+%	\noindent\rule[-0.1cm]{6cm}{0.5pt}\\
+%	(Student’s Name: Viktor Sperling)
+
+%	Place: \noindent\rule[-0.1cm]{4cm}{0.5pt} \hspace{3cm} Date:\noindent\rule[-0.1cm]{4cm}{0.5pt}\\
+	\newpage
+
+	
+	%----------------------------------------------------------------------------------------
+	%	QUOTATION PAGE
+	%----------------------------------------------------------------------------------------
+	
+	%\pagestyle{empty} % No headers or footers for the following pages
+	
+	%\null\vfill % Add some space to move the quote down the page a bit
+	
+	%\textit{``Some deep quote \textbf{TO DO}"}
+	
+	%\begin{flushright}
+	%	Add a quote here
+	%\end{flushright}
+	
+	%\vfill\vfill\vfill\vfill\vfill\vfill\null % Add some space at the bottom to position the quote just right
+	
+	%\clearpage % Start a new page
+	
+	%----------------------------------------------------------------------------------------
+	%	ABSTRACT PAGE
+	%----------------------------------------------------------------------------------------
+	
+	\addtotoc{Abstract} % Add the "Abstract" page entry to the Contents
+	
+	% \selectlanguage{ngerman}
+	% \abstract{ % Add a gap in the Contents, for aesthetics
+	
+	% Abstrakt Deutsch.
+	
+	% Mit Absätzen arbeiten.
+	
+	% }
+	
+	% \clearpage % Start a new page
+	
+	\selectlanguage{english}
+	\abstract{ % Add a gap in the Contents, for aesthetics
+		
+		This is an amazing Abstract!
+		
+%		In today's development projects, the runtime environment has to be chosen wisely.
+%		Depending on the landscape the application is deployed in, its behaviour changes drastically.
+%		And since the trend itself goes to developing microservices, the number of possible runtime environments increases.
+%		The decision, to ensure a proper compromise between development effort and cost efficiency, depends on various factors.
+		
+%		One way of approaching this issue is to consider the existing landscape offered by the company. 
+%		Some companies have their own processes and best practices for their products and offer a proper landscape and support for them. 
+%		Then again, this does not necessarily mean that this solution is the best one.
+		
+%		The best approach can also be found via market analysis. That way, common design patterns on the open market can be acquired and established in the company, with the benefit of gaining an educational value for the development team participating in such a project. 
+%		With this approach, one cannot help but find that Kubernetes has established a significant presence on the market and should be considered as the deployment and runtime environment for a project.
+		
+%		This thesis will attempt to prove the value an application can gain by being deployed into Kubernetes and show when it makes sense to use this tool and when it does not.
+		
+%		For this purpose, a prototype Kubernetes cluster was created, on which then specific tests were applied.
+%		To demonstrate the benefits the applications gains inside this landscape, a regular setup with VM based deployments was created as well.
+%		The specific tests were applied to this setup, too.
+		
+%		Via this approach, a data basis was created on which the proof is based.
+%		The data gathered from the tests was later visualized with a python script.
+		
+%		For the conclusion, not only the test results were taken into account, but also the applied effort of deploying and creating those setups.
+%		It has to be considered, however that the goal was not to compare the applications but rather the environments.
+		
+%		The gathered results can be used for further analysis or be used in Kubernetes based projects, by applying certain rules and best-practices.		
+	}
+	
+	\clearpage % Start a new page
+	
+	%----------------------------------------------------------------------------------------
+	%	LIST OF CONTENTS/FIGURES/TABLES PAGES
+	%----------------------------------------------------------------------------------------
+	
+	\pagestyle{fancy} % The page style headers have been "empty" all this time, now use the "fancy" headers as defined before to bring them back
+	
+	\lhead{\emph{Content}} % Set the left side page header to "Contents"
+	\setcounter{tocdepth}{3}
+	\tableofcontents % Write out the Table of Contents
+	
+	%----------------------------------------------------------------------------------------
+	%	THESIS CONTENT - CHAPTERS
+	%----------------------------------------------------------------------------------------
+	
+	\mainmatter % Begin numeric (1,2,3...) page numbering
+	
+	\pagestyle{fancy} % Return the page headers back to the "fancy" style
+	
+	% Include the chapters of the thesis as separate files from the Chapters folder
+	% Uncomment the lines as you write the chapters
+	
+	%include chapters here like this:
+	\input{Chapters/01_Chapter1}
+	\input{Chapters/02_Chapter2}
+	\input{Chapters/03_Chapter3}
+	\input{Chapters/04_Chapter4}
+	\input{Chapters/05_Chapter5}
+	\input{Chapters/06_Chapter6}
+	\input{Chapters/07_Chapter7}
+	\input{Chapters/08_Chapter8}
+	
+	
+	\newpage
+	%----------------------------------------------------------------------------------------
+	%	BIBLIOGRAPHY
+	%----------------------------------------------------------------------------------------
+	
+	\label{Sources}
+	\lhead{}
+	\begingroup
+	\raggedright
+	\addcontentsline{toc}{chapter}{Bibliography}
+	\bibliographystyle{plain} % Use the "unsrtnat" BibTeX style for formatting the Bibliography
+	\bibliography{sources} % The references (bibliography) information are stored in the file named "Bibliography.bib"
+	\endgroup
+	
+	%----------------------------------------------------------------------------------------
+	%	THESIS CONTENT - APPENDICES
+	%----------------------------------------------------------------------------------------
+	
+	
+	\listoffigures % Write out the List of Figures
+	
+	%\listoftables % Write out the List of Tables
+	
+	%----------------------------------------------------------------------------------------
+	%	ABBREVIATIONS
+	%----------------------------------------------------------------------------------------
+	
+	\clearpage % Start a new page
+	
+	\setstretch{1.5} % Set the line spacing to 1.5, this makes the following tables easier to read
+	
+	\lhead{\emph{Abbreviations}} % Set the left side page header to "Abbreviations"
+	\listofsymbols{ll} % Include a list of Abbreviations (a table of two columns)
+	{
+		\textbf{API} & \textbf{A}pplication \textbf{P}rogramming \textbf{I}nterface \\
+	}
+	
+	\appendix % Cue to tell LaTeX that the following 'chapters' are Appendices
+	
+	% Include the appendices of the thesis as separate files from the Appendices folder
+	% Uncomment the lines as you write the Appendices
+	
+	\input{Appendices/Appendix1}
+	\input{Appendices/Appendix2}
+	\input{Appendices/Appendix3}
+	
+	\addtocontents{toc}{\vspace{2em}} % Add a gap in the Contents, for aesthetics
+	
+\end{document}

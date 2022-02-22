@@ -1,0 +1,35 @@
+% \glsresetall
+\chapter{Introduction} % Main chapter title
+\label{Chapter1}
+
+\lhead{Chapter 1. \emph{Introduction}}
+
+This chapter will explain the problem, motivation and goals of this transcript. 
+It will also narrow down the thesis scope.
+
+\section{Motivation}
+
+The micro frontend technology has experienced a rise in popularity over the past 3 years. The occurrence of such a trend is no surprise, considering the fact that more and more application are designed following the micro service architecture principles.\cite{google_micro_frontend_trends} 
+Previously the occurring trend of the micro services it becomes clear that the micro frontends share a common interest with their precursor.
+The market prefers smaller independent lightweight applications over monolithic giants with strong dependencies. The advantages of this technology are undeniably tempting for a development team, but it still has certain flaws which has to be considered when felling the decision.\cite{Yang_2019}
+
+When it comes to making the decision, whether or not to use micro frontends for a software project, shareholders (e.g. Product Owners or Architects) express criticism. Depending on the type of the to-be-developed application, the concept of micro frontends is not always favored. One major critic points raised, is the aspect of redundancies inside the landscape. Specifically it means that isolated micro frontends are partially loading and using the same libraries during their runtime. This circumstance is causing an overhead on client and server side and therefore correlates with the runtime costs of such a landscape and potentially an inferior user experience.\cite{motivation_benefits_adopting_MFs}
+
+Despite the fact that the aspect of isolation is a core feature of the architecture, it still is possible to avoid those redundancies without disabling it.
+
+\section{Goals}
+
+The goal of this thesis is to provide proof and evaluate methods, to avoid redundancies during the runtime of a representative micro frontend landscape. To achieve this goal two prototypes were implemented using the luigi micro frontend framework. The landscape itself where implemented to be as representative as possible. That means, a heterogenic tech stack was used. Additionally following methods were implemented to avoid redundant loaded libraries:
+
+\begin{itemize}
+	\item Usage of a content delivery network
+	\item Usage of Web Components 
+	\item Usage of the Webpack Module Federation framework
+\end{itemize}
+
+The implemented methods are then later evaluated considering predefined metrics. 
+Eventually a conclusion is made which advantages a technology brings to the table.
+  
+\section{Scope of Work}
+
+

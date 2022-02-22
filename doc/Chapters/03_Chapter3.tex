@@ -1,0 +1,228 @@
+% \glsresetall
+\chapter{Content Delivery Networks} % Main chapter title
+\label{Chapter3}
+
+\lhead{Chapter 3. \emph{Content Delivery Networks}}
+
+This chapter will give further information about the CDN technology and how it was implemented for the context of this thesis.
+
+\section{CDNs in general}
+
+CDNs these days are commonly used on the Internet. This is due to the fact, that CDNs have become a convenient way of providing the resources a website needs in split seconds time. Thus, increase its performance and user experience. \cite{cdn_general}
+The following sections will provide a better insight of the CDN technology.
+
+\subsection{Architecture}
+
+The basic architecture of a CDN can be split into three different building blocks.
+
+\begin{itemize}
+	\item \textbf{Point of Presence (PoPs)} - Strategically located data centers around the world. Their function is to reduce the round trip time of requests. Thus, bring the website´s content closer to the user. PoPs usually consist of several caching servers.
+	\item \textbf{Caching servers} - These servers located in different PoPs, serve the function of caching resources from the origin server. That way website loading times and bandwidth allocations are reduced. This unit consist out of the actual hardware.
+	\item \textbf{Hardware, like SSD/HDD and RAM} - Located in the cache servers, the purpose of this building block is to provide the necessary storage and computing capacity. Better hardware means faster computing time, which then again affects the overall performance of the designated caching server.
+\end{itemize}
+
+Besides the above three building blocks, another one is crucial for the architecture of a CDN. The \textbf{origin server} serves another purpose, than a caching server. In a CDNs topology the origin server can be compared to the center or core. This is the server onto which the CDNs content is uploaded, synced with or distributed over the CDNs caching servers.\cite{cdn_origin_server}
+
+Following these informations, a basic CDN distribution can look as following.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=1\textwidth]{Figures/basic_cdn_arch.drawio.png}
+	\caption{Basic distribution a CDN}
+	\label{fig:cdn_general_arch}
+\end{figure}
+
+It has to be mentioned that the geographic distribution in figure \ref{fig:cdn_general_arch} is simplified, for the sake of readability. The cache servers of each PoP would be distributed them self over different data centers on the continent. A client requesting resources from the CDN will be communicating with the nearest edge/cache server to their designated location.\cite{cdn_general}
+
+\subsection{Design}
+
+For a CDN to fulfill its purpose, four requirements have to be met by it. These are not only technical requirements, like the necessary hardware, but are rather affected by the general design of the CDN.
+The four pillars of CDN design are mentioned below.
+
+\begin{itemize}
+	\item \textbf{Performance} - First and foremost, the CDN has to provide a benefit when it comes to website performance. When the usage of a CDN increases the loading time of website, the effect can decrease the user experience and cause financial harm to the host. \cite{cdn_general}
+	\item \textbf{Scalability} - Since an cache server can serve multiple resource to different websites, it has to be able to handle traffic peaks. Without the aspect of scalability (either horizontal oder vertical). these requirement can´t be met and would affect the CDNs performance.
+	\item \textbf{Reliability} -  When a website host decides to use a CDN for the resource handling, he/she has to rely on the CDN to deliver. An outage on CDN side would case the same effect to the relying websites, which again would cost the designated hosts. Therefore, CDN providers commit to 99.9\% service level agreements (SLAs).
+	\item \textbf{Responsiveness} -  The aspect of responsiveness targets the issue of synchronization inside the CDN. A CDN has to be capable to react to changes and distribute those accordingly to it PoPs over the globe. Otherwise inconsistencies could occur on the websites, relying on the CDN. The way to ensure this, is via an automatic pull mechanism. This which the cache/edge servers pull the changes from the origin server.\cite{cdn_origin_server}
+\end{itemize}
+
+Additionally to those four requirements, the topology of a CDN has to be considered. There two options which can be used and both would serve their purpose but bring some advantages as well as disadvantages. 
+
+\begin{itemize}
+	\item \textbf{The Scattered CDN} - This topology focuses on physical proximity. The PoP sizes are kept rather small but scattered around the world more frequent, thus providing as much proximity to their client as possible. This topology excels in providing the CDNs resources into low-connectivity region, since it is not highly dependent on the wire infrastructure. When it comes to latency, it doesn't suffer as much due to the short distance between client and server. The trade-off with this topology is though, it requires more maintenance costs since more PoPs are available to maintain. Also deploying new configurations can be connected to a lot of effort, depending on the amount of PoPs, scattered over the CDN. 
+	Additionally this amount can also affect the round trip time (RTT) , since every PoP inbetween the client and the server is a connection point.
+	
+	\item \textbf{The Consolidated CDN} - Other than the scattered CDN, this topology is designed to consolidate its resources a strategically located data centers. Since the PoPs are only located in those major data centers, the server available to the PoPs are highly advances and provide a lot of hardware capacity. Additionally since the amount of major data centers around the world are rather limited, the amount of PoPs is diminished as well, compared to the previous topology. Following the quality over quantity principle, a PoP in this topology can handle more amounts of traffic compared to its counterpart and is also more resilient specifically when it comes to DDoS attacks. Also due to moderate amount of PoPs its easier and faster for the operators of the CDN to deploy new configurations.
+	Nonetheless, the trade-off for this topology is that even though it can handle a high amount of requests, it reach is rather limited to low-connectivity regions. This is due to the proximity difference between the servers and clients. Also deploying a new PoP into this topology is connected to more effort, since the PoPs a rather complex.	
+\end{itemize}
+
+The design decision is of course dependent on the business case for the CDN, since both topologies means to solve certain issues or challenges. \cite{cdn_architecture} 
+
+\subsection{Optimization}
+
+The CDN technology offers sever ways of optimizing a websites performance and therefore, increase the user experience. In the following segment these optimizations will be show cased and explained.
+
+\subsubsection{Route optimization with Anycast}
+
+As above mentioned, a CDN can be designed with different topologies which influence the performance of a CDN or not. But another factor which has to be considered in this equation, is the routing itself. Basically it doesn't matter if a cache server is located nearby to a client, if the resource he´s requesting is not on the server, he has to be routed elsewhere. 
+Thus, the Anycast routing is used in modern CDNs. This traffic routing algorithm is best explained in direct comparison with Unicast. Both serve the same purpose of routing request to their designated destination. But they do it in different way. Where with Unicast each node has a unique address, Anycast advertises multiple nodes with the same.
+For instance, in an Unicast orchestrated network the server address \texttt{10.10.0.1} would be only present once. Anycast on the other hand would advertise this exact address over multiple different server around the globe. Thus a request towards the address would be reach its destination via the shortest path, given that the path will be identified and prioritized by devices that actually govern the flow of traffic.
+The shortest path itself is counted in hops. Hops represent the amount of time a request is changes hands between one host and another.\cite{cdn_route_opt}
+
+\subsubsection{TSL Performance}
+
+The route optimization with Anycast, does also affect the improve the round trip time (RTT), when using the TSL/SSL protocol. Since this section does not focus on explaining the protocol, only a short description is given.
+SSL (Secure Socket Layer) or as it now should be called TSL (Transport Layer Security) is a protocol via which secure communications are ensured on the Internet. The communicating parties establish a connection via following steps.
+
+\begin{itemize}
+	\item A so called three-way handshake is done
+	\item The parties agree upon an encryption method
+	\item Mutual verification process
+	\item Generate symmetric keys for encoding and decoding	
+\end{itemize}
+
+These steps are necessary to ensure secure communication and are a welcome trade off for the benefits they provide. 
+
+Still it is an overhead and increases the RTT of an request, but a CDN does provide improvement. Through the aspect route optimization and the general proximity the overall request distance is decreased. Therefore, the RTT is shortened as well. The steps are still processed, they just do not have to travel that long. Additionally the SSL/TSL negotiation process is shorter too. \cite{cdn_ssl_tsl}
+
+\subsubsection{Frontend optimization}
+
+The term frontend optimization refers to the process of making a website more browser-friendly and reduce loading times. There multiple ways of to optimize a frontend. These will be explained below under consideration of the role a CDN plays in them.
+
+\begin{itemize}
+	\item \textbf{Reducing HTTP requests} - When loading a website the browser opens several HTTP connections. The amount of which are actually limited to the browser. If a website requires to more connection than a browser can open at the time, the browser has to start queuing the rest. This again leads to longer loading time and affects the user experience. A CDN improves this aspect via pre-pooling connections and ensure they remain open throughout a session. Even though this does not the actual number of the requests, it does improve the response time for each one. Making it so that every requests can be processed faster. Additionally HTTP/2, though it is in its early stage, introduces the method of multiplexing. This allows a single TCP connecting to transfer multiple different HTTP requests.  
+	
+	\item \textbf{File compression} - Of course it´s not alway about the amount of requests pet side loaded or the proximity of the client to the server, but the actual content does affect the responsiveness too. Loading one single resource with a size of 1 GB, takes a while even if the server is directly nearby. Reducing the size of this file or resource might increase the loading process. File compression like gzip is a method of doing exactly that. Most modern CDN provider, offer automated file compression with gzip to reduce the actual content size, delivered to the client.
+	
+	\item \textbf{Cache optimization} - Via caching static files are stored, either on the client device or in cache of the nearby cache server. Locally store static files do not have to be loaded via the network and are available to the browser almost immediately for rendering. The only question remains, how long does a resource has to be cached? The answer to that is necessary one, via which the use of the clients cache can be optimized. The caching time is usually defined a the cache header of the request. Modern CDNs offer cache control options, which help in defining rules for exactly that header. By defining website policies caching rules can be applied. 
+	CDNs also have started using machine learning techniques to follow and understand content usage patterns and automatically optimize caching policies.
+	 
+	\item \textbf{Code minification} - Correlating with the file compression method, the process of code minification offers a way of reducing file sizes too. Where a developer writes code in a humanly readable way, with spaces and line breaks, a machine does not need this formatting. By removing comments, spaces and line breaks, the size of code file can be reduced by 30\%. CDNs use methods like gzip, minify or these two even in combination to reduce the size of JavaScript, HTML or CSS files.
+	
+	\item \textbf{Image optimization} - Images can be immense in size and require a long time to load. The best way to display an image on website would be to cache it first and then load it from the cache to reduce actual loading time through the network. Another option could be, reducing the actual size of the image and thus the loading time.
+	Other than code files, images are already compressed when loaded, therefore compressing them further to reduce file size might cause a loss of image quality. This is calling lossy compression. If this trade off is not an option, caching would be more effective.
+	CDNs offer exactly that solution, caching images and provide them from the nearest source available to the client. If this does not suffice CDNs also offer a progressive rendering option for images. On initially loading the page, the CDN would provide a lossy compressed version of the image fast and then progressively replace it with higher-resolution variants of it.
+	Alternatively a website host, could use vector or raster images. These are resolution independent, smaller in size and highly responsive.  
+\end{itemize}
+
+These methods in combination with the CDN technology, provide a possible gain in user experience for a website host. \cite{cdn_fe_opt}
+\section{Unpkg}
+
+As described in \ref{cdn_intro} the concept of CDN is fairly simple. A remote server is providing the necessary platform resources via an API, thus avoiding the necessity of bundling those resources.
+To evaluate the gain and impact of this technology on a micro frontend landscape, a prototype was developed using the public cloud based CDN unpkg.com.
+The below figure shows the architecture of the implemented landscape. 
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{Figures/cdn_unpkg.drawio.png}
+	\caption{Basic architecture of the unpkg.com public CDN}
+	\label{fig:unpkg_architecture}
+\end{figure}
+
+Figure \ref{fig:unpkg_architecture} shows the unpkg.com architecture, as it is described in its official documentation. It is an open source project built and maintained by Micheal Jackson. It runs on the Cloudflare platform and the Fly.io infrastructure provides its servers with auto-scaling capabilities on 17 cities around the world.\cite{unpkg_doc}
+
+The open API is available from which resources can be requested. Via path and query parameters in the URL, necessary informations like the dependency version can be provided.
+
+The previously mentioned prototype was developed using unpkg.com. The below figure visualizes the architecture of the prototype.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{Figures/unpkg.architecture.drawio.png}
+	\caption{Architecture of the Luigi prototype using unpkg.com}
+	\label{fig:unpkg_prototype_architecture}
+\end{figure}
+
+As it is visible in \ref{fig:unpkg_prototype_architecture}, several Nodes where embedded in the Luigi landscape. Some of which are Angular apps, other are implemented with Vue. It has to be added, that apart from the difference regarding the UI-Frameworks each micro frontend displays the same elements. This design decision was felt, to ensure a base for later comparisons. Additionally each micro frontend was implemented using a regular bundler and package manager. This way a direct comparison is possible between the two technologies.
+
+The usage of the unpkg-CDN itself is embedded in the code. Instead of loading the dependencies via the local \texttt{node\_modules} directory, they are directly loaded using the CDNs API. The usage of which is displayed in the listing below.
+
+\begin{lstlisting}[language=JavaScript, caption=Import of a dependecy using the unpkg API, label=unpkg_import]
+	<script src="https://unpkg.com/@ui5/webcomponents@1.0.0-rc.15/dist/StandardListItem.js?module" type="module"></script>
+\end{lstlisting}
+
+This script tag is placed in the central \texttt{index.html}. The loaded resource can be read from the URL. First part of the URL are obviously the protocol and the host. The first path parameters is the npm dependency name. In the case of \ref{unpkg_import} it´s \texttt{@ui5}, followed by a sub directory with its respective version annotated with an \@.
+As it is described in the documentation, the CDN supports two query parameters.
+
+\begin{itemize}[noitemsep]
+	\item \texttt{?meta} - to request meta data about the loaded package, in a JSON format
+	\item \texttt{?module} - to expand all import specifiers in JavaScript modules to unpkg URLs
+\end{itemize}
+
+If the import is handled via a script tag as it is done in \ref{unpkg_import}, the \texttt{type="module"} attribute has to be added. This is necessary depending on the resource loaded.
+In the case of the given example, the resource is a JavaScript module type. To ensure it is parsed by the runtime as such, this information has to be provided.\cite{js_module_type}
+
+\section{Owning a CDN}
+
+Even though the method of a self-hosted CDN, was not implemented in the developed prototype, it has to be considered for the context of this thesis. Since the basic principle of a CDN was already explained, this section will focus on the financial aspect of the technology.
+
+For the purpose of the analysis, following scenario is assumed.
+
+\begin{itemize}[noitemsep]
+	\item A micro frontend landscape has to be developed. 
+	\item To reduce the runtime costs, the loading of redundant libraries should be avoided in the landscape.
+	\item The libraries for the landscape were developed by the team and are only available for internal use.
+\end{itemize} 
+
+If now the decision to use a CDN is felt, only a self-owned one would be applicable.
+
+In the context of the given scenario following parameters are also assumed, or averaged based on existing products, for further cost-calculations.
+The micro frontends of a Luigi landscape which are requesting resources from a CDN have following metrics defined. Some of which are based on average values from implemented prototype.
+
+\begin{itemize}[noitemsep]
+	\item How often the site is access per day - $50 000 times$
+	\item Avg. byte size per page load without caching on client side - $8983.5 KB$
+	\item Avg. amount of GET requests to CDN per side load - $198$ requests 
+	\item The site is only accessed in North America 
+\end{itemize} 
+
+Taking this metrics, following values are calculated for the monthly usage of the landscape.
+
+\begin{quote}
+	\begin{center}
+		Let $A$ be the amount of requests to the CDN per month:
+		\begin{math}
+			A = 50000 \times 30 \times 198 = 297000000
+		\end{math}
+	\end{center} 
+\end{quote}
+
+\begin{quote}
+	\begin{center}
+		Let $B$ the amount of bytes loaded per month:
+		\begin{math}
+			B = 50000 \times 30 \times 8983.5 = 13475250000 KB = 13.47525 TB
+		\end{math}
+	\end{center} 
+\end{quote}
+
+In the following text, it will be analyzed, how much it would cost a company or department to pay for a CDN, hosted by one of the common CDN providers. 
+
+There multiple CDN solution providers on the market. Some of which are \textbf{Amazon CloudFront, Azure CDN, Google Cloud CDN}. \cite{top_10_cdn}
+Since the pricing models of the mentioned provides differ, it´s hard to compare them directly. But applying the given scenario to the pricing calculator of the respective providers, following results are shown.
+
+\begin{itemize}[noitemsep]
+	\item Amazon CloudFront - $1426.22$\$ per month, for North America
+	\item Google Cloud CDN - $1168.99$\$ per month, for North America
+	\item Azure CDN - $1123.90$\$ per month, for North America
+\end{itemize} 
+
+After averaging those values following $Avg. price$ is calculated.  
+
+\begin{quote}
+	\begin{center}
+		\begin{equation*}
+			Avg. price = 
+			\frac{
+				\left(1426.22 + 1168.99 + 1123,90\right)
+			}{
+				3
+			} = 1239.70  \$
+		\end{equation*}
+	\end{center} 
+\end{quote}
+
+It has to be mentioned, these values were calculated using the basic packages offered by the providers. There are further features which can be added to the solutions, which of course would increase the sum. Additionally other provides have different pricing models, some of which include pricing depending on the HTTP requests sent to the CDN. Others charge prices when resources are stored in several Points of Presences (PoPs) around the world. Also locations play a key role, different regions pay more for traffic then others and this value is provider specific.
+Since it is not the goal to pick a provider, but rather provide a general overview of costs for such a solution, those additional features were not considered for the given scenario.
+
+
+
