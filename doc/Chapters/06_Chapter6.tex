@@ -28,8 +28,6 @@ Each process was executed 5 times, therefore 10 HTTP Archive (\texttt{.har}) fil
 
 Additionally to the \texttt{.har} files a website performance report was collected, using the Lighthouse tool embedded in the Google Chrome browser. This report provides information about how much of the imported bytes were actually used by the web application, distinguished by the resources URL.
 
-Following that description following files were generated.
-
 After all data was collected, another self developed script was used to create a central file aggregating all the gather data in a single file. This was later used to define and calculate the metrics, which are described below.
 
 \subsection{Defined metrics}
@@ -61,27 +59,493 @@ The central file containing all the data, was split into separate sheets in whic
 Based on the given values from the \texttt{.har} files, following key performance indicators were calculated.
 
 \begin{itemize}
-	\item \textbf{Avg. ContentSize in KB} 
-	\item \textbf{Avg Time in MS Loaded values}
-	\item \textbf{Occurences Connection Duplicates}
-	\item \textbf{Connection Ids Connection IDs occurence}
-	\item \textbf{Parallel start time}
-	\item \textbf{Avg. Response Time per Connection ID in MS}
-	\item \textbf{Avg. Response content size per Loading Type in KB	URLs loaded}
-	\item \textbf{Avg. Response Time per URL loaded in MS}
-	\item \textbf{Avg. Response Size per URL loaded in KB}
-	\item \textbf{Avg. Response Size per URL loaded in KB}
-	\item \textbf{Avg. Response Size per URL loaded from Disk in KB}
-	\item \textbf{Avg. Response Size per URL loaded from Memory in KB}
+	\item \textbf{Avg. Content Size} - Numerical value calculated by averaging the \textbf{responseContentSize} values of all the web sites resources
+	\item \textbf{Avg Time in MS Loaded values} - Numerical value, calculated by averaging the \textbf{timeInMs} values of all the web sites resources
+	\item \textbf{Occurrences Connection Duplicates} - Numerical value to represent parallelity by counting the amount of duplicate/multiple occurring \textbf{connection} values
+	\item \textbf{Connection IDs} - List of all \textbf{connection} characteristics for the web site 
+	\item \textbf{Connection IDs occurrence} - Amount of how often the connection occurred during the loading of the website
+	\item \textbf{Parallel start time} - Numerical value, calculated by counting reoccurring \textbf{startedDateTime} values
+	\item \textbf{Avg. Response content size per Loading Type} - Numerical value, calculated by averaging the \textbf{responseContentSize} differentiated by the characteristics of the \textbf{loadedFromCache} property
+	\item \textbf{URLs loaded} - List of all unique \textbf{requestUrl} values
+	\item \textbf{Avg. Response Time per URL loaded in MS} - Numerical value, representing the average loading time of each loaded resource URL of the web site
+	\item \textbf{Avg. Response Size per URL loaded} - Numerical value, representing the average loading byte size in kilo bytes of each resource URL
+	\item \textbf{Avg. Response Size per URL loaded via network} - Numerical value, calculated by averaging the \textbf{responseContentSize} differentiated by the \textbf{requestUrl} for all resources with the \textbf{loadedFromCache} value of \textit{not loaded from cache}. For the test scenarios with cache disabled, this value equals \textbf{Avg. Response Size per URL loaded}
+	\item \textbf{Avg. Response Size per URL loaded from Disk} - Numerical value, calculated by averaging the \textbf{responseContentSize} differentiated by the \textbf{requestUrl}, for all resources with the \textbf{loadedFromCache} value of \textit{disk}
+	\item \textbf{Avg. Response Size per URL loaded from Memory} - Numerical value, calculated by averaging the \textbf{responseContentSize} differentiated by the \textbf{requestUrl}, for all resources with the \textbf{loadedFromCache} value of \textit{memory}
 \end{itemize}
 
-\section{CDN Implementation}
+The main focus of this thesis is to reduce redundant libraries in micro frontend landscapes, by using different types of technologies. Therefore, the calculated metrics were used to partially determine the gain a technology brings. Nonetheless, it has to be considered, certain indicators are hard to measure such as the complexity of the implemented technology.  
+Such a metric must not be ignored for the context of this transcript, since the gain or rather the value a technology brings, highly depends on it. What purpose does it serve to solve the issue of redundant libraries in a landscape if, for instance the development cycle takes more time due to the technology the developers are forced to use? Or the user experience is suffering, since they are limited by the technologies available to them?
+Thus a subjective retrospective will be provided in the following chapter, targeting this and similar questions.
 
-\section{Web Component Implementation}
+In the following sections, the results of the introduced metrics for each landscape are showcased. This display is distinguished by the fact, if the collected data was with caching enabled or not. Additionally to the metrics, the individual graphs for the landscape are referred to, in the appendixes \ref{appendix1}, \ref{appendix2} and \ref{appendix3}.
 
-\section{WMF Implementation}
+\section{CDN landscapes}
 
-\section{Comparison}
+\subsection{Implementation with NPM}
 
+The blow table contains the results for the implemented landscapes with a regular bundler and a package manager namely NPM. Certain metrics are not added to the table for readability, but a graphical representation can be found in \ref{appendix1}. Additionally a table view of the values can be found in the attached excel.
 
+\scriptsize 
+\setlength{\mycolwidth}{\dimexpr \textwidth/5 - 2\tabcolsep}%
 
+\begin{longtable}[l]{*{3}{p{\mycolwidth}}}
+	
+	\caption{Table of numerical KPI results for the NPM landscapes without caching enabled}
+	\label{tab:cdn_result_table} \\
+	
+	\toprule
+	\textbf{Metric}                                                           
+	& \textbf{Angular NPM}                                
+	& \textbf{Vue NPM} \\ 
+	\midrule
+	\endfirsthead
+	
+	\multicolumn{3}{l}{\footnotesize\itshape\tablename~\thetable:
+		continued from previous page} \\
+	\toprule   
+	\textbf{Metric}                        
+	& \textbf{Angular NPM}                             
+	& \textbf{Vue NPM}  \\*
+	\midrule
+	\endhead
+	%		
+	\multicolumn{1}{l|}{URLs loaded count}                                         															
+	& \multicolumn{1}{l|}{\makecell[c]{14}} 	
+	& \multicolumn{1}{l}{\makecell[c]{13}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Avg. Response content size\\per Loading Type}}   
+	& \multicolumn{1}{l|}{\makecell[c]{\textit{not loaded from cache} - 129529.13, \\ \textit{memory} - 0, \\ \textit{disk} - 0}} 											
+	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 156131.63, \\ \textit{memory} - 0, \\ \textit{disk} - 0}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{Parallel start time}                                 													
+	& \multicolumn{1}{l|}{\makecell[c]{33}} 				
+	& \multicolumn{1}{l}{\makecell[c]{45}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{Connection IDs occurence}                            											
+	& \multicolumn{1}{l|}{\makecell[c]{\textit{none established} - 10,\\ \textit{207393} - 10}} 												   
+	& \multicolumn{1}{l}{\makecell[c]{\textit{241394} - 10}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{Connection IDs count}                                      																
+	& \multicolumn{1}{l|}{\makecell[c]{62}} 															     
+	& \multicolumn{1}{l}{\makecell[c]{71}}   \\ \midrule
+		
+	\multicolumn{1}{l|}{\makecell[l]{Connection Duplicates}}                        
+	& \multicolumn{1}{l|}{\makecell[c]{20}} 						   
+	& \multicolumn{1}{l}{\makecell[c]{10}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Loaded values \& occurrences}}                        
+	& \multicolumn{1}{c|}{\makecell[c]{\textit{not loaded from cache} - 80,\\ \textit{memory} - 0, \\ \textit{disk} - 0}} 						   
+	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 80, \\ \textit{memory} - 0, \\ \textit{disk} - 0}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Avg. Time in MS}}                        
+	& \multicolumn{1}{l|}{\makecell[c]{162.22}} 						   
+	& \multicolumn{1}{l}{\makecell[c]{5323.54}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Avg. Content Size}}                                         
+	& \multicolumn{1}{l|}{\makecell[c]{129529.13}}  				  
+	&   \multicolumn{1}{l}{\makecell[c]{156131.63}} \\ \bottomrule
+	
+\end{longtable}
+
+The results shown in table \ref{tab:cdn_result_table} were collected without caching enabled. This explains why for instance, why all resources were not loaded from cache and therefore the values for the \textit{memory} or \textit{disk} characteristics are missing.
+The main takeaway from these results is an average initial loading time for these landscapes which range from \textbf{129529.125} to \textbf{156131.625} milliseconds, depending on the framework. It can also be seen, that even though less resources are loaded via URLs by the Vue JS landscape, it has a longer loading time compared to the Angular one.
+
+\begin{longtable}[l]{*{3}{p{\mycolwidth}}}
+	
+	\caption{Table of numerical KPI results for the NPM landscapes with caching enabled}
+	\label{tab:cdn_result_table_caching} \\
+	
+	\toprule
+	\textbf{Metric}                                                           
+	& \textbf{Angular NPM}                                
+	& \textbf{Vue NPM} \\ 
+	\midrule
+	\endfirsthead
+	
+	\multicolumn{3}{l}{\footnotesize\itshape\tablename~\thetable:
+		continued from previous page} \\
+	\toprule   
+	\textbf{Metric}                        
+	& \textbf{Angular NPM}                             
+	& \textbf{Vue NPM}  \\*
+	\midrule
+	\endhead
+	%		
+	\multicolumn{1}{l|}{URLs loaded count}                                         															
+	& \multicolumn{1}{l|}{\makecell[c]{14}} 	
+	& \multicolumn{1}{l}{\makecell[c]{13}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Avg. Response content size\\per Loading Type}}   
+	& \multicolumn{1}{l|}{\makecell[c]{\textit{not loaded from cache} - 166856, \\ \textit{memory} - 17548.5, \\ \textit{disk} - 17548.5}} 											
+	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 145646.67,\\ \textit{memory} - 0, \\ \textit{disk} - 187586.5}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{Parallel start time}                                 													
+	& \multicolumn{1}{l|}{\makecell[c]{32}} 				
+	& \multicolumn{1}{l}{\makecell[c]{39}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{Connection IDs occurence}                            											
+	& \multicolumn{1}{l|}{\makecell[c]{\textit{none established} - 20}} 												   
+	& \multicolumn{1}{l}{\makecell[c]{\textit{none established} - 20}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{Connection IDs count}                                      																
+	& \multicolumn{1}{l|}{\makecell[c]{61}} 															     
+	& \multicolumn{1}{l}{\makecell[c]{61}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Connection Duplicates}}                        
+	& \multicolumn{1}{l|}{\makecell[c]{20}} 						   
+	& \multicolumn{1}{l}{\makecell[c]{20}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Loaded values \& occurrences}}                        
+	& \multicolumn{1}{c|}{\makecell[c]{\textit{not loaded from cache} - 60, \\ \textit{memory} - 6, \\ \textit{disk} - 14}} 						   
+	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 60, \\ \textit{memory} - 0, \\ \textit{disk} - 20}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Avg. Time in MS}}                        
+	& \multicolumn{1}{l|}{\makecell[c]{150.90}} 						   
+	& \multicolumn{1}{l}{\makecell[c]{1890.6}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Avg. Content Size}}                                         
+	& \multicolumn{1}{l|}{\makecell[c]{129529.13}}  				  
+	&   \multicolumn{1}{l}{\makecell[c]{156131.63}} \\ \bottomrule
+	
+\end{longtable}
+
+The results of table \ref{tab:cdn_result_table_caching} show the effect caching has on the performance of a site. The average loading time of the site decreases, as do the opened TCP connections. As in the previous table, the Angular landscape is loaded faster compared to Vue JS.
+
+Both environments were implemented using a regular bundler and therefore it can not be ensured that redundant libraries were not loaded.
+
+\subsection{Implementation with Unpkg}
+
+The blow table contains the results for the implemented landscapes with a use of a public CDN, namely Unpkg. Certain metrics are not added to the table for readability, but a graphical representation can be found in \ref{appendix2}. Additionally a table view of the values can be found in the attached excel.
+
+\begin{longtable}[c]{*{3}{p{\mycolwidth}}}
+	
+	\caption{Table of numerical KPI results for the landscapes using the Unpkg CDN without caching enabled}
+	\label{tab:cdn_result_table_unpkg} \\
+	
+	\toprule
+	\textbf{Metric}                                                           
+	& \textbf{Angular Unpkg}                                
+	& \textbf{Vue Unpkg} \\ 
+	\midrule
+	\endfirsthead
+	
+	\multicolumn{3}{l}{\footnotesize\itshape\tablename~\thetable:
+		continued from previous page} \\
+	\toprule   
+	\textbf{Metric}                        
+	& \textbf{Angular Unpkg}                             
+	& \textbf{Vue Unpkg}  \\*
+	\midrule
+	\endhead
+	%		
+	\multicolumn{1}{l|}{URLs loaded count}                                         															
+	& \multicolumn{1}{l|}{\makecell[c]{171}} 	
+	& \multicolumn{1}{l}{\makecell[c]{165}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Avg. Response content size\\per Loading Type}}   
+	& \multicolumn{1}{l|}{\makecell[c]{\textit{not loaded from cache} - 9768.62, \\ \textit{memory} - 0, \\ \textit{disk} - 0}} 											
+	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 8205.19, \\ \textit{memory} - 0, \\ \textit{disk} - 0}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{Parallel start time}                                 													
+	& \multicolumn{1}{l|}{\makecell[c]{871}} 				
+	& \multicolumn{1}{l}{\makecell[c]{989}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{Connection IDs occurence}                            											
+	& \multicolumn{1}{l|}{\makecell[c]{\textit{223736} - 20,\\ \textit{223722} - 1574,\\ \textit{none established} - 10}} 												   
+	& \multicolumn{1}{l}{\makecell[c]{\textit{241394} - 20,\\ \textit{249654} - 1560}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{Connection IDs count}                                      																
+	& \multicolumn{1}{l|}{\makecell[c]{53}} 															     
+	& \multicolumn{1}{l}{\makecell[c]{42}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Connection Duplicates}}                        
+	& \multicolumn{1}{l|}{\makecell[c]{1604}} 						   
+	& \multicolumn{1}{l}{\makecell[c]{1580}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Loaded values \&\\ occurrences}}                        
+	& \multicolumn{1}{c|}{\makecell[c]{\textit{not loaded from cache} - 1654, \\ \textit{memory} - 0, \\ \textit{disk} - 0}} 						   
+	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 1620, \\ \textit{memory} - 0, \\ \textit{disk} - 0}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Avg. Time in MS}}                        
+	& \multicolumn{1}{l|}{\makecell[c]{97.23}} 						   
+	& \multicolumn{1}{l}{\makecell[c]{194.01}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Avg. Content Size}}                                         
+	& \multicolumn{1}{l|}{\makecell[c]{9768.62}}  				  
+	&   \multicolumn{1}{l}{\makecell[c]{8205.19}} \\ \bottomrule
+	
+\end{longtable}
+
+ The data shown in table \ref{tab:cdn_result_table_unpkg} are again collected without caching enabled. This, an approximate estimation of for the initial loading times can be drawn from this. It is made visible that the Vue JS environment takes longer to load for less content. A similar behavior was present in the above NPM implementation.
+ Nonetheless it is an improvement in performance compared to the NPM counterparts for both landscapes. The trade off of this technology is that single component resources, like a button or a table, were imported via script tags one by one. Thus the increase in loaded URLs.
+  
+\begin{longtable}[c]{*{3}{p{\mycolwidth}}}
+ 	
+ 	\caption{Table of numerical KPI results for the landscapes using the Unpkg CDN with caching enabled}
+ 	\label{tab:cdn_result_table_unpkg_cache} \\
+ 	
+ 	\toprule
+ 	\textbf{Metric}                                                           
+ 	& \textbf{Angular Unpkg}                                
+ 	& \textbf{Vue Unpkg} \\ 
+ 	\midrule
+ 	\endfirsthead
+ 	
+ 	\multicolumn{3}{l}{\footnotesize\itshape\tablename~\thetable:
+ 		continued from previous page} \\
+ 	\toprule   
+ 	\textbf{Metric}                        
+ 	& \textbf{Angular Unpkg}                             
+ 	& \textbf{Vue Unpkg}  \\*
+ 	\midrule
+ 	\endhead
+ 	%		
+ 	\multicolumn{1}{l|}{URLs loaded count}                                         															
+ 	& \multicolumn{1}{l|}{\makecell[c]{171}} 	
+ 	& \multicolumn{1}{l}{\makecell[c]{165}}   \\ \midrule
+ 	
+ 	\multicolumn{1}{l|}{\makecell[l]{Avg. Response content size\\per Loading Type}}   
+ 	& \multicolumn{1}{l|}{\makecell[c]{\textit{not loaded from cache} - 63972.08, \\ \textit{memory} - 208838, \\ \textit{disk} - 7166.1}} 											
+ 	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 28143.2, \\ \textit{memory} - 0, \\ \textit{disk} - 7570.22}}   \\ \midrule
+ 	
+ 	\multicolumn{1}{l|}{Parallel start time}                                 													
+ 	& \multicolumn{1}{l|}{\makecell[c]{1111}} 				
+ 	& \multicolumn{1}{l}{\makecell[c]{1069}}   \\ \midrule
+ 	
+ 	\multicolumn{1}{l|}{Connection IDs occurence}                            											
+ 	& \multicolumn{1}{l|}{\makecell[c]{\textit{none established} - 1590,\\ \textit{223722} - 15}} 												   
+ 	& \multicolumn{1}{l}{\makecell[c]{\textit{none established} - 1570,\\ \textit{249654} - 10}}   \\ \midrule
+ 	
+ 	\multicolumn{1}{l|}{Connection IDs count}                                      																
+ 	& \multicolumn{1}{l|}{\makecell[c]{52}} 															     
+ 	& \multicolumn{1}{l}{\makecell[c]{42}}   \\ \midrule
+ 	
+ 	\multicolumn{1}{l|}{\makecell[l]{Connection Duplicates}}                        
+ 	& \multicolumn{1}{l|}{\makecell[c]{1605}} 						   
+ 	& \multicolumn{1}{l}{\makecell[c]{1580}}   \\ \midrule
+ 	
+ 	\multicolumn{1}{l|}{\makecell[l]{Loaded values \& occurrences}}                        
+ 	& \multicolumn{1}{c|}{\makecell[c]{\textit{not loaded from cache} - 65, \\ \textit{memory} - 3, \\ \textit{disk} - 1587}} 						   
+ 	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 50, \\ \textit{memory} - 0, \\ \textit{disk} - 1570}}   \\ \midrule
+ 	
+ 	\multicolumn{1}{l|}{\makecell[l]{Avg. Time in MS}}                        
+ 	& \multicolumn{1}{l|}{\makecell[c]{58.73}} 						   
+ 	& \multicolumn{1}{l}{\makecell[c]{87.1}}   \\ \midrule
+ 	
+ 	\multicolumn{1}{l|}{\makecell[l]{Avg. Content Size}}                                         
+ 	& \multicolumn{1}{l|}{\makecell[c]{9762.72}}  				  
+ 	&   \multicolumn{1}{l}{\makecell[c]{8205.19}} \\ \bottomrule
+ 	
+\end{longtable}
+
+A similar development can be observed in the above table  \ref{tab:cdn_result_table_unpkg_cache} as previously. Primarily with caching enabled, the average loading times decrease, secondly the amount of loaded resources from cache increases significantly and lastly the Angular environments show shorter average loading times despite more resources were requested by them.
+
+\section{Web Components/Compound and WMF landscapes}
+
+As the described in \ref{Chapter4}, this environments exist in different versions. They were designed that way to showcase how the used technologies handle multi-version landscapes and how they affect the performance.
+The below table shows the above mentioned KPIs of those environments.
+ 
+\begin{longtable}[c]{*{3}{p{\mycolwidth}}}
+	
+	\caption{Table of numerical KPI results for the landscapes implemented with Web Components as Compound Views and WMF without caching enabled}
+	\label{tab:wmf_compound} \\
+	
+	\toprule
+	\textbf{Metric}                                                           
+	& \textbf{WC/Compound}                                          
+	& \textbf{WMF} \\ 
+	\midrule
+	\endfirsthead
+	
+	\multicolumn{3}{l}{\footnotesize\itshape\tablename~\thetable: continued from previous page} \\
+	\toprule                        
+	\textbf{Metric}                                                             
+	& \textbf{WC/Compound}                                          
+	& \textbf{WMF} \\ 
+	\midrule
+	\endhead
+	%		
+	\multicolumn{1}{l|}{URLs loaded count}                                         															
+	& \multicolumn{1}{l|}{\makecell[c]{27}} 	       
+	& \multicolumn{1}{l}{\makecell[c]{118}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Avg. Response content size\\per Loading Type}}   
+	& \multicolumn{1}{l|}{\makecell[c]{\textit{not loaded from cache} - 213266.74, \\ \textit{memory} - 0,\\ \textit{disk} - 0}} 			         
+	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 507168.76, \\ \textit{memory} - 0, \\ \textit{disk} - 0}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{Parallel start time}                                 													
+	& \multicolumn{1}{l|}{\makecell[c]{29}} 				                  
+	& \multicolumn{1}{l}{\makecell[c]{109}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{Connection IDs occurence}                            											
+	& \multicolumn{1}{l|}{\makecell[c]{\textit{78725} - 15,\\ \textit{78890} - 15}} 		              
+	& \multicolumn{1}{l}{\makecell[c]{\textit{728247} - 3,\\ \textit{none established} - 14}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{Connection IDs count}                                      																
+	& \multicolumn{1}{l|}{\makecell[c]{546}} 		         											     
+	& \multicolumn{1}{l}{\makecell[c]{42}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Connection Duplicates}}                        
+	& \multicolumn{1}{l|}{\makecell[c]{30}} 					
+	& \multicolumn{1}{l}{\makecell[c]{20}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Loaded values \& occurrences}}                          
+	& \multicolumn{1}{c|}{\makecell[c]{\textit{not loaded from cache} - 135, \\ \textit{memory} - 30, \\ \textit{disk} - 0}} 						   
+	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 563, \\ \textit{memory} - 0, \\ \textit{disk} - 0}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Avg. Time in MS}}                        
+	& \multicolumn{1}{l|}{\makecell[c]{2454.95}} 	                			   
+	& \multicolumn{1}{l}{\makecell[c]{552.7}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Avg. Content Size}}                                         
+	& \multicolumn{1}{l|}{\makecell[c]{213266.74}}  		          
+	&   \multicolumn{1}{l}{\makecell[c]{507168.76}} \\ \bottomrule
+	
+\end{longtable}
+
+As the data in table \ref{tab:wmf_compound} shows, the initial loading time for the Compound/Web Components environments is significantly lower compared to the WMF counterpart. Also the amount of loaded resources differs. This is due to the fact, that WMF has to be used in combination with the Webpack 5 bundler. Therefore certain resources might be loaded several times, if not configured as shared dependencies in the Module Federation. 
+The following table showcases the same landscapes, but with caching enabled.
+
+\begin{longtable}[c]{*{3}{p{\mycolwidth}}}
+	
+	\caption{Table of numerical KPI results for the landscapes implemented with Web Components as Compound Views and WMF without caching enabled}
+	\label{tab:wmf_compound_cache} \\
+	
+	\toprule
+	\textbf{Metric}                                                           
+	& \textbf{WC/Compound}                                          
+	& \textbf{WMF} \\ 
+	\midrule
+	\endfirsthead
+	
+	\multicolumn{3}{l}{\footnotesize\itshape\tablename~\thetable: continued from previous page} \\
+	\toprule                        
+	\textbf{Metric}                                                             
+	& \textbf{WC/Compound}                                          
+	& \textbf{WMF} \\ 
+	\midrule
+	\endhead
+	%		
+	\multicolumn{1}{l|}{URLs loaded count}                                         															
+	& \multicolumn{1}{l|}{\makecell[c]{27}} 	       
+	& \multicolumn{1}{l}{\makecell[c]{109}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Avg. Response content size\\per Loading Type}}   
+	& \multicolumn{1}{l|}{\makecell[c]{\textit{not loaded from cache} - 215385.36, \\ \textit{memory} - 167973, \\ \textit{disk} - 588082}} 			         
+	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 525243.08, \\ \textit{memory} - 0, \\ \textit{disk} - 1959}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{Parallel start time}                                 													
+	& \multicolumn{1}{l|}{\makecell[c]{35}} 				                  
+	& \multicolumn{1}{l}{\makecell[c]{105}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{Connection IDs occurence}                            											
+	& \multicolumn{1}{l|}{\makecell[c]{\textit{none established} - 4,\\ \textit{78890} - 15,\\ \textit{78725} - 11}} 		              
+	& \multicolumn{1}{l}{\makecell[c]{\textit{none established} - 15}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{Connection IDs count}                                      																
+	& \multicolumn{1}{l|}{\makecell[c]{104}} 		         											     
+	& \multicolumn{1}{l}{\makecell[c]{537}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Connection Duplicates}}                        
+	& \multicolumn{1}{l|}{\makecell[c]{30}} 					
+	& \multicolumn{1}{l}{\makecell[c]{15}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Loaded values \& occurrences}}                          
+	& \multicolumn{1}{c|}{\makecell[c]{\textit{not loaded from cache} - 107, \\ \textit{memory} - 20, \\ \textit{disk} - 4}} 						   
+	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 536, \\ \textit{memory} - 0, \\ \textit{disk} - 15}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Avg. Time in MS}}                        
+	& \multicolumn{1}{l|}{\makecell[c]{897.62}} 	                			   
+	& \multicolumn{1}{l}{\makecell[c]{356.53}}   \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Avg. Content Size}}                                         
+	& \multicolumn{1}{l|}{\makecell[c]{219526.89}}  		          
+	&   \multicolumn{1}{l}{\makecell[c]{510997.6}} \\ \bottomrule
+	
+\end{longtable}
+
+The results with the caching enabled are not so different compared to the disabled caching ones. For instances, in both cases the average loading time for the Compound landscape has longer loading times for fewer resources. One aspect differs though, compared to the Compound landscape the WMF one has little cached resources. Also it becomes visible that the average content size loaded smaller.  Therefore, the Lighthouse tool was used to gather further information and data about those application. The following section will showcase and explain the analysis done.
+
+\section{Lighthouse analysis}
+
+It has to be mentioned in advanced that the following data is considered to be representative. Therefore, it is assumed that similar landscapes would follow a similar result in general. Nonetheless it is possible that for single cases the reports differ, since the within lying calculations are highly application dependent.
+For the sake of completeness the reports are shown below.
+
+The given data was gathered based on the previously introduced landscapes. It contains the analysis of the imported resources and how much of the corresponding imports were not used by the application, measured in bytes. First a tabular view is provided, following by the corresponding graph.
+
+\scriptsize 
+\setlength{\mycolwidthtwo}{\dimexpr \textwidth/5 - 2\tabcolsep}%
+
+\begin{longtable}[c]{*{4}{p{\mycolwidthtwo}}}
+	
+	\caption{Table of the average imported and unused bytes values, collected via the Lighthouse tool in the prototype landscapes}
+	\label{tab:lighthouse_used_report} \\
+	
+	\toprule
+	\textbf{Landscape}                                                           
+	& \textbf{Avg. imported bytes}                                          
+	& \textbf{Avg. unused bytes}                   
+	& \textbf{Avg. unused bytes in \%} \\ 
+	\midrule
+	\endfirsthead
+	
+	\multicolumn{4}{l}{\footnotesize\itshape\tablename~\thetable: continued from previous page} \\
+	\toprule        
+	\textbf{Landscape}                                                           
+	& \textbf{Avg. imported bytes}                                          
+	& \textbf{Avg. unused bytes}                   
+	& \textbf{Avg. unused bytes in \%}   \\ 
+	\midrule
+	\endhead
+	%		
+	\multicolumn{1}{l|}{Angular NPM}                                         															
+	& \multicolumn{1}{l|}{\makecell[c]{219257.14}} 	       
+	& \multicolumn{1}{l|}{\makecell[c]{93671.43}}   
+	& \multicolumn{1}{l}{\makecell[c]{42.72}} 	\\ \midrule
+		
+	\multicolumn{1}{l|}{Angular Unpkg}                                 													
+	& \multicolumn{1}{l|}{\makecell[c]{13126.84}} 				                  
+	& \multicolumn{1}{l|}{\makecell[c]{7425.87}}   
+	& \multicolumn{1}{l}{\makecell[c]{56.57}} \\ \midrule
+	
+	\multicolumn{1}{l|}{Vue NPM}                            											
+	& \multicolumn{1}{l|}{\makecell[c]{281262.33}} 		              
+	& \multicolumn{1}{l|}{\makecell[c]{123902}}    
+	& \multicolumn{1}{l}{\makecell[c]{44.05}} \\ \midrule
+	
+	\multicolumn{1}{l|}{Vue Unpkg}                                      																
+	& \multicolumn{1}{l|}{\makecell[c]{12057.91}} 		         											     
+	& \multicolumn{1}{l|}{\makecell[c]{6844.21}}    
+	& \multicolumn{1}{l}{\makecell[c]{56.76}} \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Compound/\\Web Components}}                        
+	& \multicolumn{1}{l|}{\makecell[c]{229483.67}} 					
+	& \multicolumn{1}{l|}{\makecell[c]{90265.19}}    
+	& \multicolumn{1}{l}{\makecell[c]{39.33}} \\ \midrule
+	
+	\multicolumn{1}{l|}{\makecell[l]{Webpack\\Module\\Federation}}                         
+	& \multicolumn{1}{l|}{\makecell[c]{551111.19}} 						   
+	& \multicolumn{1}{l|}{\makecell[c]{222113.73}}   
+	& \multicolumn{1}{l}{\makecell[c]{40.31}}  \\ \midrule
+\end{longtable}
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=1\textwidth]{Figures/avg_unsed_imported_1.png}
+	\caption{Unused and imported bytes per landscape}
+	\label{fig:unsed_imported_1}
+\end{figure}
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=1\textwidth]{Figures/avg_unsed_imported_2.png}
+	\caption{Unused and imported bytes per landscape in \%}
+	\label{fig:unsed_imported_2}
+\end{figure}
+
+It is mentioned again, the above shown data is highly application dependent. Still as these landscape are considered to be generally representative, a display in efficiency can be drawn from the above shown charts.
+As can be seen, the Unpkg CDN landscapes have a low unused bytes ratio. Since only the required resources were requested from the CDN, only a few unused bytes were detected by the Lighthouse tool. 
+For the WMF landscape, it can be argued, that due to the bundling with Webpack, a lot of bytes were imported but only a few of them were not used. This can be explained through how the Module Federation works, since every configured shared resource is checked if it should be shared or not.
+
+The following chapter will be concluding the displayed data. Detailed tables and informations can be found in the appendixes \ref{appendix1}, \ref{appendix2} and \ref{appendix3}.

@@ -46,6 +46,8 @@ parskip=half			% Abstand zwischen Absätzen
 
 \usepackage{graphicx}
 
+\usepackage{xltabular}
+
 \usepackage{pdfpages}
 
 \usepackage{titlesec}
@@ -55,6 +57,16 @@ parskip=half			% Abstand zwischen Absätzen
 \usepackage{enumitem}
 
 \usepackage{mathtools}
+
+\usepackage{makecell}
+
+\usepackage{longtable}
+
+\usepackage{lscape}
+
+\usepackage{adjustbox}
+
+\usepackage{booktabs}
 
 \usepackage[english,ngerman]{babel}
 
@@ -68,10 +80,15 @@ parskip=half			% Abstand zwischen Absätzen
 \def\UrlBreaks{\do\/\do-}
 
 \usepackage{float}
+
 \usepackage{aliascnt}
+
 \newaliascnt{eqfloat}{equation}
 \newfloat{eqfloat}{h}{eqflts}
 \floatname{eqfloat}{Equation}
+
+\newlength{\mycolwidth}
+\newlength{\mycolwidthtwo}
 
 \newcommand*{\ORGeqfloat}{}
 \let\ORGeqfloat\eqfloat
