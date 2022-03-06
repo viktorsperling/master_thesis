@@ -4,10 +4,87 @@
 
 \lhead{Chapter 7. \emph{Conclusion}}
 
-Quite self explaining I´d say.
+The following chapter will conclude and evaluate the results shown in chapter \ref{Chapter6}. First the a direct comparison between similar or equal landscapes and technologies is made, followed by the comparison of different landscapes and technologies.
+For the evaluation of the results the introduced KPIs will be used as examples, references or for further calculations.
+ 
+\section{Direct evaluation of the landscapes}
 
-\section{Evaluation of the results}
+\subsection{Angular and Vue landscapes}
 
-\section{Result/Recommendation}
+The Angular and Vue landscapes implemented were the following.
 
+\begin{itemize}[noitemsep]
+	\item Angular NPM 1
+	\item Angular NPM 2
+	\item Angular Unpkg 1
+	\item Angular Unpkg 2
+	\item Vue NPM 1
+	\item Vue NPM 2
+	\item Vue Unpkg 1
+	\item Vue Unpkg 2
+\end{itemize}
+
+The naming refers to the used technology to load or access the required resources for the apps. Unpkg, as mentioned before, is a public cloud CDN. The idea behind those implementation was to prove that not only the CDN technology affects the performance of a micro frontend, but also the used frameworks.
+Comparing the numbers of those two landscapes it becomes obvious, the Angular landscapes load more resources (counted by the URLs loaded KPI) in a shorter loading time for all implementations. 
+Also looking at the initial loading times, calculated via the loading procedure where caching was disabled, for all implementations Angular performed better compared to Vue.
+
+It has to be mentioned, that the actual goal of this implementation was to compare the technology of the CDN, not the used frameworks. It is still mentioned though just to prove that this decision should be considered when planning developing projects for micro frontends. 
+
+Looking the the numbers of the NPM implementations and the ones with Unpkg in use, following aspects come to show.
+
+\begin{enumerate}
+	\item The amount of requested URLs is significantly increased
+	\item Even though approximately ten times the amount of URLs is requested by the landscape, the initial loading times decreases by ca. 60 MS for the Angular Unpkg landscapes and for Vue it's even more.
+	\item The cache usage of the landscapse significantly increases when a CDN is used. This statement is counted by the amount of \textit{none established} ID occurrences. For each connection not established, a resource is loaded from the cache/disk. Thus the faster loading times, when cache is enabled
+	\item A similar result is present in the loaded bytes from connection type. Compared to the NPM implementation, the Unpkg environments load significantly more bytes from \textit{disk} or \textit{memory}. This behavior was anticipated in the CDN implementations, since it is one of the desired features of this technologies. Since every resource has a designated URL from where it is loaded from, the browser can distinguish if it already loaded or not.
+	\item Additionally the average loaded content size of the Unpkg apps is lower, since only specific resources can be requested from the CDN. Therefore big bundles with unused features are generally not present there.
+	\item The graph \ref{fig:unsed_imported_1} shows a similar result. Even though the below graph \ref{fig:unsed_imported_2} shows, that approximately half of the imported bytes were not used according to the Lighthouse report, the absolute amount of loaded bytes is significantly lower, compared with the NPM environments.
+	\item When comparing the variances of the loading times, the Unpkg implementation show a lower value. Reasons for that could be either the protocol used by the CDN server or the smaller resource sizes of the loaded resources
+\end{enumerate}
+
+In comparing the KPIs \textbf{loading time in MS, resource sizes in bytes and amount of cached resources} the Unpkg implementation follow the expected pattern. Additionally looking at the variance the Unpkg environments show a less variant loading time for all applications compared with the NPM implementations. 
+One behavior was not expected though, initially it was assumed that the initial loading time of a CDN landscape would be significantly higher. Reason for that was the assumed effect of the network latency, since the resources are loaded from a remote server, instead from an integrated bundle inside the project itself. Nonetheless, in case of the prototype this behavior could not be confirmed, since even the initial loading times for the Unpkg apps, were lower compared with the NPM apps. It is assumed that, reason for that result are the efficiently picked resources. Instead of importing whole bundles of libraries only necessary components or resources were added as import in the Unpkg landscape. Thus the loaded byte size of those are so low.
+
+Mentioning the \textit{"efficiently picked resources"} another KPI which should be considered for all landscapes, is the effort connected to using a corresponding technology. This metric is hard to measure though, since it highly influenced by the individual using the technology. A developer whom is familiar with Webpack for instance, would have less trouble using and implementing the Module Federation. Therefore this metric is not easily quantifiable. Still, in the context of this thesis, the author will try and provide a subjective opinion on his experiences with the implementations he has done as generally as possible. 
+In case of the CDN the effort of implementation is comparably low. From a developers point of view it's even less effort, since no libraries have to be maintained in a central resource or package manager file (namely \texttt{package.json}). Nonetheless it has to considered what type of CDN is used. Is a self hosted or not? 
+In case of the prototype implementation, it was a public cloud CDN which already had all the required resources available. For a self hosted CDN, this might now always be the case. Also when deciding to host an own CDN maintenance, development and deployment costs have to be put into account. This part was explained in chapter \ref{Chapter2}.
+In summary, the CDN technology is a comparably easy way to avoid redundancies in a micro frontend landscape. It still is connected to certain obstacles, when ones use case is highly specific and requires certain customizations on CDN side. 
+
+Also multi-version landscapes are not supported by a CDN. That means that redundancies still can occur if the same resources is imported under different version tags. This use case is not directly covered by a CDN. If the resource itself, has some sort of scoping feature a support can be provided (e.g. Custom Scopes by SAPUI5 Web Components). But this is not part of the CDN. Other technologies offer more support on that part.
+
+\subsection{Compound and WMF landscapes}
+
+The functionality of the Web Component and Module Federation landscapes to avoid redundant libraries were explained the chapter \ref{Chapter4} and \ref{Chapter5}. Thus this section will focus on the direct comparison of these two environments. Since those two landscapes also included components to simulate heterogenic, multi-version micro frontends, this has to be considered in the comparison. 
+Starting with values introduced in chapter \ref{Chapter6}, the first thing to attract attention should be the difference in the average loading time of the landscapes. For the caching disabled scenarios, the WMF landscape requires almost a fifth of the time, the Compound landscape requires. With caching disabled the difference is only a third but still significant. Additionally the bytes loaded by the landscapes differ. WMF loads almost double the amount of bytes compared to the Compound environment in a shorter period on average. Additionally WMF does this with barely using the cache, even with caching enabled. Where the Compound environment loaded approximately 756055 bytes on average from memory, the WMF only imported 1959 bytes on average from the cache. Therefore, based in this comparison the Webpack Module Federation seems to be on top.
+
+Still further aspects have to be considered when using those technologies. First is the multi-version handling. Web Components offer means to handle different versions of a component which is to be registered. Since in case of the prototype a component library (namely SAPUI5 Web Components) this feature was present in it. Still a self developed component can implement a similar functionality. This again would be connected to more effort developing Web Components for a Compound landscape in Luigi, but it is not entirely impossible.
+When using an existing component library, this feature might already be present as it is the case for the SAPUI5 Web Components. 
+Since each other version of a component is registered under a different tag, with a version suffix attached to it, the result might lead to redundancies again. That means the a component called e.g. \texttt{ui5-table} would be registered and imported twice into the same landscape under different names. For instance version 1 would be \texttt{ui5-table-v1} and version 2 \texttt{ui5-table-v2}. Thus even though the different versions are handled in a distinguishable way, the redundancies would increase.
+
+The Module Federation offers different means for solving this issue. By sharing certain dependencies and with a definition of a required version, redundancies are not entirely eliminated in a multi version WMF landscape, but handled more elegantly. During the data collection of this landscape, a phenomenon appeared which indeed appears to intended by the Federations developers. Shared dependencies like for instance \texttt{@angular-common - v1.1.2} which are shared over the landscape, are always loaded via the network even if caching is enabled, but never in full size. On initial loaded this dependency would have approximately 1.2 MB on size, but when reloading the page with cache enabled, this dependency is loaded again via the net but with 412 KB in size.
+This behavior appeared for all shared dependency in the WMF landscape. This behavior is enabled via the Module Federation itself, since the shared dependencies are lazy loaded as chunks. \cite{wmf_the_good_and_ugly}
+
+Again it seems to be that the WMF is superior on that regard compared to Web Components. Still following aspects are not considered yet, the effort of using the technology. As mentioned in the previous section this is no actual KPI but rather a subjective opinion of the author. When directly compared, the effort of implementing or developing micro frontends, was by far higher when using WMF compared to Web Components. Even taking into account that a component library was used, still the Module Federation required more expertise with the Webpack bundler.
+The possibilities with WMF are more vast, but to one unfamiliar with the necessary bundler Webpack, kept in secret. The documentation offers good hints and explanations for options and syntax inside the configuration, but it is documented in a more general way and if the developer wants to use it in combination with a Webpack based framework like Angular or Vue, the whole operation becomes more experimental. In the case of Angular, a separate dependency is required to publish the hidden \texttt{webpack.config.js} via which the Module Federation is enabled in the first place. And this configuration has to be done for every module or remote, federated to the landscape. Thus, assuming a real life scenario with independent isolated teams, working on the same micro frontend landscape using different UI frameworks for their remote modules, this might become a bigger obstacle, as it was in case of the prototype. Not only the bundle size of the heterogenic landscape would increase since every shared dependency has to be bundled and published in the landscape, but the the routing inside the landscape becomes a challenge itself. In case of Angular for instance, the inner routers do not recognize route changes and one router has to import another applications router manually to be able to communicate route changes.\cite{wmf_the_good_and_ugly}
+
+Web Components on the other hand are standard. The result and assigning process is the same. Different UI frameworks offer means to register developed components as Web Components (e.g. Angular Elements). Thus the developer can work framework independent within a familiar environment and expect the same result as another developer working with tools of his choice.
+Additionally Web Components are not bound to certain technology stacks, not like the WMF which requires the Webpack bundler to enable it. Ergo Web Components have less limitations and more stability due to their standardization.
+
+In summary, both technologies offer means to solve the issue of avoiding redundant libraries, but when it comes to handle multi version landscapes, WMF offers more elegant ways compared to Web Components. On the other hand using the WMF limits the developers to a certain technology stack and is not always easy or effortless implemented depending on the UI framework in use. Also certain obstacles are present in the WMF as of now and require workarounds to solve them.\cite{wmf_the_good_and_ugly} On that regard Web Components offer easier means and ways for implementation due to their standardized aspects.
+
+\section{Final recommendations}
+
+The previous section contain general summaries for each respective technology, based on either empiric data, official sources or subjective experience. None the low the below listing will provide final recommendations when and how best to use the introduced and implemented technologies based on the conclusions made in this transcript.
+
+\begin{itemize}
+	\item \textbf{Content Delivery Networks} - CDN offer an easy way to reduce redundancies in micro frontend landscapes by centralizing the landscapes resources to one point. From developer perspective only the way of importing the resources changes and no further changes are applied. Therefore, this is the easiest and fast way of achieving the goal of avoiding redundant libraries on micro frontend landscapes. Nonetheless, what it offers in simplicity it lacks in flexibility. Multi version support is not always present and can not be entirely solved by this technology. Also a public CDN might not always have the necessary resources required by the landscape and hosting an own CDN is connected to high maintenance and developing costs (depending on its size). Therefore, if the use case describes a homogenic micro frontend landscape one without different versions, CDNs is the way to go. If different versions of the same resource are required, then there are more elegant ways than this technology.
+	
+	\item \textbf{Web Components} - As a web standard it is a save way of again avoid redundancies, maybe not in libraries but rather in the used components them self. Providing reusable components to the browser which are not affected by the isolation of micro services. Additionally existing Web Component libraries offer means to scope different versions of its components, providing a way to handle multi versions inside the landscape. With its standardized aspect it also does not limit the developer to certain technology stacks and is compatible with most common UI frameworks. Some even offer framework features to create Web Components out of their components like Angular Elements. If the use case requires a lot of reusable components with as less redundancies as possible, Web Components offer the best way to provide that service.
+	
+	\item \textbf{Webpack Module Federation} - A rather new technology compared to the other two, promises to excel where the other two lack. Via federalizing remotes, which again can be any piece of precompiled code, and embedding it into a host application, the Module Federation offers a flexible way of sharing, UI components, modules or utility services inside a micro frontend landscape. The possibilities are vast using this technology. But this offer comes for a price, one has to use the Webpack bundler and for certain features or issues workarounds are required. 
+	Generally it can be said, this technology if used correctly, is applicable to almost any use case, but this might be connected with some obstacles and workarounds, which could be easier solved with other means. 
+\end{itemize}
+
+As a closing word for the recommendation, when the main goal is to avoid redundant libraries in a micro frontend landscape, each of the introduced technologies offers means to do that. But each comes with their own kind of trade off. Also when picking from one of the above choices, one might want to consider side effects and benefits to be gained from that choice. Thus the final recommendation is highly dependent on the use case and requirements for the landscape to be developed.
+Additionally it is not excluded or impossible to combine those technologies. 
 

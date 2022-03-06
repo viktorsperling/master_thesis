@@ -4,7 +4,12 @@
 
 \lhead{Chapter 8. \emph{Prospect}}
 
-\textit{"If I had more time I´d have looked into following things...."}
+The time available for the research, data collection and the actual writing was limited and therefore this transcript is scoped to a certain degree. Nonetheless the statements stated in this document are not final and further possibilities can be explored in that field. One of which was mentioned in the last chapter, the combinational effect of the researched technologies. A Web Components base micro frontend landscape, where the resources for the components are provided by a CDN for instance. Also the WMF topic was analyzed in the context of the UI framework Angular, this is a valid way of doing but the Module Federation can be used in combination with other frameworks as well. This is a field which also could be looked into, especially when taken into account that the data displayed in \ref{Chapter6} shows that a framework affects the performance of a micro frontend to a certain degree.
+Another field which could not be explored in the time given for this document, is the development of an own CDN. Even though a approximate assumption was made concerning the effort connected to such a project, this is by no means empiric data. Therefore since the developed landscape rely on the Unpkg API to request the CDN  resources, it would an interesting experiment if and how an own CDN could improve or optimize the performance metrics for similar landscapes.
+Lastly the Surge web server, used for the deployment of the landscapes, was connected to certain limitation too. Namely, the missing HTTP/2 server configuration. Thus, it would make sense to deploy those landscapes over different web servers just to see if the changes on server side improve the performances in the given context.
+
+It is save to say, the landscape implemented can be considered to be representative but still offers room for improvement and optimization. Thus, when the given research is applied to a real life scenario, special conditions or requirements have to be considered when making a decision in that context. Therefore, it is mentioned in chapter \ref{Chapter7} that the gain or benefit of each respective technology is highly dependent on the individual use case.
+
 
 
 
