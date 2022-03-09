@@ -360,8 +360,8 @@ parskip=half			% Abstand zwischen Absätzen
 	%----------------------------------------------------------------------------------------
 	%	Confidentiality Agreement
 	%----------------------------------------------------------------------------------------
-	\section*{Master Thesis Confidentiality Agreement}	
-	Not required yet.
+%	\section*{Master Thesis Confidentiality Agreement}	
+%	Not required yet.
 %	Title of thesis:  \textit{Effort analysis of application porting to Kubernetes based on a prototype}
 	
 %	Name of student: 
@@ -419,7 +419,7 @@ parskip=half			% Abstand zwischen Absätzen
 %	(Student’s Name: Viktor Sperling)
 
 %	Place: \noindent\rule[-0.1cm]{4cm}{0.5pt} \hspace{3cm} Date:\noindent\rule[-0.1cm]{4cm}{0.5pt}\\
-	\newpage
+%	\newpage
 
 	
 	%----------------------------------------------------------------------------------------
@@ -462,14 +462,14 @@ parskip=half			% Abstand zwischen Absätzen
 		
 		This transcript provides prove of possible solutions regarding redundant libraries in micro frontend landscapes. The data and prove collected is based on an implemented prototype using the Luigi micro frontend framework. Different landscapes, with different technologies are implemented to represent a heterogenic landscape, which is considered to be representative for a micro frontend landscape.
 		
-		The technologies in use are foremost the Content Delivery Network, namely Unpkg.com, usage of the Compound feature of Luigi in combination with Web Components, namely the UI5 Web Components library and lastly the Webpack Module Federation, a rather new feature of Webpack to create micro frontends.
-		After implementation, the data is collected and displayed, defining the performance metrics used for the evaluation. It is proven that every of the respective technologies has their own means to avoid redundant libraries in the respective micro frontend landscapes. Let it either be distinguishable resource URLs provided by the CDN, or reusable Web Components or even shared dependency through the Module Federation. Each technology shows ways of solving the issue at hand. Still every method has its limits and these are evaluated as well, such as the effort connected to using one of the corresponding technologies.
+		The technologies in use are a Content Delivery Network, the Compound feature of Luigi in combination with Web Components and lastly the Webpack Module Federation, a rather new feature of Webpack to create micro frontends.
+		After implementation, data is collected and displayed, defining the performance metrics used for the evaluation. It is proven that every of the respective technologies has their own means to avoid redundant libraries in the micro frontend landscapes. Let it either be distinguishable resource URLs provided by the CDN, reusable Web Components or even shared dependency through the Module Federation. Each technology shows ways of solving the issue at hand. Still every method has its limits and these are evaluated as well, such as the effort involved when using one of the corresponding technologies.
 		
-		For CDN it is shown, that even though easy to implement and use in the project itself, a public CDN has certain restrictions, such as absence of special libraries required for the project or dependency on constant uptime of the CDN servers. Implementing or hosting an own CDN is firstly connected to further costs and implementation/configuration time, which in certain cases might not affordable.
-		Web Components implemented as Compounds in Luigi, show great potential in avoiding redundancies to a certain degree, by providing reusable components registered in the browser. Additionally this technology is framework independent and compatible with almost all modern browser, due to its standard status. Additionally, it is shown how this technology provides a way to support multi-version landscapes via the scoping feature of the UI5 Web Components library.
+		For CDN it is shown, that even though easy to implement and use in the project itself, a public CDN has certain restrictions. This include the absence of special libraries required for the project or the constant dependency on the CDN servers to be available. Hosting an own CDN involves further costs and requires time for implementation and configuration, which in certain cases might not be affordable.
+		Web Components implemented as Compounds in Luigi, show great potential in avoiding redundancies to a certain degree, by providing reusable components registered in the browser. Additionally this technology is framework independent and compatible with almost all modern browsers, due to its standard status. It is shown how this technology provides a way to support multi-version landscapes via the scoping feature of the UI5 Web Components library.
 		The Webpack Module Federation, is considered to be a powerful tool to solve the issue of the redundancies in micro frontend landscapes. Not only can it serve to share central dependencies between its federalized modules, but also optimize shared dependencies in different versions. It is assumed that more features can be enabled through the Webpack bundler to optimize the landscape even further.
 		
-		After showing the means on how each respective technology avoids redundant libraries in a micro frontend landscape, the comparison is made and a conclusion is drawn. The use case and the requirements on the landscape, define which technology should or could be used. Since every technology provides a solution for the issue in their own way.
+		After showing the means on how each respective technology avoids redundant libraries in a micro frontend landscape, the comparison is made and a conclusion is drawn. The use case and the requirements on the landscape define which technology should or could be used, since every technology provides a solution for the issue in their own way.
 	}
 	
 	\clearpage % Start a new page

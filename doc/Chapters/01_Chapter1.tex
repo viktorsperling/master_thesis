@@ -10,39 +10,40 @@ It will also narrow down the thesis scope.
 \section{Motivation}
 
 The micro frontend technology has experienced a rise in popularity over the past 3 years. The occurrence of such a trend is no surprise, considering the fact that more and more applications are designed following the micro service architecture principles.\cite{google_micro_frontend_trends} 
-Micro frontends share a common interest with their assumed precursor. Generally it can be stated, that the market prefers smaller independent lightweight applications over monolithic giants with strong dependencies. Similar to micro services, micro frontends offer almost the same advantages to a development team. Independence of the respective micro frontend teams, shorter developments cycles, smaller scope of maintenance, separations of concerns, reusable components available via defined APIs and further more.\cite{advantages_of_mfes} But still this concepts has certain flaws which has to be considered when felling the decision.\cite{Yang_2019}
+Micro frontends share a common interest with their assumed precursor. Generally it can be stated, that the market prefers smaller independent lightweight applications over monolithic giants with strong dependencies. Similar to micro services, micro frontends offer almost the same advantages to a development team: Independence of the respective micro frontend teams, shorter developments cycles, smaller scope of maintenance, separations of concerns, reusable components available via defined APIs and further more.\cite{advantages_of_mfes} But still this concept has certain flaws which have to be considered when making the decision.\cite{Yang_2019}
 
-Depending on the type of the to-be-developed application, the concept of micro frontends is not always favored. One major point of criticism, is the aspect of redundancies inside the landscape. Specifically it means that isolated micro frontends are partially loading and using the same libraries during their runtime. This circumstance is causing an overhead on client and server side and therefore correlates with the runtime costs of such a landscape and potentially an inferior user experience.\cite{motivation_benefits_adopting_MFs}
+Depending on the type of the to-be-developed application, the concept of micro frontends is not always favored. One major point of criticism is the aspect of redundancies inside the landscape. Specifically it means that isolated micro frontends are partially loading and using the same libraries during their runtime. This circumstance is causing an overhead on client and server side and therefore correlates with the runtime costs of such a landscape and potentially an inferior user experience.\cite{motivation_benefits_adopting_MFs}
 
-Despite the fact that the aspect of isolation is a core feature of such an architecture, it still is possible to avoid those redundancies without disabling it.
+Despite the fact that isolation is a core feature of such an architecture, it still is possible to avoid redundancies without disabling it.
 
 \section{Goals}
 
-The goal of this thesis is to provide proof and evaluate methods, to avoid redundancies during the runtime of a representative micro frontend landscape. To achieve this goal two prototypes were implemented using the Luigi micro frontend framework. The landscape itself where implemented to be as representative as possible. That means, a heterogenic tech stack was used. Additionally following methods were implemented to avoid redundant loaded libraries:
+The goal of this thesis is to provide proof and evaluate methods to avoid redundancies during the runtime of a representative micro frontend landscape. To achieve this goal two prototypes were implemented using the Luigi micro frontend framework. The landscape itself was implemented to be as representative as possible by using a heterogenic tech stack. Additionally following methods were implemented to avoid redundantly loaded libraries:
 
 \begin{itemize}
-	\item Usage of a Content Delivery Network (CDN)
-	\item Usage of Web Components in Luigi Compound views
-	\item Usage of the Webpack Module Federation (WMF) framework
+	\item Content Delivery Network (CDN)
+	\item Web Components in Luigi Compound views
+	\item Webpack Module Federation (WMF) framework
 \end{itemize}
 
-The implemented methods are then later evaluated under predefined metrics. The steps followed to collect data for the metrics are explained as well.
-Eventually a conclusion is made based on the empiric data, accompanied by the subjective experience of the author. It is shared how the usage and implementation of the respective technologies was experienced and which advantages each technology brings to the table from an objective and subjective view.
+The implemented methods are then evaluated under predefined metrics. The steps followed to collect the data for the metrics are explained too.
+Eventually a conclusion is made based on the empiric data, accompanied by the subjective experience of the author. It is explained how the usage and implementation of the respective technologies was experienced and which advantages each technology brings to the table from an objective and subjective view.
   
 \section{Scope of Work}
 
-Since the time given for this this transcript, the context is scoped. Therefore, following aspects are either not considered or referenced on a theoretical level.
+Since the time given for this transcript, the context is scoped. Therefore, following aspects are either not considered or referenced on a theoretical level.
 
 \begin{itemize}
-	\item The development of an own CDN - An approximate assumption is made for such a project, but not actual implementation is done.
+	\item The development of an own CDN - An approximate cost assumption is made for such a project, without actual implementation.
 	\item Usage of the Webpack bundler outside the context of the Module Federation - Since this bundler offers many ways for configuration, the focus lies on the necessary onces for the WMF context.
-	\item Configuration for the Luigi framework of the implemented landscape - Only a general overview is given about the framework, actual code snippets for the configuration done are not provided here.
+	\item Configuration for the Luigi framework of the implemented landscape - Only a general overview is given about the framework, actual code snippets for the configuration are not provided here.
 	\item Development of Web Components - The general usage and functionality of this standard is explained.
 	\item Combinations of the implemented technologies - This aspect is not empirically considered in this transcript.
 \end{itemize}
 
 \section{The collaborators}
 
-This thesis was written in collaboration with SAP Luigi project team. The SAP orignally founded in in 1972 as SAPD (system analysis program development), later became SAP AG in 2005 and in 2014 SAP SE. The Hybris compoany originally founded in 1997 was later acquired by the SAP in 2013, after moving its headquarter from Zug in Switzerland to Munich in Germany. The Luigi project team is part of the SAP Hybris organization but the developed framework is an open-source product. The team and their product aiming to improve not only their customers, but the corresponding developers and administrators experiences when using Luigi. Their open-source product was designed to make the transformation from monolithic architectures into micro service/frontend based landscapes as smooth as possible. 
+This thesis was written in collaboration with SAP Luigi project team. The SAP originally founded in in 1972 as SAPD (system analysis program development), later became SAP AG in 2005 and in 2014 SAP SE. The Hybris company originally founded in 1997 was later acquired by the SAP in 2013, after moving its headquarter from Zug in Switzerland to Munich in Germany. The Luigi project team is part of the SAP Hybris organization but the developed framework is an open-source product. 
+The team and their product aim to improve the experiences of customers, developers and administrators who are using Luigi. Their open-source product was designed to make the transformation from monolithic architectures into micro frontend based landscapes as smooth as possible. 
 
  
