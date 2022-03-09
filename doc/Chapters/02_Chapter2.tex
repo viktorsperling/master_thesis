@@ -119,7 +119,7 @@ This standard of Web Components provides an API via which new HTML tags can be d
 	\label{fig:same_wc_example}
 \end{figure}
 
-Figure \ref{fig:same_wc_example} shows a simple micro frontend landscape with Luigi using Web Components. As it is visible, both micro frontends are registering the same tag name \texttt{customElement} using the \texttt{customElements} object. This object is a read-only property of the \texttt{Window} interface.
+Figure \ref{fig:same_wc_example} shows a simple micro frontend landscape with Luigi using Web Components. As it is visible, both micro frontends are registering the same tag name \texttt{custom-element} using the \texttt{customElements} object. This object is a read-only property of the \texttt{Window} interface.
 The above shown scenario will cause a  \texttt{DOMException}, this way making it impossible to register the same tag twice.
 
 The registration of Web Components follows the \textit{"first come, first served"} principle, the first micro frontend to register a tag name defines this tag and can not be overwritten without reloading the page.\cite{mdn_web_docs_define}
