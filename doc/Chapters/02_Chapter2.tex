@@ -134,7 +134,7 @@ One way would be to define a name space for every team when creating Web Compone
 
 A better way might be to assign a common Web Components library like \textbf{UI5 Web Components}. That way the registered elements are provided by the library and are limited to set of unique registrable tags. If another micro frontend would use an already registered element of the library, a warning is thrown but no error occurs.
 
-Most Web Component libraries also offer so called scoping options. This feature finds its use case, when versions of the used components differ from micro frontend to micro frontend. This option enables the developers to customize their Web Components and register them under different tags. That of course might lead to redundancies again. But it also reduces the dependency of the developer teams to always use the latest version of the component library or the first registered element in the landscape. \cite{ui5_webcomponents_scoping} \cite{openwc_scoping}
+Most Web Component libraries also offer so called scoping options. This feature finds its use case, when versions of the used components differ from micro frontend to micro frontend. This option enables the developers to customize their Web Components and register them under different tags. With this feature it is made possible to register components according to their respective versions, by adding a version-specific suffix. That of course might lead to redundancies again. But it also reduces the dependency of the developer teams to always use the latest version of the component library or the first registered element in the landscape. \cite{ui5_webcomponents_scoping} \cite{openwc_scoping}
 
 \section{Webpack Module Federation}
 \label{wmf_chap_2}

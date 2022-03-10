@@ -62,7 +62,7 @@ Listing \ref{shadow_dom_definition} provides be a simple example.
 </html>
 \end{lstlisting}
 
-The listing \ref{shadow_dom_definition} shows the usage of the Shadow DOM in combination with registering a custom element (named \texttt{custom-element}) using the customElements API which was explained in chapter \ref{Chapter2}.
+The listing shows the usage of the Shadow DOM in combination with registering a custom element (named \texttt{custom-element}) using the customElements API which was explained in chapter \ref{Chapter2}.
 The \texttt{script} tag of the snippet starts with creating a new HTML element called CustomElement. It is an extension to the HTMLElement class. This new element has the Shadow DOM attached to it. Therefore, it is the Shadow host in the DOM tree. Via the \texttt{innerHTML} attribute a Shadow DOM Node is created. In this case it is a styling for paragraphs,followed by the creation of a paragraph onto which the styling is applied. Additionally the text color of the paragraph is set to blue and lastly it is attached to the Shadow root.
 The last three lines of the script, are the definition and registration of the new \texttt{custom-element}, the creation of a new \texttt{customElement} object and the output of the attached Shadow DOM in the console.
 
@@ -71,7 +71,7 @@ Now when looking at the body of the above snipped, it becomes visible that besid
 Now another configuration which is shown in the snipped is the \texttt{this.attachShadow({mode: 'open'})}. This mode property defines the visibility of the Shadow DOM to the browser. If set to \texttt{open}, the elements of the Shadow DOM can be inspected inside the sources. Thus, the \texttt{console.log(customElement.shadowRoot)} line would work if executed. 
 If the mode would be set to \texttt{closed}  the \texttt{console.log()} command in line 20 would return \texttt{null}.\cite{simon_thesis}
 
-This behavior is not meant to be used as a measure of security, since it can be overwritten. For Web Components in particular it is not recommended to use this mode at all, since it would make them less flexible for end users.\cite{wc_shadow_dom_google}
+This behavior is not meant to be used as a measure of security, since it can be overwritten. The Shadow DOM only isolates CSS/HTML but not JavaScript code. For Web Components in particular it is not recommended to use this mode at all, since it would make them less flexible for end users.\cite{wc_shadow_dom_google}
 
 \subsection{HTML Template}
 
