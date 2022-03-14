@@ -7,8 +7,8 @@
 \section{Web Components in general}
 
 As in \ref{Chapter2} introduced, Web Components have the attribute of the Custom Element, via which the individuality of each registered tag is guaranteed.
-Nonetheless to understand the actual functionality of how using Web Components helps avoiding redundancies in micro frontend landscape, it is necessary to explain the technology itself.
-The following section will introduce the other three standards of Web Components and their functions.
+Nonetheless to understand the actual functionality of Web Components, it is necessary to explain the other aspects of it.
+The following section will introduce the other three standards of Web Components and their functions and showcase how exactly they serve a purpose for the context of the thesis.
 
 \subsection{Shadow DOM}
 
@@ -34,6 +34,7 @@ Figure \ref{fig:shadow_dom} visualizes the relations between the newly introduce
 \end{figure}
 
 Through the isolation of the Shadow DOMs code, this standard offers a way to provide scoped HTML and CSS code to custom elements. As mentioned before, the nodes of the Shadow DOM are rendered separately. Therefore, styles, ids, names or even CSS classes and other configurations applied to a tag inside the Shadow DOM are not applied to the actual DOM.
+
 Listing \ref{shadow_dom_definition} provides be a simple example.
 
 \begin{lstlisting}[caption=Definition of a custom element using the Shadow DOM \cite{simon_thesis}, label=shadow_dom_definition]
@@ -72,6 +73,8 @@ Now another configuration which is shown in the snipped is the \texttt{this.atta
 If the mode would be set to \texttt{closed}  the \texttt{console.log()} command in line 20 would return \texttt{null}.\cite{simon_thesis}
 
 This behavior is not meant to be used as a measure of security, since it can be overwritten. The Shadow DOM encapsulates every part of its DOM elements, that means HTML, CSS and JavaScript. The \texttt{document} object, available during runtime, stays the same for the regular DOM as for the Shadow DOM though. Therefore, each configuration done in the Shadow DOM via scripts can be easily overwritten from any other script in the document, thus the mode can be changed even if initially set to \texttt{closed}.\cite{shadow_dom_encapsulation} For Web Components in particular it is not recommended to use this mode at all, since it would make them less flexible for end users.\cite{wc_shadow_dom_google}
+
+This feature can be used in combination with a component library like UI5 Web Components, to customize styles or appearances of individual components. Nonetheless, for the context of this thesis, it does not serve any purpose to actually avoid redundancies in a micro frontend landscape, instead it might even increase them. The encapsulation of code elements between the single components increases the isolation and thus it cannot be guaranteed that e.g. the same CSS class is not rendered in multiple different Shadow DOMs. Even though the redundancies would occur on code level and not on dependency level, they are redundancies nonetheless.
 
 \subsection{HTML Template}
 
@@ -123,7 +126,9 @@ Other than the templates, slots are always rendered if included in the markup vi
 
 Even though slots are a HTML standard just a templates, their support for browsers is not always guaranteed. This is due to the fact, that compared to templates it is a rather new standard.
 
-In combination these two standards offer a way to define flexible, reusable markup code for Web Components.\cite{wc_html_template_slots}
+In combination these two standards offer a way to define flexible, reusable markup code for Web Components.\cite{wc_html_template_slots} 
+
+When developing own Web Components for a micro frontend landscape, this aspect can be used to reduce repetitive HTML code elements by serving them a templates. But again this feature is not applicable when it comes to reducing redundant libraries in a micro frontend landscape. Redundant code snippets can be defined as reusable templates but not the actual libraries.
 
 \subsection{ES Modules}
 
@@ -147,6 +152,8 @@ Thus the development of Web Components can be done in a modular way, making ever
 \end{lstlisting}
 
 Listing \ref{es_modules_example} shows such an import. Assuming the \texttt{awesome-explosion.js} files contains the definition of an element called \texttt{awesome-explosion}, these lines enable the document to use this element.\cite{wc_specifications}
+
+This feature is essential for the prototype developed, since via this aspect the components are made available to the landscape. The used Web Components are served as ES Modules to the landscape and are imported similarly as shown in \ref{es_modules_example}. Therefore, this aspect enables a component to be imported in multiple micro frontends as a module.
 
 \section{Usage of Web Components in the Prototype}
 

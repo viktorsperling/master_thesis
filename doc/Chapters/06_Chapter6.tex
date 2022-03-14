@@ -13,6 +13,41 @@ This section will contain information about how the data was collected and which
 
 \subsection{Data collection}
 
+\subsubsection{Testing hardware and environment}
+
+It has to be mentioned that certain aspects of the environment were not maintained by the tester and are therefore out of reach for influence or configuration. Nonetheless they are mentioned here for the sake of reproducibility.
+The testing hardware and environment available were the following:
+
+\begin{enumerate}
+	\item \textbf{Laptop:}
+	\begin{itemize}[noitemsep]
+		\item MacBook Pro (15-inch, 2017)
+		\item \textbf{Processor:} 2.9 GHz Quad-Core Intel Core i7
+		\item \textbf{Memory:} 16 GB 2133 MHz LPDDR3 
+		\item \textbf{Graphics:} Radeon Pro 560 4 GB and Intel HD Graphics 630 1536 MB
+		\item \textbf{macOS Monetary - Version:} 12.2.1 (21D62)
+	\end{itemize} 
+
+	\item \textbf{Browser, Network and Lighthouse:}
+	\begin{itemize}[noitemsep]
+		\item \textbf{Browser:} Google Chrome
+		\item \textbf{Version:} 99.0.4844.51 (Official Build) (x86\_64)
+		\item \textbf{Chrome DevTools version:} Chrome 99
+		\item \textbf{Lighthouse version:} 100.0.0.0
+		\item \textbf{JavaScript version:} V8 9.9.115.8
+		\item \textbf{Network-Bandwidth:} 180-200 MB/s
+	\end{itemize}
+
+	\item \textbf{Runtime environment for prototypes:} surge.sh \footnote{surge.sh is a platform for static web publishing
+		for frontend developers via the command line.}
+	
+	\item \textbf{CDN:} Unpkg.com \footnote{This part of the environment was explained in chapter \ref{Chapter3}}
+\end{enumerate}
+
+Additionally to the specified hardware specs, version 1.18.1 of the \texttt{@luigi-project} was used. This dependency enables the Luigi framework and is therefore used in every implemented version of the prototype.
+
+\subsubsection{Testing process}
+
 Since multiple landscapes were implemented a unified process was required to collect comparable data. The BPMN diagram \ref{fig:data_collection_process_har} contains the process steps in detail.
 
 \begin{figure}[!h]
@@ -90,22 +125,22 @@ The table \ref{tab:cdn_result_table} contains the results for the implemented la
 
 \begin{longtable}[l]{*{3}{p{\mycolwidth}}}
 	
-	\caption{Table of numerical KPI results for the NPM landscapes without caching enabled}
+	\caption{Table of numerical KPI results for the NPM landscapes with caching disabled}
 	\label{tab:cdn_result_table} \\
 	
 	\toprule
-	\textbf{Metric}                                                           
-	& \makecell[c]{\textbf{Angular NPM}}                                
-	& \makecell[c]{\textbf{Vue NPM}} \\ 
+	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{Angular NPM}}}                              
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{Vue NPM}}} \\ 
 	\midrule
 	\endfirsthead
 	
 	\multicolumn{3}{l}{\footnotesize\itshape\tablename~\thetable:
 		continued from previous page} \\
 	\toprule   
-	\textbf{Metric}                        
-	& \textbf{Angular NPM}                             
-	& \textbf{Vue NPM}  \\*
+	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{Angular NPM}}}                              
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{Vue NPM}}} \\*
 	\midrule
 	\endhead
 	%		
@@ -144,7 +179,6 @@ The table \ref{tab:cdn_result_table} contains the results for the implemented la
 	\multicolumn{1}{l|}{\makecell[l]{Avg. Content Size}}                                         
 	& \multicolumn{1}{l|}{\makecell[c]{129529.13}}  				  
 	&   \multicolumn{1}{l}{\makecell[c]{156131.63}} \\ \bottomrule
-	
 \end{longtable}
 
 The results shown in table \ref{tab:cdn_result_table} were collected without caching enabled. This explains for instance, why no resources were loaded from cache and therefore the values for the \textit{memory} or \textit{disk} characteristics are missing.
@@ -156,18 +190,18 @@ The main takeaway from these results, is an average initial loading time for the
 	\label{tab:cdn_result_table_caching} \\
 	
 	\toprule
-	\textbf{Metric}                                                           
-	& \textbf{Angular NPM}                                
-	& \textbf{Vue NPM} \\ 
+	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{Angular NPM}}}                              
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{Vue NPM}}} \\ 
 	\midrule
 	\endfirsthead
 	
 	\multicolumn{3}{l}{\footnotesize\itshape\tablename~\thetable:
 		continued from previous page} \\
 	\toprule   
-	\textbf{Metric}                        
-	& \textbf{Angular NPM}                             
-	& \textbf{Vue NPM}  \\*
+	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{Angular NPM}}}                              
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{Vue NPM}}} \\*
 	\midrule
 	\endhead
 	%		
@@ -219,22 +253,22 @@ Table \ref{tab:cdn_result_table_unpkg} contains the results for the implemented 
 
 \begin{longtable}[c]{*{3}{p{\mycolwidth}}}
 	
-	\caption{Table of numerical KPI results for the landscapes using the Unpkg CDN without caching enabled}
+	\caption{Table of numerical KPI results for the landscapes using the Unpkg CDN with caching disabled}
 	\label{tab:cdn_result_table_unpkg} \\
 	
 	\toprule
-	\textbf{Metric}                                                           
-	& \textbf{Angular Unpkg}                                
-	& \textbf{Vue Unpkg} \\ 
+	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{Angular Unpkg}}}                              
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{Vue Unpkg}}} \\ 
 	\midrule
 	\endfirsthead
 	
 	\multicolumn{3}{l}{\footnotesize\itshape\tablename~\thetable:
 		continued from previous page} \\
-	\toprule   
-	\textbf{Metric}                        
-	& \textbf{Angular Unpkg}                             
-	& \textbf{Vue Unpkg}  \\*
+	\toprule                        
+	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{Angular Unpkg}}}                              
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{Vue Unpkg}}} \\*
 	\midrule
 	\endhead
 	%		
@@ -285,18 +319,18 @@ Table \ref{tab:cdn_result_table_unpkg} contains the results for the implemented 
  	\label{tab:cdn_result_table_unpkg_cache} \\
  	
  	\toprule
- 	\textbf{Metric}                                                           
- 	& \textbf{Angular Unpkg}                                
- 	& \textbf{Vue Unpkg} \\ 
+	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{Angular Unpkg}}}                              
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{Vue Unpkg}}} \\ 
  	\midrule
  	\endfirsthead
  	
  	\multicolumn{3}{l}{\footnotesize\itshape\tablename~\thetable:
  		continued from previous page} \\
  	\toprule   
- 	\textbf{Metric}                        
- 	& \textbf{Angular Unpkg}                             
- 	& \textbf{Vue Unpkg}  \\*
+	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{Angular Unpkg}}}                              
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{Vue Unpkg}}} \\*
  	\midrule
  	\endhead
  	%		
@@ -347,21 +381,21 @@ Table \ref{tab:wmf_compound} shows the above mentioned KPIs of those environment
  
 \begin{longtable}[c]{*{3}{p{\mycolwidth}}}
 	
-	\caption{Table of numerical KPI results for the landscapes implemented with Web Components as Compound Views and WMF without caching enabled}
+	\caption{Table of numerical KPI results for the landscapes implemented with Web Components as Compound Views and WMF with caching disabled}
 	\label{tab:wmf_compound} \\
 	
 	\toprule
-	\textbf{Metric}                                                           
-	& \textbf{WC/Compound}                                          
-	& \textbf{WMF} \\ 
+	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{WC/Compound }}}                              
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{WMF}}} \\ 
 	\midrule
 	\endfirsthead
 	
 	\multicolumn{3}{l}{\footnotesize\itshape\tablename~\thetable: continued from previous page} \\
 	\toprule                        
-	\textbf{Metric}                                                             
-	& \textbf{WC/Compound}                                          
-	& \textbf{WMF} \\ 
+	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{WC/Compound }}}                              
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{WMF}}} \\*
 	\midrule
 	\endhead
 	%		
@@ -408,21 +442,21 @@ Table \ref{tab:wmf_compound_cache} showcases the same landscapes, but with cachi
 
 \begin{longtable}[c]{*{3}{p{\mycolwidth}}}
 	
-	\caption{Table of numerical KPI results for the landscapes implemented with Web Components as Compound Views and WMF without caching enabled}
+	\caption{Table of numerical KPI results for the landscapes implemented with Web Components as Compound Views and WMF with caching enabled}
 	\label{tab:wmf_compound_cache} \\
 	
 	\toprule
-	\textbf{Metric}                                                           
-	& \textbf{WC/Compound}                                          
-	& \textbf{WMF} \\ 
+	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{WC/Compound }}}                              
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{WMF}}} \\ 
 	\midrule
 	\endfirsthead
 	
 	\multicolumn{3}{l}{\footnotesize\itshape\tablename~\thetable: continued from previous page} \\
 	\toprule                        
-	\textbf{Metric}                                                             
-	& \textbf{WC/Compound}                                          
-	& \textbf{WMF} \\ 
+	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{WC/Compound }}}                              
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{WMF}}} \\*
 	\midrule
 	\endhead
 	%		
@@ -482,19 +516,19 @@ The given data was gathered based on the previously introduced landscapes. It co
 	\label{tab:lighthouse_used_report} \\
 	
 	\toprule
-	\textbf{Landscape}                                                           
-	& \textbf{Avg. imported bytes}                                          
-	& \textbf{Avg. unused bytes}                   
-	& \textbf{Avg. unused bytes in \%} \\ 
+	\textbf{Landscape}                        
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{Avg. imported bytes}}}   
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{Avg. unused bytes}}}                              
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{Avg. unused bytes in \%}}} \\                                    
 	\midrule
 	\endfirsthead
 	
 	\multicolumn{4}{l}{\footnotesize\itshape\tablename~\thetable: continued from previous page} \\
 	\toprule        
-	\textbf{Landscape}                                                           
-	& \textbf{Avg. imported bytes}                                          
-	& \textbf{Avg. unused bytes}                   
-	& \textbf{Avg. unused bytes in \%}   \\ 
+	\textbf{Landscape}                        
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{Avg. imported bytes}}}   
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{Avg. unused bytes}}}                              
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{Avg. unused bytes in \%}}} \\*
 	\midrule
 	\endhead
 	%		
