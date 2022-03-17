@@ -120,10 +120,10 @@ In the following sections the results of the introduced metrics for each landsca
 
 The table \ref{tab:cdn_result_table} contains the results for the implemented landscapes with a regular bundler and a package manager, namely NPM. Certain metrics are not added to the table for readability, but a graphical representation can be found in \ref{appendix1}.
 
-\scriptsize 
-\setlength{\mycolwidth}{\dimexpr \textwidth/5 - 2\tabcolsep}%
+\scriptsize
+\setlength{\mycolwidth}{\dimexpr \textwidth/5 - 2\tabcolsep}
 
-\begin{longtable}[l]{*{3}{p{\mycolwidth}}}
+\begin{longtable}[c]{*{3}{p{\mycolwidth}}}
 	
 	\caption{Table of numerical KPI results for the NPM landscapes with caching disabled}
 	\label{tab:cdn_result_table} \\
@@ -181,10 +181,14 @@ The table \ref{tab:cdn_result_table} contains the results for the implemented la
 	&   \multicolumn{1}{l}{\makecell[c]{156131.63}} \\ \bottomrule
 \end{longtable}
 
+\normalsize
 The results shown in table \ref{tab:cdn_result_table} were collected without caching enabled. This explains for instance, why no resources were loaded from cache and therefore the values for the \textit{memory} or \textit{disk} characteristics are missing.
 The main takeaway from these results, is an average initial loading time for the landscapes which range from \textbf{129529.125} to \textbf{156131.625} milliseconds, depending on the framework. It can also be seen, that even though less resources are loaded via URLs by the VueJS landscape, it has a longer loading time compared to the Angular one.
 
-\begin{longtable}[l]{*{3}{p{\mycolwidth}}}
+\scriptsize
+\setlength{\mycolwidth}{\dimexpr \textwidth/5 - 2\tabcolsep}
+
+\begin{longtable}[c]{*{3}{p{\mycolwidth}}}
 	
 	\caption{Table of numerical KPI results for the NPM landscapes with caching enabled}
 	\label{tab:cdn_result_table_caching} \\
@@ -243,6 +247,7 @@ The main takeaway from these results, is an average initial loading time for the
 	
 \end{longtable}
 
+\normalsize
 The results of table \ref{tab:cdn_result_table_caching} show the effect caching has on the performance of a site. The average loading time of the site decreases, as do the opened TCP connections. In table \ref{cdn_result_table}, the Angular landscape is loaded faster compared to Vue JS.
 
 Both environments were implemented using a regular bundler and therefore it can not be ensured that redundant libraries were not loaded.
@@ -250,6 +255,9 @@ Both environments were implemented using a regular bundler and therefore it can 
 \subsection{Implementation with Unpkg}
 
 Table \ref{tab:cdn_result_table_unpkg} contains the results for the implemented landscapes with a use of a public CDN, namely Unpkg. Certain metrics are not added to the table for readability, but a graphical representation can be found in \ref{appendix1}. 
+
+\scriptsize
+\setlength{\mycolwidth}{\dimexpr \textwidth/5 - 2\tabcolsep}
 
 \begin{longtable}[c]{*{3}{p{\mycolwidth}}}
 	
@@ -310,9 +318,13 @@ Table \ref{tab:cdn_result_table_unpkg} contains the results for the implemented 
 	
 \end{longtable}
 
- The data shown in table \ref{tab:cdn_result_table_unpkg} are again collected without caching enabled. An approximate estimation for the initial loading times can be drawn from this. It is made visible that the VueJS environment takes longer to load for less content. A similar behavior was present in the NPM implementation.
- Nonetheless it is an improvement in performance compared to the NPM counterparts for both landscapes. The trade-off of this technology is that single component resources, like a button or a table, were imported via script tags one by one, thus the increase in loaded URLs.
-  
+\normalsize
+The data shown in table \ref{tab:cdn_result_table_unpkg} are again collected without caching enabled. An approximate estimation for the initial loading times can be drawn from this. It is made visible that the VueJS environment takes longer to load for less content. A similar behavior was present in the NPM implementation.
+Nonetheless it is an improvement in performance compared to the NPM counterparts for both landscapes. The trade-off of this technology is that single component resources, like a button or a table, were imported via script tags one by one, thus the increase in loaded URLs.
+
+\scriptsize
+\setlength{\mycolwidth}{\dimexpr \textwidth/5 - 2\tabcolsep}
+
 \begin{longtable}[c]{*{3}{p{\mycolwidth}}}
  	
  	\caption{Table of numerical KPI results for the landscapes using the Unpkg CDN with caching enabled}
@@ -372,6 +384,7 @@ Table \ref{tab:cdn_result_table_unpkg} contains the results for the implemented 
  	
 \end{longtable}
 
+\normalsize
 A similar development can be observed in table \ref{tab:cdn_result_table_unpkg_cache} as previously. Primarily with caching enabled, the average loading times decrease, secondly the amount of loaded resources from cache increases significantly and lastly the Angular environments show shorter average loading times despite more resources were requested by them.
 
 \section{Web Components/Compound and WMF landscapes}
@@ -379,14 +392,18 @@ A similar development can be observed in table \ref{tab:cdn_result_table_unpkg_c
 As the described in chapter \ref{Chapter4}, these environments exist in different versions. They were designed that way to showcase how the used technologies handle multi-version landscapes and how they affect the performance.
 Table \ref{tab:wmf_compound} shows the above mentioned KPIs of those environments.
  
+
+\scriptsize
+\setlength{\mycolwidth}{\dimexpr \textwidth/5 - 2\tabcolsep}
+
 \begin{longtable}[c]{*{3}{p{\mycolwidth}}}
 	
-	\caption{Table of numerical KPI results for the landscapes implemented with Web Components as Compound Views and WMF with caching disabled}
+	\caption{Table of numerical KPI results for the landscapes implemented with Web Components as compound views and WMF with caching disabled}
 	\label{tab:wmf_compound} \\
 	
 	\toprule
 	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{WC/Compound }}}                              
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{WC/Compound}}}                              
 	& \multicolumn{1}{l}{\makecell[c]{\textbf{WMF}}} \\ 
 	\midrule
 	\endfirsthead
@@ -437,17 +454,21 @@ Table \ref{tab:wmf_compound} shows the above mentioned KPIs of those environment
 	
 \end{longtable}
 
+\normalsize
 As the data in table \ref{tab:wmf_compound} shows, the initial loading time for the Compound/Web Components environments is significantly lower compared to the WMF counterpart. Also the amount of loaded resources differs. This is due to the fact, that WMF has to be used in combination with the Webpack 5 bundler. Therefore certain resources might be loaded several times, if not configured as shared dependencies in the Module Federation. 
 Table \ref{tab:wmf_compound_cache} showcases the same landscapes, but with caching enabled.
 
+\scriptsize
+\setlength{\mycolwidth}{\dimexpr \textwidth/5 - 2\tabcolsep}
+
 \begin{longtable}[c]{*{3}{p{\mycolwidth}}}
 	
-	\caption{Table of numerical KPI results for the landscapes implemented with Web Components as Compound Views and WMF with caching enabled}
+	\caption{Table of numerical KPI results for the landscapes implemented with Web Components as compound views and WMF with caching enabled}
 	\label{tab:wmf_compound_cache} \\
 	
 	\toprule
 	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{WC/Compound }}}                              
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{WC/Compound}}}                              
 	& \multicolumn{1}{l}{\makecell[c]{\textbf{WMF}}} \\ 
 	\midrule
 	\endfirsthead
@@ -455,7 +476,7 @@ Table \ref{tab:wmf_compound_cache} showcases the same landscapes, but with cachi
 	\multicolumn{3}{l}{\footnotesize\itshape\tablename~\thetable: continued from previous page} \\
 	\toprule                        
 	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{WC/Compound }}}                              
+	& \multicolumn{1}{l}{\makecell[c]{\textbf{WC/Compound}}}                              
 	& \multicolumn{1}{l}{\makecell[c]{\textbf{WMF}}} \\*
 	\midrule
 	\endhead
@@ -498,7 +519,8 @@ Table \ref{tab:wmf_compound_cache} showcases the same landscapes, but with cachi
 	
 \end{longtable}
 
-The results with the caching enabled are not so different compared to the disabled caching ones. For instances, in both cases the average loading time for the Compound landscape has longer loading times for fewer resources. One aspect differs though, compared to the Compound landscape the WMF one has little cached resources. Also it becomes visible that the average content size loaded is smaller. Therefore, the Lighthouse tool was used to gather further information and data about those applications. The next section will showcase and explain the analysis done.
+\normalsize
+The results with the caching enabled are not so different compared to the disabled caching ones. For instances, in both cases the average loading time for the compound landscape has longer loading times for fewer resources. One aspect differs though, compared to the compound landscape the WMF one has little cached resources. Also it becomes visible that the average content size loaded is smaller. Therefore, the Lighthouse tool was used to gather further information and data about those applications. The next section will showcase and explain the analysis done.
 
 \section{Lighthouse analysis}
 
@@ -506,6 +528,8 @@ It has to be mentioned in advance that the following data is considered to be re
 For the sake of completeness the reports are shown below.
 
 The given data was gathered based on the previously introduced landscapes. It contains the analysis of the imported resources and how much of the corresponding imports were not used by the application, measured in bytes. First a tabular view is provided, following by the corresponding graph.
+
+\newpage
 
 \scriptsize 
 \setlength{\mycolwidthtwo}{\dimexpr \textwidth/5 - 2\tabcolsep}%
@@ -576,8 +600,10 @@ The given data was gathered based on the previously introduced landscapes. It co
 	\caption{Unused and imported bytes per landscape in \%}
 	\label{fig:unsed_imported_2}
 \end{figure}
+\newpage
 
-The above shown data is highly application dependent. Still as these landscapes are considered to be generally representative, a display in efficiency can be drawn from the above shown charts.
+\normalsize
+The shown data in \ref{tab:lighthouse_used_report}, \ref{fig:unsed_imported_1} and \ref{fig:unsed_imported_2} is highly application dependent. Still as these landscapes are considered to be generally representative, a display in efficiency can be drawn from the charts.
 The Unpkg CDN landscapes show a low unused bytes ratio. Since only the required resources were requested from the CDN, only a few unused bytes were detected by the Lighthouse tool. 
 For the WMF landscape, it can be argued, that due to the bundling with Webpack, a lot of bytes were imported but only a few of them were not used. This can be explained through how the Module Federation works, since every configured shared resource is checked if it should be shared or not.
 

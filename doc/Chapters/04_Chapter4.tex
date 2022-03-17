@@ -67,9 +67,9 @@ The listing shows the usage of the Shadow DOM in combination with registering a 
 The \texttt{script} tag of the snippet starts with creating a new HTML element called CustomElement. It is an extension to the HTMLElement class. This new element has the Shadow DOM attached to it. Therefore, it is the Shadow host in the DOM tree. Via the \texttt{innerHTML} attribute a Shadow DOM Node is created. In this case it is a styling for paragraphs,followed by the creation of a paragraph onto which the styling is applied. Additionally the text color of the paragraph is set to blue and lastly it is attached to the Shadow root.
 The last three lines of the script, are the definition and registration of the new \texttt{custom-element}, the creation of a new \texttt{customElement} object and the output of the attached Shadow DOM in the console.
 
-Now when looking at the body of the above snipped, it becomes visible that beside the \texttt{custom-element} another paragraph is defined in the document. Usually the styles defined in the \texttt{script} below would apply to this paragraph too. Through the encapsulation of the two separate DOMs this is not the case. The paragraph defined in the body of the document will be completely unaffected by the changes applied to the paragraphs in the Shadow DOM.\cite{simon_thesis}
+Now when looking at the body of the above snippet, it becomes visible that beside the \texttt{custom-element} another paragraph is defined in the document. Usually the styles defined in the \texttt{script} below would apply to this paragraph, too. Through the encapsulation of the two separate DOMs this is not the case. The paragraph defined in the body of the document will be completely unaffected by the changes applied to the paragraphs in the Shadow DOM.\cite{simon_thesis}
 
-Now another configuration which is shown in the snipped is the \texttt{this.attachShadow({mode: 'open'})}. This mode property defines the visibility of the Shadow DOM to the browser. If set to \texttt{open}, the elements of the Shadow DOM can be inspected inside the sources. Thus, the \texttt{console.log(customElement.shadowRoot)} line would work if executed. 
+Now another configuration which is shown in the snippet is the \texttt{this.attachShadow({mode: 'open'})}. This mode property defines the visibility of the Shadow DOM to the browser. If set to \texttt{open}, the elements of the Shadow DOM can be inspected inside the sources. Thus, the \texttt{console.log(customElement.shadowRoot)} line would work if executed. 
 If the mode would be set to \texttt{closed}  the \texttt{console.log()} command in line 20 would return \texttt{null}.\cite{simon_thesis}
 
 This behavior is not meant to be used as a measure of security, since it can be overwritten. The Shadow DOM encapsulates every part of its DOM elements, that means HTML, CSS and JavaScript. The \texttt{document} object, available during runtime, stays the same for the regular DOM as for the Shadow DOM though. Therefore, each configuration done in the Shadow DOM via scripts can be easily overwritten from any other script in the document, thus the mode can be changed even if initially set to \texttt{closed}.\cite{shadow_dom_encapsulation} For Web Components in particular it is not recommended to use this mode at all, since it would make them less flexible for end users.\cite{wc_shadow_dom_google}
@@ -124,7 +124,7 @@ As it can be seen in \ref{slot_example}, the \texttt{slot} definition has some d
 In that case the content is replaced by some list items.
 Other than the templates, slots are always rendered if included in the markup via their respective names. The content which is rendered is depended on, if the default content is overwritten or not.
 
-Even though slots are a HTML standard just a templates, their support for browsers is not always guaranteed. This is due to the fact, that compared to templates it is a rather new standard.
+Even though slots are a HTML standard just as templates, their support for browsers is not always guaranteed. This is due to the fact, that compared to templates it is a rather new standard.
 
 In combination these two standards offer a way to define flexible, reusable markup code for Web Components.\cite{wc_html_template_slots} 
 
@@ -157,8 +157,8 @@ This feature is essential for the prototype developed, since via this aspect the
 
 \section{Usage of Web Components in the Prototype}
 
-The Web Components standard was partially used in the development of the prototype. This technology was required to make usage of the Compound feature of the Luigi framework. \cite{luigi_wc} \cite{luigi_compound}
-For development itself no UI framework was used, which means all compounds were developed using plain Java Script. The actual components provided for the compounds, were taken from a component library called UI5 Web Components. Each element in that library is in fact a Web Component.\cite{ui5_wc_github}
+The Web Components standard was partially used in the development of the prototype. This technology was used to embed the developed components as part of a compound view, using the corresponding feature in Luigi. \cite{luigi_wc} \cite{luigi_compound}
+For development itself no UI application framework was used, which means all three compounds were developed using plain Java Script. The actual components used in the micro frontends of the compounds, were taken from a component library called UI5 Web Components. Each element in that library is in fact a Web Component.\cite{ui5_wc_github}
 Consisting of the picked elements and under the usage of the scoping feature of the component library, the compounds where created. This made it possible to scope the tags of the UI5 Web Components.\cite{ui5_webcomponents_scoping}
 
 \begin{lstlisting}[caption=Scoping feature used in the prototype, label=scoping_wc_prototype]
@@ -205,7 +205,7 @@ export default class extends LuigiElement {
 Listing \ref{scoping_wc_prototype} shows the exact usage of the scoping feature. 
 The imported \textit{setCustomElementsScopingSuffix} function enables to define a custom suffix to all UI5 Web Component elements, if not configured otherwise. Also, as it can be seen in the same listing, the suffix is set to \textit{placeholder} using the imported method 
 \textit{setCustomElementsScopingSuffix("placeholder")}.
-This is done for the sake of the experiment itself. It was intended to deploy six same or similar looking compounds into the Luigi landscape to test how many redundancies occur. In addition it was meant to be tested how different versions of the same elements could be registered. For example the \textit{Bar} element in version \textit{1.0.1} is registered under same tag as the same element in version \textit{1.1.0}. This scenario has to be handled and the scoping feature is one way of doing so.
+This is done for the sake of the experiment itself. It was intended to deploy six same or similar looking Web Components into the Luigi landscape to test how many redundancies occur. In addition it was meant to be tested how different versions of the same elements could be registered. For example the \textit{Bar} element in version \textit{1.0.1} is registered under same tag as the same element in version \textit{1.1.0}. This scenario has to be handled and the scoping feature is one way of doing so.
 By defining a version suffix for the \textit{Bar} element tag, the browser can distinguish those elements.
 In case of the prototype to create this exact scenario, one global tag suffix \textit{placeholder} was picked and later replaced. The replacement itself happened during the bundling of the project. The RollUp bundler provided the necessary functionality for that.
 Inside the \texttt{rollup.config.js} several configurations were defined, which are shown in listing \ref{rollupconfigjs}.

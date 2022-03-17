@@ -10,7 +10,7 @@ It will also narrow down the thesis scope.
 \section{Motivation}
 
 The micro frontend technology has experienced a rise in popularity over the past 3 years. The occurrence of such a trend is no surprise, considering the fact that more and more applications are designed following the micro service architecture principles.\cite{google_micro_frontend_trends} 
-Micro frontends share a common interest with their assumed precursor. Generally it can be stated, that the market prefers smaller independent lightweight applications over monolithic giants with strong dependencies. Similar to micro services, micro frontends offer almost the same advantages to a development team: Independence of the respective micro frontend teams, shorter developments cycles, smaller scope of maintenance, separations of concerns, reusable components available via defined APIs and further more.\cite{advantages_of_mfes} But still this concept has certain flaws which have to be considered when making the decision.\cite{Yang_2019}
+Micro frontends share a common interest with their assumed precursor. Generally it can be stated, that the market prefers smaller independent lightweight applications over monolithic giants with strong dependencies. Similar to micro services, micro frontends offer almost the same advantages to a development team: Independence of the respective micro frontend teams, shorter and decoupled developments cycles, smaller scope of maintenance, separations of concerns, reusable components available via defined APIs and further more.\cite{advantages_of_mfes} But still this concept has certain flaws which have to be considered when making the decision.\cite{Yang_2019}
 
 Depending on the type of the to-be-developed application, the concept of micro frontends is not always favored. One major point of criticism is the aspect of redundancies inside the landscape. Specifically the aspect of isolation is a core aspect of this architecture. The circumstance that, each micro frontend is a separate project with its own runtime, developed by an independent team causes the issue to occur. It allows the development teams to use their own preferred tech stack and enables the application itself to be reused in different landscapes. Nonetheless, that also means that isolated micro frontends are partially loading and using the same libraries during their runtime. This is causing an overhead on client and server side and therefore correlates with the runtime costs of such a landscape and potentially an inferior user experience.\cite{motivation_benefits_adopting_MFs}\cite{micro_frontends_in_general}
 
@@ -22,7 +22,7 @@ The goal of this thesis is to provide proof and evaluate methods to avoid redund
 
 For the context of this transcript, the term \textit{"redundancies"} or \textit{"redundant libraries"} means same libraries or dependencies used by multiple micro frontend projects. It does not mean the redundant code elements, like reoccurring methods inside the projects or same CCS classes. 
 
-A library is determined by its identifier or its name, e.g. \texttt{@luigi-project.} If the given library or dependency is imported via any means and in any version, by multiple different micro frontends, it is considered to be redundant for the context of this thesis. The case of different versions of redundant libraries is considered too and is covered in the following chapters.
+A library is determined by its identifier or its name, e.g. \texttt{@luigi-project.} If the given library or dependency is imported, via any means and in any version, by multiple different micro frontends, it is considered to be redundant for the context of this thesis. The case of different versions of redundant libraries is considered too and is covered in the following chapters.
 
 To achieve the mentioned goal, two prototypes were implemented using the Luigi micro frontend framework. The landscape itself was implemented to be as representative as possible by using a heterogenic tech stack. Additionally following methods were implemented to avoid redundantly loaded libraries:
 
@@ -42,7 +42,7 @@ Since the time given for this transcript is limited, the context is scoped. Ther
 \begin{itemize}
 	\item The development of an own CDN - An approximate cost assumption is made for such a project, without actual implementation.
 	\item Usage of the Webpack bundler outside the context of the Module Federation - Since this bundler offers many ways for configuration, the focus lies on the necessary onces for the WMF context.
-	\item Configuration for the Luigi framework of the implemented landscape - Each prototype implemented, uses this framework to for their micro frontend landscapes and since not all configurations can be shown here, only a general overview is given.
+	\item Configuration for the Luigi framework of the implemented landscape - Each prototype implemented uses this framework for their micro frontend landscapes and since not all configurations can be shown here, only a general overview is given.
 	\item Development of Web Components - The general usage and functionality of this standard is explained.
 	\item Combinations of the implemented technologies - This aspect is not empirically considered in this transcript.
 \end{itemize}

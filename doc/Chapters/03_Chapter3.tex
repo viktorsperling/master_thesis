@@ -131,7 +131,7 @@ The previously mentioned prototype was developed using Unpkg.com. The figure \re
 	\label{fig:unpkg_prototype_architecture}
 \end{figure}
 \newpage
-Several Nodes where embedded in the Luigi landscape. Some of which are Angular apps, other are implemented with Vue. It has to be added, that apart from the difference regarding the UI-Frameworks each micro frontend displays the same elements. This design decision was made, to ensure a base for later comparisons. Additionally each micro frontend was implemented using a regular bundler and package manager. This way a direct comparison is possible between the two technologies.
+Several Nodes were embedded in the Luigi landscape. Some of which are Angular apps, other are implemented with Vue. It has to be added, that apart from the difference regarding the UI-Frameworks, each micro frontend displays the same elements. This design decision was made, to ensure a base for later comparisons. Additionally, each micro frontend was implemented using a regular bundler and package manager. This way a direct comparison is possible between the two technologies.
 
 The usage of the Unpkg-CDN itself is embedded in the code. Instead of loading the dependencies via the local \texttt{node\_modules} directory, they are directly loaded using the CDNs API. The usage of which is displayed in the listing \ref{unpkg_import}.
 

@@ -47,9 +47,9 @@ In the \texttt{luigi.config.js} itself the above mentioned possible configuratio
 
 \subsubsection{Client}
 
-The Luigi Client serves as the connection between the framework and its micro frontends. In order to establish the connection a micro frontend has to import and initialize it. This will grant the micro frontend access to the \textbf{LuigiClient} object during the runtime. The micro frontend can then interact with the framework to e.g. set a global state, add event listeners or enable navigation between other micro frontends in the landscape.
+The Luigi Client serves as the connection between the framework and its micro frontends. In order to establish the connection, a micro frontend has to import and initialize it. This will grant the micro frontend access to the \textbf{LuigiClient} object during the runtime. The micro frontend can then interact with the framework to e.g. set a global state, add event listeners or enable navigation between other micro frontends in the landscape.
 
-An import of the Luigi Client can be accomplished via different methods. The most forward approach, might be the direct import with a HTML script tag. Another option can be the import of the local package manager dependency.\cite{luigi_client}
+An import of the Luigi Client can be accomplished via different methods. The most forward approach might be the direct import with a HTML script tag. Another option can be the import of the local package manager dependency.\cite{luigi_client}
 
 \begin{lstlisting}[caption=Import methods of the Luigi Client]
 	<!-- Via the HTML script tag -->
@@ -71,7 +71,7 @@ After the short introduction of the framework's core components, a general archi
 	\label{fig:luigi_architecture_fig}
 \end{figure}
 
-As can be seen in figure \ref{fig:luigi_architecture_fig}, the displayed micro frontends in the Web App have a distinguished position in the Micro Frontends Container. The embedded projects can either be integrated via iFrames or as Web Components as so called Compounds.
+As can be seen in figure \ref{fig:luigi_architecture_fig}, the displayed micro frontends in the Web App have a distinguished position in the Micro Frontends Container. The embedded projects can either be integrated via iFrames or as Web Components.
 Via the provided dashboard, called Navigation Frame in the image, the Luigi Core features are used. Through it the navigation or search feature can be accessed.
 
 As described in the first chapter of this transcript, the issue in such a landscape is redundancies between the same libraries of the embedded micro frontends. Each Node is an isolated application, which is the reason for this problem.
