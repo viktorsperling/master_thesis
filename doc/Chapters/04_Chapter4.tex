@@ -4,13 +4,11 @@
 
 \lhead{Chapter 4. \emph{Web Components}}
 
-\section{Web Components in general}
-
 As in \ref{Chapter2} introduced, Web Components have the attribute of the Custom Element, via which the individuality of each registered tag is guaranteed.
 Nonetheless to understand the actual functionality of Web Components, it is necessary to explain the other aspects of it.
 The following section will introduce the other three standards of Web Components and their functions and showcase how exactly they serve a purpose for the context of the thesis.
 
-\subsection{Shadow DOM}
+\section{Shadow DOM}
 
 The DOM (Document Object Model) represents the elements of a markup document in a tree-like structure, consisting of connected nodes. The commonly used markup language for websites is HTML. \cite{wc_shadow_dom}
 The Shadow DOM is also a DOM, but is attached to the actual DOM of the document. Underneath it, elements can be defined the same way as they are in the regular DOM. The difference appears during the rendering of the document, when a page is loaded. The Shadow DOM elements are rendered separately from the DOM it is attached to.\cite{simon_thesis}
@@ -76,7 +74,7 @@ This behavior is not meant to be used as a measure of security, since it can be 
 
 This feature can be used in combination with a component library like UI5 Web Components, to customize styles or appearances of individual components. Nonetheless, for the context of this thesis, it does not serve any purpose to actually avoid redundancies in a micro frontend landscape, instead it might even increase them. The encapsulation of code elements between the single components increases the isolation and thus it cannot be guaranteed that e.g. the same CSS class is not rendered in multiple different Shadow DOMs. Even though the redundancies would occur on code level and not on dependency level, they are redundancies nonetheless.
 
-\subsection{HTML Template}
+\section{HTML Template}
 
 This standard offers a way to define reusable markup code. As a part of the HTML standard itself, the \texttt{template} tag is used to define templates. These are not rendered unless used by another element. Similar to \texttt{template}, \texttt{slot} serves the same purpose, but in a different way. Templates are defined HTML code snippets which can be cloned and inserted in other document elements or even elements rendered in the Shadow DOM.
 Slots on the other hand serve as placeholder for either default markup texts or other DOM elements. Therefore, a template is a rather static piece of reusable HTML code, compared to slots.
@@ -130,7 +128,7 @@ In combination these two standards offer a way to define flexible, reusable mark
 
 When developing own Web Components for a micro frontend landscape, this aspect can be used to reduce repetitive HTML code elements by serving them a templates. But again this feature is not applicable when it comes to reducing redundant libraries in a micro frontend landscape. Redundant code snippets can be defined as reusable templates but not the actual libraries.
 
-\subsection{ES Modules}
+\section{ES Modules}
 
 The last standard is not referred to by every source, but according to \cite{wc_specifications}, it is a stable part of the Web Components standard, via which Java Script modules can be defined and reused by other documents.
 Thus the development of Web Components can be done in a modular way, making every component available to other documents, using the \texttt{type="module"} attribute.

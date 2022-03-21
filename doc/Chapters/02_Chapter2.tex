@@ -29,9 +29,9 @@ The \textbf{Luigi Core} is the groundstone of the whole landscape. It defines th
 \end{itemize} 
 
 The core application inside the landscape is determined via the \texttt{luigi.config.js}. Any project containing it can fulfill this role, which is the only prerequisite. In the context of the framework this app is later referred to as the \textbf{Core}.
-Following this principle, the project structure of the \textbf{Core} could look as shown in \ref{luigi_core_structure}.\footnote{This example is directly taken from the implemented core project.}  
+Following this principle, the project structure of the \textbf{Core} could look as shown in listing \ref{list:luigi_core_structure}.\footnote{This example is directly taken from the implemented core project.}  
 
-\begin{lstlisting}[language=Bash, caption=Project structure for a Luigi Core application including the \texttt{luigi.config.js}, label=luigi_core_structure]
+\begin{lstlisting}[language=Bash, caption=Project structure for a Luigi Core application including the \texttt{luigi.config.js}, label=list:luigi_core_structure]
 	- react-core-mf
 		- [...]
 		- node_modules
@@ -51,7 +51,7 @@ The Luigi Client serves as the connection between the framework and its micro fr
 
 An import of the Luigi Client can be accomplished via different methods. The most forward approach might be the direct import with a HTML script tag. Another option can be the import of the local package manager dependency.\cite{luigi_client}
 
-\begin{lstlisting}[caption=Import methods of the Luigi Client]
+\begin{lstlisting}[caption=Import methods of the Luigi Client, label=list:import_luigi_client]
 	<!-- Via the HTML script tag -->
 	<script src="https://unpkg.com/@luigi-project/client@1.17.0/luigi-client.js">
 	</script>
@@ -66,7 +66,7 @@ After the short introduction of the framework's core components, a general archi
 
 \begin{figure}[!h]
 	\centering
-	\includegraphics[width=1\textwidth]{Figures/Luigi_Architektur.png}
+	\includegraphics[width=1.05\textwidth]{Figures/Luigi_Architektur.png}
 	\caption{Architecture of the Luigi Framework \cite{luigi_architecture}}
 	\label{fig:luigi_architecture_fig}
 \end{figure}
@@ -82,12 +82,12 @@ The sections below will introduce methods of resolving exactly that issue.
 \label{cdn_intro}
 
 One way of avoiding loading redundant libraries into a micro frontend landscape can be a central source, where all resources are stored and can be requested via an API. Such a concept exists in the idea of Content Delivery Networks (CDNs).
-A CDN is the simplest way of solving the issue at hand. Since the resources are loaded via the CDN API, a dependency is available under a unique URL. Loading a dependency twice means the browser requests the resource from the same URL with the same parameters. Therefore, the browser can determine if the given resource is already present and decide to either load it from the CDN or from the browser cache, if it is already loaded.
+A CDN is the simplest way of solving the issue at hand. Since the resources are loaded via the CDN API, a dependency is available under a unique URL. Loading a dependency twice means the browser requests the resource from the same URL with the same parameters. Therefore, the browser can determine if the given resource is already present and decide to either load it from the CDN or from the browser cache, if it is already loaded.\cite{caching_in_browser}
 
 Nonetheless, a CDN has its limits which have to be considered. Costs can play a key role in the decision process.
 Even though free CDN services like \textbf{Unpkg.com} or \textbf{cdnjs} are valid options, the advantages of using such might differ depending on the business case.
 For instance, those services might solve the issue of redundant libraries in a micro frontend landscape, but do they really improve the user experience of the application? 
-Since the resources would be loaded from a cloud based service, the server location has significant influence on the latency of the requests. Therefore, depending from where the website is accessed, this circumstance could lead to a performance decrease when initially loading the page.
+Since the resources would be loaded from a cloud based service, the server location has significant influence on the latency of the requests. Therefore, depending from where the website is accessed, this circumstance could lead to a performance decrease when initially loading the page.\cite{cdn_general}
 
 Also the technological dependency on a public cloud based CDN has to be considered. Most cloud based services are scalable and replicable. However, a down time could lead to immense costs for a platform provider relying on a public CDN to deliver the platform resources.
 Besides, it is never guaranteed that certain dependencies are always available on the public CDN.
@@ -151,7 +151,7 @@ WMF can be used in combination with most of the common UI Frameworks. But since 
 As explained WMF is a micro frontend framework, but for the purpose of solving the issue introduced in this transcript, it provides functionality too.
 This feature is enabled and configured, as well as the rest of the WMF, via the \texttt{webpack.config.js}. When configuring the components of the landscape, it is possible to define a section where shared dependencies are described. These dependencies can be defined in different ways. For instance, it is possible to define a strict version of the dependency, which would result in the framework loading this specific version. Or one can define a less restricted dependency which would mean, that if another \texttt{remote} loads the same dependency but in a different version, the framework would automatically apply the highest major version of the dependency to both micro frontends.
 \newpage
-\begin{lstlisting}[language=JavaScript, caption=Example of sharing dependencies configured in the \texttt{webpack.config.js}, label=shared_mapping_wmf]
+\begin{lstlisting}[language=JavaScript, caption=Example of sharing dependencies configured in the \texttt{webpack.config.js}, label=list:shared_mapping_wmf]
 	  shared: share({
 			"@angular/core": { 
 				singleton: true, 
@@ -173,7 +173,7 @@ This feature is enabled and configured, as well as the rest of the WMF, via the 
 		})
 \end{lstlisting}
 
-The listing \ref{shared_mapping_wmf} is an example of how to share libraries in a restrictive way. To provide a less restricted configuration a simple array of the shared dependency names suffices. But to ensure a redundant free landscape, these restrictions are necessary. Each configuration property will be explained below.
+The listing \ref{list:shared_mapping_wmf} is an example of how to share libraries in a restrictive way. To provide a less restricted configuration a simple array of the shared dependency names suffices. But to ensure a redundant free landscape, these restrictions are necessary. Each configuration property will be explained below.
 
 \begin{itemize}
 	\item \texttt{singleton} - This property defines if the dependency should be able to be loaded more than once in different versions or not. If set to \texttt{true}, WMF will automatically pick the highest version of a major release of this dependency available and distribute it to the \texttt{remotes}.\cite{wmf_version_mismatch}
@@ -195,7 +195,7 @@ Analyzing this statement in combination with the information in the above list, 
 	\label{fig:wmf_multiversions}
 \end{figure}
 
-As it can be seen in \ref{fig:wmf_multiversions} WMF always picks the the highest major release, assuming the respective micro frontends have the above shown configuration \ref{shared_mapping_wmf} applied. If for instance, if \textbf{MF3} has its \texttt{strictVersion} property set to \texttt{true}, it would cause the loading of its libraries too.
+As it can be seen in \ref{fig:wmf_multiversions} WMF always picks the the highest major release, assuming the respective micro frontends have a similar configuration as shown in listing \ref{list:shared_mapping_wmf} applied. If for instance, if \textbf{MF3} has its \texttt{strictVersion} property set to \texttt{true}, it would cause the loading of its libraries too.
 
 When now looking at the introduced example, it is obvious that sharing several versions of the same framework over the whole landscape can not go without side effects. One of which is the increase in bundle sizes, since every \texttt{remote} bundles their local dependencies. WMF then picks the one to serve during the runtime of the landscape.
 This impact has a trade-off tough. Returning users can benefit from cached dependencies but in certain use cases this is not acceptable.\cite{wmf_multi_versions}

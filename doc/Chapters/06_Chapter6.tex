@@ -11,9 +11,7 @@ Afterwards the landscapes will be compared, using the defined metrics as key per
 
 This section will contain information about how the data was collected and which metrics were defined based on the gathered data.
 
-\subsection{Data collection}
-
-\subsubsection{Testing hardware and environment}
+\subsection{Testing hardware and environment}
 
 It has to be mentioned that certain aspects of the environment were not maintained by the tester and are therefore out of reach for influence or configuration. Nonetheless they are mentioned here for the sake of reproducibility.
 The testing hardware and environment available were the following:
@@ -27,7 +25,7 @@ The testing hardware and environment available were the following:
 		\item \textbf{Graphics:} Radeon Pro 560 4 GB and Intel HD Graphics 630 1536 MB
 		\item \textbf{macOS Monetary - Version:} 12.2.1 (21D62)
 	\end{itemize} 
-
+	
 	\item \textbf{Browser, Network and Lighthouse:}
 	\begin{itemize}[noitemsep]
 		\item \textbf{Browser:} Google Chrome
@@ -37,7 +35,7 @@ The testing hardware and environment available were the following:
 		\item \textbf{JavaScript version:} V8 9.9.115.8
 		\item \textbf{Network-Bandwidth:} 180-200 MB/s
 	\end{itemize}
-
+	
 	\item \textbf{Runtime environment for prototypes:} surge.sh \footnote{surge.sh is a platform for static web publishing
 		for frontend developers via the command line.}
 	
@@ -46,7 +44,7 @@ The testing hardware and environment available were the following:
 
 Additionally to the specified hardware specs, version 1.18.1 of the \texttt{@luigi-project} was used. This dependency enables the Luigi framework and is therefore used in every implemented version of the prototype.
 
-\subsubsection{Testing process}
+\subsection{Testing process}
 
 Since multiple landscapes were implemented a unified process was required to collect comparable data. The BPMN diagram \ref{fig:data_collection_process_har} contains the process steps in detail.
 
@@ -62,6 +60,21 @@ The second process was used to gather information about caching behavior in gene
 Each process was executed 5 times, therefore 10 HTTP Archive (\texttt{.har}) files were generated per landscape. These \texttt{.har} files were then transformed into \texttt{.csv} files using a self-developed script. 
 
 Additionally to the \texttt{.har} files a website performance report was collected, using the Lighthouse tool embedded in the Google Chrome browser. Such a report provides information about how much of the imported bytes are actually used by a web application, distinguished by resource URL.
+
+In summary it means:
+
+\begin{itemize}[noitemsep]
+	\item 12 landscapes were developed
+	\item Each landscape was loaded 10 times, 5 times with cache enabled and 5 with cache disabled
+	\item Each loading of a landscape is represented by a HTTP Archive file
+	\item In summary, the testing processes were executed 120 times overall
+	\item Generating 120 \texttt{.har} files
+	\item Which then were aggregated and transformed into 12 \texttt{.csv} files
+	\item Which then again were copied into one Excel file, where the data was analyzed
+	\item In addition 12 Lighthouse reports where collected (one per landscape) and added to the excel
+\end{itemize}
+
+The reason why this testing procedure was chosen was, due to the low variety in the parameters when a landscape was loaded. First it was tested if the parameters would vary when a landscape is loaded up to 1000 times, but that case did not occur. Due the constant resource sizes and stable network, not many fluctuations could be observed. Only when changes on technological level were made (e.g. usage of cache, network outage) fluctuations started to appeared. But other than that, it was observed that the results were stable. Therefore it was decided that loading a landscape 10 times does suffice for the experiment.
 
 After the collection process, another self-developed script was used to aggregate all the gather data into one single file. This was later used to define and calculate the metrics, which are described next.
 
@@ -594,16 +607,15 @@ The given data was gathered based on the previously introduced landscapes. It co
 	\label{fig:unsed_imported_1}
 \end{figure}
 
-\begin{figure}[!h]
-	\centering
-	\includegraphics[width=1\textwidth]{Figures/avg_unsed_imported_2.png}
-	\caption{Unused and imported bytes per landscape in \%}
-	\label{fig:unsed_imported_2}
-\end{figure}
-\newpage
+%\begin{figure}[!h]
+%	\centering
+%	\includegraphics[width=1\textwidth]{Figures/avg_unsed_imported_2.png}
+%	\caption{Unused and imported bytes per landscape in \%}
+%	\label{fig:unsed_imported_2}
+%\end{figure}
 
 \normalsize
-The shown data in \ref{tab:lighthouse_used_report}, \ref{fig:unsed_imported_1} and \ref{fig:unsed_imported_2} is highly application dependent. Still as these landscapes are considered to be generally representative, a display in efficiency can be drawn from the charts.
+The shown data in table \ref{tab:lighthouse_used_report} and figure \ref{fig:unsed_imported_1} is highly application dependent. Still as these landscapes are considered to be generally representative, a display in efficiency can be drawn from the charts.
 The Unpkg CDN landscapes show a low unused bytes ratio. Since only the required resources were requested from the CDN, only a few unused bytes were detected by the Lighthouse tool. 
 For the WMF landscape, it can be argued, that due to the bundling with Webpack, a lot of bytes were imported but only a few of them were not used. This can be explained through how the Module Federation works, since every configured shared resource is checked if it should be shared or not.
 

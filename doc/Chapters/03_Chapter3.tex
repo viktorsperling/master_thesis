@@ -69,10 +69,10 @@ Thus the Anycast routing is used in modern CDNs. This traffic routing algorithm 
 For instance, in an Unicast orchestrated network the server address \texttt{10.10.0.1} would be only present once. Anycast on the other hand would advertise this exact address over multiple different servers around the globe. Thus a request towards the address would reach its destination via the shortest path, given that the path will be identified and prioritized by devices that actually govern the flow of traffic.
 The shortest path itself is counted in hops. Hops represent the amount of time a request changes hands between hosts.\cite{cdn_route_opt}
 
-\subsubsection{TSL Performance}
+\subsubsection{TLS Performance}
 
-The route optimization with Anycast, does also improve the round trip time (RTT), when using the TSL/SSL protocol. Since this section does not focus on explaining the protocol, only a short description is given.
-SSL (Secure Socket Layer) or as it now should be called TSL (Transport Layer Security) is a protocol via which secure communications are ensured on the Internet. The communicating parties establish a connection via following steps:
+The route optimization with Anycast, does also improve the round trip time (RTT), when using the TLS/SSL protocol. Since this section does not focus on explaining the protocol, only a short description is given.
+SSL (Secure Socket Layer) or as it now should be called TLS (Transport Layer Security) is a protocol via which secure communications are ensured on the Internet. The communicating parties establish a connection via following steps:
 
 \begin{enumerate}[noitemsep]
 	\item A so called three-way handshake is done
@@ -83,14 +83,14 @@ SSL (Secure Socket Layer) or as it now should be called TSL (Transport Layer Sec
 
 These steps are necessary to ensure secure communication and are a welcome trade-off for the benefits they provide. 
 
-Even though it is an overhead and increases the RTT of a request, a CDN can provide improvement. Through the aspect of route optimization and the general proximity the overall request distance is decreased. Therefore, the RTT is shortened as well. The steps are still processed, they just do not have to travel that long. Additionally the SSL/TSL negotiation process is shorter too.\cite{cdn_ssl_tsl}
+Even though it is an overhead and increases the RTT of a request, a CDN can provide improvement. Through the aspect of route optimization and the general proximity the overall request distance is decreased. Therefore, the RTT is shortened as well. The steps are still processed, they just do not have to travel that long. Additionally the SSL/TLS negotiation process is shorter too.\cite{cdn_ssl_tsl}
 
 \subsubsection{Frontend optimization}
 
 The term frontend optimization refers to the process of making a website more browser-friendly and reduce loading times. There are multiple ways of to optimize a frontend. These will be explained under consideration of the role a CDN plays in them.
 
 \begin{itemize}
-	\item \textbf{Reducing HTTP requests} - When loading a website the browser opens several HTTP connections. The amount of which are actually limited to the browser. If a website requires more connections than a browser can open at the time, the browser has to start queuing the rest. This again leads to longer loading times and affects the user experience. A CDN improves on that via pre-pooling connections and ensure they remain open throughout a session. Even though this does not reduce the actual number of requests, it does improve the response time for each one. Making it so that every request can be processed faster. Additionally HTTP/2, though it is in its early stage, introduces the method of multiplexing. This allows a single TCP connecting to transfer multiple different HTTP requests.  
+	\item \textbf{Reducing HTTP requests} - When loading a website the browser opens several HTTP connections. The amount of which are actually limited to the browser. If a website requires more connections than a browser can open at the time, the browser has to start queuing the rest. This again leads to longer loading times and affects the user experience. A CDN improves on that via pre-pooling connections and ensure they remain open throughout a session. Even though this does not reduce the actual number of requests, it does improve the response time for each one. Making it so that every request can be processed faster. Additionally HTTP/2, introduces the method of multiplexing. This allows a single TCP connecting to transfer multiple different HTTP requests \cite{http2}.
 	
 	\item \textbf{File compression} - Of course it is not always about the amount of requests per side loaded or the proximity of the client to the server. The actual content does affect the responsiveness too. Loading one single resource with a size of 1 GB takes a while even if the server is directly nearby. Reducing the size of this file or resource might increase the loading process. File compression like gzip is a method of doing exactly that. Most modern CDN providers offer automated file compression with gzip to reduce the actual content size delivered to the client.
 	
@@ -102,7 +102,7 @@ The term frontend optimization refers to the process of making a website more br
 	\item \textbf{Image optimization} - Images can be immense in size and require a long time to load. The best way to display an image on a website would be to cache it first and then load it from the cache to reduce actual loading time through the network. Another option could be, reducing the actual size of the image and thus the loading time.
 	Other than code files, images are already compressed when loaded, therefore compressing them further to reduce file size might cause a loss of image quality. This is called lossy compression. If this trade-off is not an option, caching would be more effective.
 	CDNs offer exactly that solution, caching images and providing them from the nearest source available to the client. If this does not suffice, CDNs also offer a progressive rendering option for images. On initially loading the page, the CDN would provide a lossy compressed version of the image fast and then progressively replace it with higher-resolution variants of it.
-	Alternatively a website host could use vector or raster images. These are resolution independent, smaller in size and highly responsive.  
+	Alternatively a website host could use vector or raster images. These are resolution independent, smaller in size and highly responsive.\cite{cdn_fe_opt_img_opt}
 \end{itemize}
 
 These methods in combination with the CDN technology provide a possible gain in user experience for a website host. \cite{cdn_fe_opt}
@@ -110,15 +110,15 @@ These methods in combination with the CDN technology provide a possible gain in 
 
 As described in \ref{cdn_intro} the concept of CDN is fairly simple. A remote server is providing the necessary platform resources via an API, thus avoiding the necessity of bundling those resources.
 To evaluate the gain and impact of this technology on a micro frontend landscape, a prototype was developed using the public cloud based CDN Unpkg.com.
+%\begin{figure}[!h]
+%	\centering
+%	\includegraphics[width=0.7\textwidth]{Figures/cdn_unpkg.drawio.png}
+%	\caption{Basic architecture of the unpkg.com public CDN}
+%	\label{fig:unpkg_architecture}
+%\end{figure}
 
-\begin{figure}[!h]
-	\centering
-	\includegraphics[width=0.7\textwidth]{Figures/cdn_unpkg.drawio.png}
-	\caption{Basic architecture of the unpkg.com public CDN}
-	\label{fig:unpkg_architecture}
-\end{figure}
-
-Figure \ref{fig:unpkg_architecture} shows the Unpkg.com architecture, as it is described in its official documentation. It is an open source project built and maintained by Michael Jackson. It runs on the Cloudflare platform and the Fly.io infrastructure provides its servers with auto-scaling capabilities on 17 cities around the world.\cite{unpkg_doc}
+%Figure \ref{fig:unpkg_architecture} shows the Unpkg.com architecture, as it is described in its official documentation. 
+It is an open source project built and maintained by Michael Jackson. It runs on the Cloudflare platform and auto-scalable servers are provided by Fly.io, which are located in 17 cities around the world.\cite{unpkg_doc}
 
 An open API is available, through which resources can be requested. Via path and query parameters in the URL, necessary information like the dependency version can be provided.
 
@@ -135,7 +135,7 @@ Several Nodes were embedded in the Luigi landscape. Some of which are Angular ap
 
 The usage of the Unpkg-CDN itself is embedded in the code. Instead of loading the dependencies via the local \texttt{node\_modules} directory, they are directly loaded using the CDNs API. The usage of which is displayed in the listing \ref{unpkg_import}.
 
-\begin{lstlisting}[caption=Import of a dependecy using the unpkg API, label=unpkg_import]
+\begin{lstlisting}[caption=Import of a dependecy using the unpkg API, label=list:unpkg_import]
 	<script src="https://unpkg.com/@ui5/webcomponents@1.0.0-rc.15/dist/StandardListItem.js?module" type="module"></script>
 \end{lstlisting}
 
@@ -168,9 +168,9 @@ In the context of the given scenario following parameters are also assumed or av
 The micro frontends of a Luigi landscape which are requesting resources from a CDN have following metrics defined. Some of which are based on average values from the implemented prototype.
 
 \begin{itemize}[noitemsep]
-	\item How often the site is accessed per day - $50 000 times$
-	\item Avg. byte size per page load without caching on client side - $8983.5 KB$
-	\item Avg. amount of GET requests to CDN per side load - $198$ requests 
+	\item How often the site is accessed per day - $50 000$ times (estimated)
+	\item Avg. byte size per page load without caching on client side - $8983.5$ KB (taken from the prototype)
+	\item Avg. amount of GET requests to CDN per side load - $198$ requests (taken from the prototype)
 	\item The site is only accessed in North America 
 \end{itemize} 
 

@@ -16,15 +16,17 @@ Depending on the type of the to-be-developed application, the concept of micro f
 
 Despite isolation being a key aspect of this architecture, it is still possible to avoid the caused redundancies without disabling it.
 
-\section{Goals}
+\section{Definition of redundancies}
+
+For the context of this transcript, the term \textit{"redundancies"} or \textit{"redundant libraries"} refers to same libraries or dependencies used by multiple micro frontend projects. It does not mean the redundant code elements, like reoccurring methods inside the projects or same CCS classes. 
+
+A library is determined by its identifier or its name, e.g. \texttt{@luigi-project.} If the given library or dependency is imported, via any means and in any version, by multiple different micro frontends, it is considered to be redundant for the context of this thesis. The case of different versions of redundant libraries is considered too and is covered in the later chapters.
+
+\section{Goal}
 
 The goal of this thesis is to provide proof and evaluate methods to avoid redundancies during the runtime of a representative micro frontend landscape. 
 
-For the context of this transcript, the term \textit{"redundancies"} or \textit{"redundant libraries"} means same libraries or dependencies used by multiple micro frontend projects. It does not mean the redundant code elements, like reoccurring methods inside the projects or same CCS classes. 
-
-A library is determined by its identifier or its name, e.g. \texttt{@luigi-project.} If the given library or dependency is imported, via any means and in any version, by multiple different micro frontends, it is considered to be redundant for the context of this thesis. The case of different versions of redundant libraries is considered too and is covered in the following chapters.
-
-To achieve the mentioned goal, two prototypes were implemented using the Luigi micro frontend framework. The landscape itself was implemented to be as representative as possible by using a heterogenic tech stack. Additionally following methods were implemented to avoid redundantly loaded libraries:
+To achieve this, two prototypes are implemented using the Luigi micro frontend framework. The landscape itself is designed to be as representative as possible by using a heterogenic tech stack. Additionally following methods are present to avoid redundantly loaded libraries:
 
 \begin{itemize}
 	\item Content Delivery Network (CDN)
@@ -32,8 +34,8 @@ To achieve the mentioned goal, two prototypes were implemented using the Luigi m
 	\item Webpack Module Federation (WMF) framework
 \end{itemize}
 
-The implemented methods are then evaluated under predefined metrics. The steps followed to collect the data for the metrics are explained too.
-Eventually a conclusion is made based on the empiric data, accompanied by the subjective experience of the author. It is explained how the usage and implementation of the respective technologies was experienced and which advantages each technology brings to the table from an objective and subjective view.
+The implemented methods are evaluated under predefined metrics. The steps to collect the data for the metrics are explained too.
+Eventually a conclusion is drawn based on the empiric data, accompanied by the subjective experience of the author. It is explained how the usage and implementation of the respective technologies was experienced and which advantages each technology brings to the table from an objective and subjective point of view.
   
 \section{Scope of Work}
 
@@ -49,7 +51,7 @@ Since the time given for this transcript is limited, the context is scoped. Ther
 
 \section{The collaborators}
 
-This thesis was written in collaboration with SAP Luigi project team. The SAP originally founded in in 1972 as SAPD (system analysis program development), later became SAP AG in 2005 and in 2014 SAP SE. The Hybris company originally founded in 1997 was later acquired by the SAP in 2013, after moving its headquarter from Zug in Switzerland to Munich in Germany. The Luigi project team is part of the SAP Hybris organization but the developed framework is an open-source product. 
+This thesis was written in collaboration with SAP Luigi project team. The SAP originally founded in in 1972 as SAPD (system analysis program development), later became SAP AG in 2005 and in 2014 SAP SE. The Hybris company originally founded in 1997 was later acquired by the SAP in 2013, after moving its headquarter from Zug in Switzerland to Munich in Germany.\cite{sap_history} The Luigi project team is part of the SAP Hybris organization but the developed framework is an open-source product. 
 The team and their product aim to improve the experiences of customers, developers and administrators who are using Luigi. Their open-source product was designed to make the transformation from monolithic architectures into micro frontend based landscapes as smooth as possible. 
 
  

@@ -6,8 +6,6 @@
 
 Since an introduction of this technology was given in chapter \ref{Chapter2}, only a short recap of WMF is given here. Main focus of this chapter will be to showcase how the technology was implemented in the prototype. As mentioned before the implementation of the WMF was mainly done in combination with Angular. Therefore, all the examples and explanations below will have their focus on exactly that framework. It has to be mentioned though, that WMF is not restricted to Angular alone. The only restriction applied is concerning the bundler, which has to be Webpack.\cite{wmf_concepts}
 
-\section{Short recap}
-
 WMF is a new way to create micro frontends using the Webpack bundler in version 5. The way it does that, is via modularizing self-compiled code parts and publishing them for integration by other modules. This published modules can be micro frontends themselves and are called remotes whereas the integrating modules are called hosts. 
 Hosts refer to remotes under a configured name. This name is not actually known to the host during the compile time, but is first resolved at runtime.
 The self compiled remote in this case can be anything, a micro frontend or some sort of utility script. This way the Module Federation provides a way to avoid external or manual script loading and instead gives opportunities to automatically lazy load necessary code blocks during runtime.\cite{wmf_concepts}
@@ -45,9 +43,9 @@ It contains a table with several table items in it. The angular version of each 
 Prior to introducing the implemented landscape in detail, it is necessary to talk about Webpack itself first. As mentioned before, Webpack is a mandatory feature for using the Module Federation. Popular UI frameworks like React, VueJS or Angular use Webpack under the hood anyway, so it isn't as much of a restriction as it seems.\cite{webpack_angular}\cite{webpack_react}\cite{webpack_vue}
 The documentation of the named frameworks imply that Webpack is used by default, but can be customized if necessary by the developer.
 
-For Angular in particular, it is necessary to install two dependencies via the Angular CLI, to enable the features of the Module Federation. The command used for this is shown in \ref{angluar_wmf_command}. 
+For Angular in particular, it is necessary to install two dependencies via the Angular CLI, to enable the features of the Module Federation. The command used for this is shown in \ref{list:angluar_wmf_command}. 
 
-\begin{lstlisting}[language=Bash, caption=Angular CLI console command to enable Module Federation in an Angular project, label=angluar_wmf_command]
+\begin{lstlisting}[language=Bash, caption=Angular CLI console command to enable Module Federation in an Angular project, label=list:angluar_wmf_command, xleftmargin=.05\textwidth, xrightmargin=.05\textwidth]
 ng add @angular-architects/module-federation --project name --port port
 \end{lstlisting}
 
@@ -63,9 +61,9 @@ Since the implementation of the remotes is always similar, it won't be mentioned
 \subsection{Implementation of the prototype versions}
 \label{wmf_implementation_prototype}
 
-The three implemented versions for the the WMF landscape are fairly similar to each other, the only difference can be found are the dependencies and their configured sharing. Listing \ref{wmf_sameversions_shell} shows the configuration for the \textit{sameVersion} environment.
+The three implemented versions for the the WMF landscape are similar to one another, the only difference can be found are the dependencies and their configured sharing. Listing \ref{list:wmf_sameversions_shell} shows the configuration for the \textit{sameVersion} environment.
 
-\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{webpack.config.js} of the shell of the same versions WMF project, label=wmf_sameversions_shell]
+\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{webpack.config.js} of the shell of the same versions WMF project, label=list:wmf_sameversions_shell, xleftmargin=.05\textwidth, xrightmargin=.05\textwidth]
 [...]
 module.exports = {
 	[...]
@@ -92,9 +90,9 @@ module.exports = {
 	]};
 \end{lstlisting}
 
-As it can be seen the shared dependencies are defined in between lines 22 and 24. Line 18 and 19 define the name of the application in the landscape and the name of the file after bundling. For the above case it has to be mentioned that the remotes are separate applications in their own runtime. Therefore, they have to be imported via the network, thus no \texttt{remote} property is configured in this file. To add the dynamically loaded remotes, a service had to be developed which imports the remotes at runtime. This service is shown in listing \ref{wmf_lookup_service}.\cite{wmf_angular_dynamicfederation}
+As it can be seen the shared dependencies are defined in between lines 22 and 24. Line 18 and 19 define the name of the application in the landscape and the name of the file after bundling. For the above case it has to be mentioned that the remotes are separate applications in their own runtime. Therefore, they have to be imported via the network, thus no \texttt{remote} property is configured in this file. To add the dynamically loaded remotes, a service had to be developed which imports the remotes at runtime. This service is shown in listing \ref{list:wmf_lookup_service}.\cite{wmf_angular_dynamicfederation}
 
-\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{lookup.service.ts} for remote module loading in shell applications, label=wmf_lookup_service]
+\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{lookup.service.ts} for remote module loading in shell applications, label=list:wmf_lookup_service, xleftmargin=.05\textwidth, xrightmargin=.05\textwidth]
 [...]
 @Injectable({ providedIn: 'root' })
 export class LookupService {
@@ -116,7 +114,7 @@ export class LookupService {
 
 This service serves the information of the remotely loaded modules to plugins for actual rendering. The rendering itself is done in a proxy plugin component. This component defines a plain template as some sort of placeholder for the remotes. \cite{wmf_angular_dynamicfederation}
 \newpage
-\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{plugin-proxy.component.ts} for remote module loading in shell applications, label=wmf_pluginproxy]
+\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{plugin-proxy.component.ts} for remote module loading in shell applications, label=list:wmf_pluginproxy, xleftmargin=.05\textwidth, xrightmargin=.05\textwidth]
 [...]	
 @Component({
 	selector: 'plugin-proxy',
@@ -146,11 +144,11 @@ export class PluginProxyComponent implements OnChanges {
 }
 \end{lstlisting}
 
-Line 8 of listing \ref{wmf_pluginproxy} defines the \texttt{ng-container} with the identifier called \texttt{placeholder}. This identifier is used in the code below to select and actually fill the container with a remote module. The functionality is placed in one of Angulars Lifecycle hook methods \texttt{ngOnChanges}, which is triggered when changes to input properties occur.\cite{wmf_angular_lifecyclehooks} 
+Line 8 of listing \ref{list:wmf_pluginproxy} defines the \texttt{ng-container} with the identifier called \texttt{placeholder}. This identifier is used in the code below to select and actually fill the container with a remote module. The functionality is placed in one of Angulars Lifecycle hook methods \texttt{ngOnChanges}, which is triggered when changes to input properties occur.\cite{wmf_angular_lifecyclehooks} 
 In there, the container is first cleared, then a remote loading option is selected from the array of the \texttt{lookup.service.ts}. The following line creates an Angular component out of the loaded remote and inserts it into the placeholder container, using the imported dependencies.
-The type of the plugin options was defined in an interface, exporting a type definition. The code for is displayed in listing \ref{wmf_plugintype}.
+The type of the plugin options was defined in an interface, exporting a type definition. The code for is displayed in listing \ref{list:wmf_plugintype}.
 \newpage
-\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{plugin.ts} for remote module loading in shell applications, label=wmf_plugintype]
+\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{plugin.ts} for remote module loading in shell applications, label=list:wmf_plugintype, xleftmargin=.05\textwidth, xrightmargin=.05\textwidth]
 import { LoadRemoteModuleOptions } from '@angular-architects/module-federation';
 export type PluginOptions = LoadRemoteModuleOptions & {
 	displayName: string;
@@ -158,11 +156,11 @@ export type PluginOptions = LoadRemoteModuleOptions & {
 };
 \end{lstlisting}
 
-The previously imported \texttt{@angular-architects/module-federation} dependency offers an existing type interface for that use case. This is extended by two more properties in line 4 and 5 of listing \ref{wmf_plugintype}.
+The previously imported \texttt{@angular-architects/module-federation} dependency offers an existing type interface for that use case. This is extended by two more properties in line 4 and 5 of listing \ref{list:wmf_plugintype}.
 By configuring the above service and component, it is made possible to load federated modules via the network into the host application.
-The configuration for a federated module can be seen in listing \ref{wmf_sameversions_mfe1}.
+The configuration for a federated module can be seen in listing \ref{list:wmf_sameversions_mfe1}.
 
-\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{webpack.config.js} of the mfe1 remote app of the same versions WMF project, label=wmf_sameversions_mfe1]
+\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{webpack.config.js} of the mfe1 remote app of the same versions WMF project, label=list:wmf_sameversions_mfe1, xleftmargin=.05\textwidth, xrightmargin=.05\textwidth]
 [...]
 module.exports = {
 	[...]
@@ -198,7 +196,7 @@ module.exports = {
 
 As mentioned in chapter \ref{Chapter2}, to share dependencies every participant has to bulk in. Therefore, similarities can be found in the sharing configurations of the remotes and hosts. 
 Between line 7 and 11, the actual federation of the module is configured. The reference to the module is later bundled in a file with the name defined in the \texttt{filename} property. In this case it is the \texttt{remoteEntry.js}.
-This is the file, which is automatically generated when the remote is compiled and serves as the entry point for the application when it is loaded into the host. Therefore this is the file accessed via the server url in the \texttt{lookup.service.ts} \ref{wmf_lookup_service}.
+This is the file, which is automatically generated when the remote is compiled and serves as the entry point for the application when it is loaded into the host. Therefore this is the file accessed via the server url in the \texttt{lookup.service.ts} \ref{list:wmf_lookup_service}.
 As soon as the script is loaded via the service, the exposed module paths and names become known to the host and can be used to load the module. Thus the \texttt{expose} property contains a Java Script object, which maps the path to the actual component. In this case to \texttt{./Mfe1}.\cite{wmf_concepts}
 
 The implementations of the other versions are similar and only differ in the the shared dependencies configured. The effects of a multi-version environment and how it is handled by the Module Federation were explained in chapter \ref{Chapter2}.
