@@ -31,7 +31,7 @@ The \textbf{Luigi Core} is the groundstone of the whole landscape. It defines th
 The core application inside the landscape is determined via the \texttt{luigi.config.js}. Any project containing it can fulfill this role, which is the only prerequisite. In the context of the framework this app is later referred to as the \textbf{Core}.
 Following this principle, the project structure of the \textbf{Core} could look as shown in listing \ref{list:luigi_core_structure}.\footnote{This example is directly taken from the implemented core project.}  
 
-\begin{lstlisting}[language=Bash, caption=Project structure for a Luigi Core application including the \texttt{luigi.config.js}, label=list:luigi_core_structure]
+\begin{lstlisting}[language=Bash, caption=Project structure for a Luigi Core application including the \texttt{luigi.config.js}, label=list:luigi_core_structure,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
 	- react-core-mf
 		- [...]
 		- node_modules
@@ -51,7 +51,7 @@ The Luigi Client serves as the connection between the framework and its micro fr
 
 An import of the Luigi Client can be accomplished via different methods. The most forward approach might be the direct import with a HTML script tag. Another option can be the import of the local package manager dependency.\cite{luigi_client}
 
-\begin{lstlisting}[caption=Import methods of the Luigi Client, label=list:import_luigi_client]
+\begin{lstlisting}[caption=Import methods of the Luigi Client, label=list:import_luigi_client,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
 	<!-- Via the HTML script tag -->
 	<script src="https://unpkg.com/@luigi-project/client@1.17.0/luigi-client.js">
 	</script>
@@ -151,7 +151,7 @@ WMF can be used in combination with most of the common UI Frameworks. But since 
 As explained WMF is a micro frontend framework, but for the purpose of solving the issue introduced in this transcript, it provides functionality too.
 This feature is enabled and configured, as well as the rest of the WMF, via the \texttt{webpack.config.js}. When configuring the components of the landscape, it is possible to define a section where shared dependencies are described. These dependencies can be defined in different ways. For instance, it is possible to define a strict version of the dependency, which would result in the framework loading this specific version. Or one can define a less restricted dependency which would mean, that if another \texttt{remote} loads the same dependency but in a different version, the framework would automatically apply the highest major version of the dependency to both micro frontends.
 \newpage
-\begin{lstlisting}[language=JavaScript, caption=Example of sharing dependencies configured in the \texttt{webpack.config.js}, label=list:shared_mapping_wmf]
+\begin{lstlisting}[language=JavaScript, caption=Example of sharing dependencies configured in the \texttt{webpack.config.js}, label=list:shared_mapping_wmf,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
 	  shared: share({
 			"@angular/core": { 
 				singleton: true, 

@@ -45,7 +45,7 @@ The documentation of the named frameworks imply that Webpack is used by default,
 
 For Angular in particular, it is necessary to install two dependencies via the Angular CLI, to enable the features of the Module Federation. The command used for this is shown in \ref{list:angluar_wmf_command}. 
 
-\begin{lstlisting}[language=Bash, caption=Angular CLI console command to enable Module Federation in an Angular project, label=list:angluar_wmf_command, xleftmargin=.05\textwidth, xrightmargin=.05\textwidth]
+\begin{lstlisting}[language=Bash, caption=Angular CLI console command to enable Module Federation in an Angular project, label=list:angluar_wmf_command,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
 ng add @angular-architects/module-federation --project name --port port
 \end{lstlisting}
 
@@ -63,7 +63,7 @@ Since the implementation of the remotes is always similar, it won't be mentioned
 
 The three implemented versions for the the WMF landscape are similar to one another, the only difference can be found are the dependencies and their configured sharing. Listing \ref{list:wmf_sameversions_shell} shows the configuration for the \textit{sameVersion} environment.
 
-\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{webpack.config.js} of the shell of the same versions WMF project, label=list:wmf_sameversions_shell, xleftmargin=.05\textwidth, xrightmargin=.05\textwidth]
+\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{webpack.config.js} of the shell of the same versions WMF project, label=list:wmf_sameversions_shell,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
 [...]
 module.exports = {
 	[...]
@@ -92,7 +92,7 @@ module.exports = {
 
 As it can be seen the shared dependencies are defined in between lines 22 and 24. Line 18 and 19 define the name of the application in the landscape and the name of the file after bundling. For the above case it has to be mentioned that the remotes are separate applications in their own runtime. Therefore, they have to be imported via the network, thus no \texttt{remote} property is configured in this file. To add the dynamically loaded remotes, a service had to be developed which imports the remotes at runtime. This service is shown in listing \ref{list:wmf_lookup_service}.\cite{wmf_angular_dynamicfederation}
 
-\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{lookup.service.ts} for remote module loading in shell applications, label=list:wmf_lookup_service, xleftmargin=.05\textwidth, xrightmargin=.05\textwidth]
+\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{lookup.service.ts} for remote module loading in shell applications, label=list:wmf_lookup_service,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
 [...]
 @Injectable({ providedIn: 'root' })
 export class LookupService {
@@ -114,7 +114,7 @@ export class LookupService {
 
 This service serves the information of the remotely loaded modules to plugins for actual rendering. The rendering itself is done in a proxy plugin component. This component defines a plain template as some sort of placeholder for the remotes. \cite{wmf_angular_dynamicfederation}
 \newpage
-\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{plugin-proxy.component.ts} for remote module loading in shell applications, label=list:wmf_pluginproxy, xleftmargin=.05\textwidth, xrightmargin=.05\textwidth]
+\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{plugin-proxy.component.ts} for remote module loading in shell applications, label=list:wmf_pluginproxy,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
 [...]	
 @Component({
 	selector: 'plugin-proxy',
@@ -148,7 +148,7 @@ Line 8 of listing \ref{list:wmf_pluginproxy} defines the \texttt{ng-container} w
 In there, the container is first cleared, then a remote loading option is selected from the array of the \texttt{lookup.service.ts}. The following line creates an Angular component out of the loaded remote and inserts it into the placeholder container, using the imported dependencies.
 The type of the plugin options was defined in an interface, exporting a type definition. The code for is displayed in listing \ref{list:wmf_plugintype}.
 \newpage
-\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{plugin.ts} for remote module loading in shell applications, label=list:wmf_plugintype, xleftmargin=.05\textwidth, xrightmargin=.05\textwidth]
+\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{plugin.ts} for remote module loading in shell applications, label=list:wmf_plugintype,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
 import { LoadRemoteModuleOptions } from '@angular-architects/module-federation';
 export type PluginOptions = LoadRemoteModuleOptions & {
 	displayName: string;
@@ -160,7 +160,7 @@ The previously imported \texttt{@angular-architects/module-federation} dependenc
 By configuring the above service and component, it is made possible to load federated modules via the network into the host application.
 The configuration for a federated module can be seen in listing \ref{list:wmf_sameversions_mfe1}.
 
-\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{webpack.config.js} of the mfe1 remote app of the same versions WMF project, label=list:wmf_sameversions_mfe1, xleftmargin=.05\textwidth, xrightmargin=.05\textwidth]
+\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{webpack.config.js} of the mfe1 remote app of the same versions WMF project, label=list:wmf_sameversions_mfe1,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
 [...]
 module.exports = {
 	[...]

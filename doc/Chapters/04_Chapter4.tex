@@ -33,9 +33,9 @@ Figure \ref{fig:shadow_dom} visualizes the relations between the newly introduce
 
 Through the isolation of the Shadow DOMs code, this standard offers a way to provide scoped HTML and CSS code to custom elements. As mentioned before, the nodes of the Shadow DOM are rendered separately. Therefore, styles, ids, names or even CSS classes and other configurations applied to a tag inside the Shadow DOM are not applied to the actual DOM.
 
-Listing \ref{shadow_dom_definition} provides be a simple example.
+Listing \ref{list:shadow_dom_definition} provides be a simple example.
 
-\begin{lstlisting}[caption=Definition of a custom element using the Shadow DOM \cite{simon_thesis}, label=shadow_dom_definition]
+\begin{lstlisting}[caption=Definition of a custom element using the Shadow DOM \cite{simon_thesis}, label=list:shadow_dom_definition,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
 <!DOCTYPE html> 
 	...
 	<body>
@@ -79,9 +79,9 @@ This feature can be used in combination with a component library like UI5 Web Co
 This standard offers a way to define reusable markup code. As a part of the HTML standard itself, the \texttt{template} tag is used to define templates. These are not rendered unless used by another element. Similar to \texttt{template}, \texttt{slot} serves the same purpose, but in a different way. Templates are defined HTML code snippets which can be cloned and inserted in other document elements or even elements rendered in the Shadow DOM.
 Slots on the other hand serve as placeholder for either default markup texts or other DOM elements. Therefore, a template is a rather static piece of reusable HTML code, compared to slots.
 Slot themselves are identified by their name, the content is inserted when the slot is addressed by its name.
-Listings \ref{template_example} and \ref{slot_example} provide examples how exactly these two standards are used. \cite{wc_html_template_slots}
+Listings \ref{list:template_example} and \ref{slot_example} provide examples how exactly these two standards are used. \cite{wc_html_template_slots}
 
-\begin{lstlisting}[caption=Definition and usage of the \texttt{template} standard \cite{wc_html_template_slots}, label=template_example]
+\begin{lstlisting}[caption=Definition and usage of the \texttt{template} standard \cite{wc_html_template_slots}, label=list:template_example,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
 <!-- Definition of the template -->
 <template id="my-paragraph">
 	<p>My paragraph</p>
@@ -103,7 +103,7 @@ class extends HTMLElement {
 
 It is important to note, that the defined template in the listing is not rendered unless somehow included in a DOM (either Shadow DOM or the regular DOM), via Java Script.
 
-\begin{lstlisting}[language=HTML5, caption=Definition and usage of the \texttt{slot} standard \cite{wc_html_template_slots}, label=slot_example]
+\begin{lstlisting}[language=HTML5, caption=Definition and usage of the \texttt{slot} standard \cite{wc_html_template_slots}, label=list:slot_example,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
 <!-- Definition of the slot -->
 <p>
 	<slot name="my-text">Default input</slot>
@@ -118,7 +118,7 @@ It is important to note, that the defined template in the listing is not rendere
 </my-paragraph>
 \end{lstlisting}
 
-As it can be seen in \ref{slot_example}, the \texttt{slot} definition has some default content defined. In the above case it´s a simple text. When the slot is used, this content is overwritten by the content in the element which is calling the \texttt{slot} by its name.
+As it can be seen in \ref{list:slot_example}, the \texttt{slot} definition has some default content defined. In the above case it´s a simple text. When the slot is used, this content is overwritten by the content in the element which is calling the \texttt{slot} by its name.
 In that case the content is replaced by some list items.
 Other than the templates, slots are always rendered if included in the markup via their respective names. The content which is rendered is depended on, if the default content is overwritten or not.
 
@@ -133,7 +133,7 @@ When developing own Web Components for a micro frontend landscape, this aspect c
 The last standard is not referred to by every source, but according to \cite{wc_specifications}, it is a stable part of the Web Components standard, via which Java Script modules can be defined and reused by other documents.
 Thus the development of Web Components can be done in a modular way, making every component available to other documents, using the \texttt{type="module"} attribute.
 
-\begin{lstlisting}[language=HTML5, caption=Importing modular Java Script documents into another \cite{wc_specifications}, label=es_modules_example]
+\begin{lstlisting}[language=HTML5, caption=Importing modular Java Script documents into another \cite{wc_specifications}, label=list:es_modules_example,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
 <!-- Import of the JS Module -->
 <script type="module" src="awesome-explosion.js"></script>
 	...
@@ -149,7 +149,7 @@ Thus the development of Web Components can be done in a modular way, making ever
 </awesome-explosion>
 \end{lstlisting}
 
-Listing \ref{es_modules_example} shows such an import. Assuming the \texttt{awesome-explosion.js} files contains the definition of an element called \texttt{awesome-explosion}, these lines enable the document to use this element.\cite{wc_specifications}
+Listing \ref{list:es_modules_example} shows such an import. Assuming the \texttt{awesome-explosion.js} files contains the definition of an element called \texttt{awesome-explosion}, these lines enable the document to use this element.\cite{wc_specifications}
 
 This feature is essential for the prototype developed, since via this aspect the components are made available to the landscape. The used Web Components are served as ES Modules to the landscape and are imported similarly as shown in \ref{es_modules_example}. Therefore, this aspect enables a component to be imported in multiple micro frontends as a module.
 
@@ -159,7 +159,7 @@ The Web Components standard was partially used in the development of the prototy
 For development itself no UI application framework was used, which means all three compounds were developed using plain Java Script. The actual components used in the micro frontends of the compounds, were taken from a component library called UI5 Web Components. Each element in that library is in fact a Web Component.\cite{ui5_wc_github}
 Consisting of the picked elements and under the usage of the scoping feature of the component library, the compounds where created. This made it possible to scope the tags of the UI5 Web Components.\cite{ui5_webcomponents_scoping}
 
-\begin{lstlisting}[caption=Scoping feature used in the prototype, label=scoping_wc_prototype]
+\begin{lstlisting}[caption=Scoping feature used in the prototype, label=list:scoping_wc_prototype,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
 import { LuigiElement, html } 
 from "@luigi-project/client/luigi-element.js";
 import { setCustomElementsScopingSuffix } 
@@ -200,15 +200,15 @@ export default class extends LuigiElement {
 }
 \end{lstlisting}
 
-Listing \ref{scoping_wc_prototype} shows the exact usage of the scoping feature. 
+Listing \ref{list:scoping_wc_prototype} shows the exact usage of the scoping feature. 
 The imported \textit{setCustomElementsScopingSuffix} function enables to define a custom suffix to all UI5 Web Component elements, if not configured otherwise. Also, as it can be seen in the same listing, the suffix is set to \textit{placeholder} using the imported method 
 \textit{setCustomElementsScopingSuffix("placeholder")}.
 This is done for the sake of the experiment itself. It was intended to deploy six same or similar looking Web Components into the Luigi landscape to test how many redundancies occur. In addition it was meant to be tested how different versions of the same elements could be registered. For example the \textit{Bar} element in version \textit{1.0.1} is registered under same tag as the same element in version \textit{1.1.0}. This scenario has to be handled and the scoping feature is one way of doing so.
 By defining a version suffix for the \textit{Bar} element tag, the browser can distinguish those elements.
 In case of the prototype to create this exact scenario, one global tag suffix \textit{placeholder} was picked and later replaced. The replacement itself happened during the bundling of the project. The RollUp bundler provided the necessary functionality for that.
-Inside the \texttt{rollup.config.js} several configurations were defined, which are shown in listing \ref{rollupconfigjs}.
+Inside the \texttt{rollup.config.js} several configurations were defined, which are shown in listing \ref{list:rollupconfigjs}.
 
-\begin{lstlisting}[language=JavaScript, caption=Content of the \texttt{rollup.config.js}, label=rollupconfigjs]
+\begin{lstlisting}[language=JavaScript, caption=Content of the \texttt{rollup.config.js}, label=list:rollupconfigjs,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
 imp\part{ort resolve from '@rollup/plugin-node-resolve';
 import json from '@rollup/plugin-json';
 import url from "@rollup/plugin-url";
@@ -239,10 +239,9 @@ aggregateConfigs();
 export default buildArray;
 \end{lstlisting}
 
-The configuration of the bundler was split into several Java Script files, to improve the readability of the configuration file itself. The content of such a file can be seen in \ref{rollupconfigfile}.
+The configuration of the bundler was split into several Java Script files, to improve the readability of the configuration file itself. The content of such a file can be seen in \ref{list:rollupconfigfile}.
 
-\begin{lstlisting}[language=JavaScript, caption=Actual configuration for the \texttt{rollup.config.js}, label=rollupconfigfile]
-imp\part{ort resolve from '@rollup/plugin-node-resolve';
+\begin{lstlisting}[language=JavaScript, caption=Actual configuration for the \texttt{rollup.config.js}, label=list:rollupconfigfile, xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
 import resolve from '@rollup/plugin-node-resolve';
 import json from '@rollup/plugin-json';
 import url from "@rollup/plugin-url";
