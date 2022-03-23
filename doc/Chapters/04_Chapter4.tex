@@ -4,9 +4,33 @@
 
 \lhead{Chapter 4. \emph{Web Components}}
 
-As in \ref{Chapter2} introduced, Web Components have the attribute of the Custom Element, via which the individuality of each registered tag is guaranteed.
-Nonetheless to understand the actual functionality of Web Components, it is necessary to explain the other aspects of it.
-The following section will introduce the other three standards of Web Components and their functions and showcase how exactly they serve a purpose for the context of the thesis.
+Another option to address the issue of redundancies are Web Components. Consisting of the following four standards, they provide reusable elements closed in HTML tags.\cite{mdn_web_docs}
+
+\begin{itemize}[noitemsep]
+	\item Custom Elements
+	\item Shadow DOM
+	\item HTML Template
+	\item ES Modules
+\end{itemize}
+
+The following sections will introduce the four standards of Web Components with their functions and showcase what purpose they can serve for the context of this thesis.
+
+\section{Custom Elements}
+
+This standard of Web Components provides an API via which new HTML tags can be defined and registered by the \texttt{CustomElementRegistry}. Since a single tag name can only be registered once, multiple registrations of the same element would lead to an exception, thereby making already registered tags reusable for the whole micro frontend landscape without reloading the code of the registered element.\cite{google_reusable_wcs}
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=0.6\textwidth]{Figures/customElements_registered.drawio.png}
+	\caption{Simple micro frontend landscape using Web Components}
+	\label{fig:same_wc_example}
+\end{figure}
+
+Figure \ref{fig:same_wc_example} shows a simple micro frontend landscape with Luigi using Web Components. As displayed, both micro frontends are registering the same tag name \texttt{custom-element} using the \texttt{customElements} object. This object is a read-only property of the \texttt{Window} interface.
+The scenario shown will cause a  \texttt{DOMException}, making it impossible to register the same tag twice.
+
+The registration of Web Components follows the \textit{"first come, first served"} principle: The first micro frontend to register a tag name defines this tag and cannot be overwritten without reloading the page.\cite{mdn_web_docs_define}
+Therefore, this standard is crucial for the goal to achieve in this transcript, by making impossible to register same components with the same tag name.
 
 \section{Shadow DOM}
 
@@ -61,7 +85,7 @@ Listing \ref{list:shadow_dom_definition} provides be a simple example.
 </html>
 \end{lstlisting}
 
-The listing shows the usage of the Shadow DOM in combination with registering a custom element (named \texttt{custom-element}) using the customElements API which was explained in chapter \ref{Chapter2}.
+The listing shows the usage of the Shadow DOM in combination with registering a custom element (named \texttt{custom-element}) using the customElements API.
 The \texttt{script} tag of the snippet starts with creating a new HTML element called CustomElement. It is an extension to the HTMLElement class. This new element has the Shadow DOM attached to it. Therefore, it is the Shadow host in the DOM tree. Via the \texttt{innerHTML} attribute a Shadow DOM Node is created. In this case it is a styling for paragraphs,followed by the creation of a paragraph onto which the styling is applied. Additionally the text color of the paragraph is set to blue and lastly it is attached to the Shadow root.
 The last three lines of the script, are the definition and registration of the new \texttt{custom-element}, the creation of a new \texttt{customElement} object and the output of the attached Shadow DOM in the console.
 
@@ -72,7 +96,7 @@ If the mode would be set to \texttt{closed}  the \texttt{console.log()} command 
 
 This behavior is not meant to be used as a measure of security, since it can be overwritten. The Shadow DOM encapsulates every part of its DOM elements, that means HTML, CSS and JavaScript. The \texttt{document} object, available during runtime, stays the same for the regular DOM as for the Shadow DOM though. Therefore, each configuration done in the Shadow DOM via scripts can be easily overwritten from any other script in the document, thus the mode can be changed even if initially set to \texttt{closed}.\cite{shadow_dom_encapsulation} For Web Components in particular it is not recommended to use this mode at all, since it would make them less flexible for end users.\cite{wc_shadow_dom_google}
 
-This feature can be used in combination with a component library like UI5 Web Components, to customize styles or appearances of individual components. Nonetheless, for the context of this thesis, it does not serve any purpose to actually avoid redundancies in a micro frontend landscape, instead it might even increase them. The encapsulation of code elements between the single components increases the isolation and thus it cannot be guaranteed that e.g. the same CSS class is not rendered in multiple different Shadow DOMs. Even though the redundancies would occur on code level and not on dependency level, they are redundancies nonetheless.
+This feature can be used in combination with a component library like UI5 Web Components, to customize styles or appearances of individual components. For the context of this thesis, this feature offers means to individualize the registered Web Components of the landscape. This comes with a trade-off though. The level of isolation increases through the encapsulation of code elements between the single components. This increase makes it difficult to guaranteed that e.g. the same CSS class is not rendered in multiple different Shadow DOMs. Even though the redundancies would occur on code level and not on dependency level, they are redundancies nonetheless.
 
 \section{HTML Template}
 
@@ -126,7 +150,7 @@ Even though slots are a HTML standard just as templates, their support for brows
 
 In combination these two standards offer a way to define flexible, reusable markup code for Web Components.\cite{wc_html_template_slots} 
 
-When developing own Web Components for a micro frontend landscape, this aspect can be used to reduce repetitive HTML code elements by serving them a templates. But again this feature is not applicable when it comes to reducing redundant libraries in a micro frontend landscape. Redundant code snippets can be defined as reusable templates but not the actual libraries.
+When developing own Web Components for a micro frontend landscape, this aspect can be used to reduce repetitive HTML code elements by serving them a templates. Similar to the Shadow DOM this feature could be used to apply more flexibility to the Web Components, by adding placeholders for customization. But contrary to the Shadow DOM, this does not increase the level of isolation, since the rendered elements are not separated from the actual DOM. Redundant code snippets can be defined as reusable templates but, thereby reducing the redundancies in the code itself.
 
 \section{ES Modules}
 
@@ -153,160 +177,19 @@ Listing \ref{list:es_modules_example} shows such an import. Assuming the \texttt
 
 This feature is essential for the prototype developed, since via this aspect the components are made available to the landscape. The used Web Components are served as ES Modules to the landscape and are imported similarly as shown in \ref{es_modules_example}. Therefore, this aspect enables a component to be imported in multiple micro frontends as a module.
 
-\section{Usage of Web Components in the Prototype}
+\section{Additional considerations}
 
-The Web Components standard was partially used in the development of the prototype. This technology was used to embed the developed components as part of a compound view, using the corresponding feature in Luigi. \cite{luigi_wc} \cite{luigi_compound}
-For development itself no UI application framework was used, which means all three compounds were developed using plain Java Script. The actual components used in the micro frontends of the compounds, were taken from a component library called UI5 Web Components. Each element in that library is in fact a Web Component.\cite{ui5_wc_github}
-Consisting of the picked elements and under the usage of the scoping feature of the component library, the compounds where created. This made it possible to scope the tags of the UI5 Web Components.\cite{ui5_webcomponents_scoping}
+This chapter has shown, that this technology solves the issue of redundancies in a micro frontend landscape, on a different level. Instead of reducing the redundant libraries, it actually reduces the code itself used by the landscape.
 
-\begin{lstlisting}[caption=Scoping feature used in the prototype, label=list:scoping_wc_prototype,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
-import { LuigiElement, html } 
-from "@luigi-project/client/luigi-element.js";
-import { setCustomElementsScopingSuffix } 
-from "@ui5/webcomponents-base/dist/CustomElementsScope.js";
-setCustomElementsScopingSuffix("placeholder");
-import "@ui5/webcomponents/dist/Dialog.js";
-import "@ui5/webcomponents/dist/Button.js";
-[...]
+There is still a niche case which can be raised as an objection though. Since the registration and therefore the naming of elements is up to the developers, it can occur that two components are registered under the same tag name, but the elements themselves are different. In this case, it is up to the developers to use the standard properly.
 
-export default class extends LuigiElement {
-	constructor() {
-		super();
-		[...]
-	render() {
-		return html`
-		<div>
-			<div class="header">
-				<h2>Products table - Version: placeholder</h2>
-			</div>
-			
-			<ui5-table-placeholder id="ui5-table" 
-			ui5-table sticky-column-header>
-				<!-- Columns -->
-				<ui5-table-column-placeholder 
-					slot="columns" 
-					style="width: 4rem">
-					<span 
-					style="line-height: 1.4rem">
-						Product
-					</span>
-				</ui5-table-column-placeholder>
-				
-				[...]
-				
-			</ui5-table-placeholder>
-		</div>`;
-	}
-}
-\end{lstlisting}
+Assuming a common micro frontend landscape where every micro frontend is developed by independent, isolated teams, using heterogenic frameworks, the mentioned issue might occur. Two teams use Web Components and try to register different elements under the same tag name in the same landscape. This requires organizational interference on team level.
 
-Listing \ref{list:scoping_wc_prototype} shows the exact usage of the scoping feature. 
-The imported \textit{setCustomElementsScopingSuffix} function enables to define a custom suffix to all UI5 Web Component elements, if not configured otherwise. Also, as it can be seen in the same listing, the suffix is set to \textit{placeholder} using the imported method 
-\textit{setCustomElementsScopingSuffix("placeholder")}.
-This is done for the sake of the experiment itself. It was intended to deploy six same or similar looking Web Components into the Luigi landscape to test how many redundancies occur. In addition it was meant to be tested how different versions of the same elements could be registered. For example the \textit{Bar} element in version \textit{1.0.1} is registered under same tag as the same element in version \textit{1.1.0}. This scenario has to be handled and the scoping feature is one way of doing so.
-By defining a version suffix for the \textit{Bar} element tag, the browser can distinguish those elements.
-In case of the prototype to create this exact scenario, one global tag suffix \textit{placeholder} was picked and later replaced. The replacement itself happened during the bundling of the project. The RollUp bundler provided the necessary functionality for that.
-Inside the \texttt{rollup.config.js} several configurations were defined, which are shown in listing \ref{list:rollupconfigjs}.
+One way would be to define a namespace for every team when creating Web Components e.g. Team 1 has the namespace \texttt{team-1}, causing a Web Component registered by the micro frontend of Team 1 to be named \texttt{team-1-tagname}. This could lead to redundancies, because there is no way of assuring that the \texttt{team-1-tagname} and \texttt{team-2-tagname} Web Components are not the same.\cite{wc_best_practices}
 
-\begin{lstlisting}[language=JavaScript, caption=Content of the \texttt{rollup.config.js}, label=list:rollupconfigjs,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
-imp\part{ort resolve from '@rollup/plugin-node-resolve';
-import json from '@rollup/plugin-json';
-import url from "@rollup/plugin-url";
-import { terser } from "rollup-plugin-terser";
-import replace from '@rollup/plugin-replace';
-import { SameVersions } from './rollup_files/same_version';
-import { DiffVersions } from './rollup_files/different_version';
-import { MixedVersions } from './rollup_files/mixed_version';
+A better way might be to assign a common Web Components library like \textbf{UI5 Web Components}. That way, the registered elements are provided by the library and are limited to a set of unique registrable tags. If another micro frontend would try and register an already registered element of the library, a warning is thrown but no error occurs.
 
-let buildArray = [];
+Most Web Component libraries also offer so called scoping options. This feature is employed, when versions of the used components differ between micro frontends. It enables the developers to customize their Web Components and register them under different tags. With this feature, it is made possible to register components according to their respective versions, by adding a version-specific suffix. That, of course, might lead to redundancies again. But it also reduces the dependency of the developer teams to always use the latest version of the component library or the first registered element in the landscape. \cite{ui5_webcomponents_scoping} \cite{openwc_scoping}
 
-function aggregateConfigs() {
-	for(let buildConfig of SameVersions) {
-		buildArray.push(buildConfig);
-	}
-	
-	for(let buildConfig of DiffVersions) {
-		buildArray.push(buildConfig);
-	}
-	
-	for(let buildConfig of MixedVersions) {
-		buildArray.push(buildConfig);
-	}
-}
 
-aggregateConfigs();
-
-export default buildArray;
-\end{lstlisting}
-
-The configuration of the bundler was split into several Java Script files, to improve the readability of the configuration file itself. The content of such a file can be seen in \ref{list:rollupconfigfile}.
-
-\begin{lstlisting}[language=JavaScript, caption=Actual configuration for the \texttt{rollup.config.js}, label=list:rollupconfigfile, xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
-import resolve from '@rollup/plugin-node-resolve';
-import json from '@rollup/plugin-json';
-import url from "@rollup/plugin-url";
-import { terser } from "rollup-plugin-terser";
-import replace from '@rollup/plugin-replace';
-
-export const MixedVersions = [
-	// 1
-	{
-		input: 'src/tableView.js',
-		output: {
-			file: 'dist/tableViewMixedVersions1.js',
-			format: 'es',
-			compact: true
-		},
-		plugins: [
-		replace({
-			'placeholder': '0-9-0',
-		}),
-		terser(),
-		resolve(),
-		json(),
-		url({
-			limit: 0,
-			include: [
-			/.*assets\/.*\.json/,
-			],
-			emitFiles: true,
-			fileName: "[name].[hash][extname]",
-			publicPath: "\" + new URL(\".\", import.meta.url) + \"", // relative configuration for assets (TBD with UI5 Web Components team)
-		})
-		]
-	},
-	// 2
-	{
-		input: 'src/tableView.js',
-		output: {
-			file: 'dist/tableViewMixedVersions2.js',
-			format: 'es',
-			compact: true
-		},
-		plugins: [
-		replace({
-			'placeholder': '1-1-0',
-		}),
-		terser(),
-		resolve(),
-		json(),
-		url({
-			limit: 0,
-			include: [
-			/.*assets\/.*\.json/,
-			],
-			emitFiles: true,
-			fileName: "[name].[hash][extname]",
-			publicPath: "\" + new URL(\".\", import.meta.url) + \"", // relative configuration for assets (TBD with UI5 Web Components team)
-		})
-		]
-	},
-	[...]
-]
-\end{lstlisting}
-
-The same file is used for bundling and each time it is bundled differently. The \texttt{replace} method of to configuration object replaces a string inside the input file. In this case the string \textit{placeholder} is first replaced with \textit{0-9-0} and in the second bundle configuration with \textit{1-1-0}. Also the files generated in the process are called differently, the first one is called \texttt{tableViewMixedVersions1.js} and the second \texttt{tableViewMixedVersions2.js}.
-Even though the elements inside those files are actually the same, they are handled as differently, since their tags differ in the browser. Elements register for the first view are called for example \texttt{<ui5-bar-0-9-0>} and for the second then \texttt{<ui5-bar-1-1-0>}.
-
-That means out of the same file, several differently bundled and named files were generated. Each one of the bundled files register the same elements under different tags which are therefore treated as new elements.
 

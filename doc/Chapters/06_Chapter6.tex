@@ -1,622 +1,501 @@
 % \glsresetall
-\chapter{Presentation of the results} % Main chapter title
+\chapter{Development of the prototypes} % Main chapter title
 \label{Chapter6}
 
-\lhead{Chapter 6. \emph{Presentation of the results}}
+\lhead{Chapter 6. \emph{Development of the prototypes}}
 
-In this chapter it will be explained how empirical traffic data was gathered using the prototype and which metrics were defined for comparison.
-Afterwards the landscapes will be compared, using the defined metrics as key performance indicators. The actual evaluation of the results will be concluded in chapter \ref{Chapter7}.
+This chapter will provide an overview of the prototype landscapes and explain how the previously introduced technologies were used in them.
 
-\section{Data collection and metric definition} 
+\section{Definition of representation}
 
-This section will contain information about how the data was collected and which metrics were defined based on the gathered data.
-
-\subsection{Testing hardware and environment}
-
-It has to be mentioned that certain aspects of the environment were not maintained by the tester and are therefore out of reach for influence or configuration. Nonetheless they are mentioned here for the sake of reproducibility.
-The testing hardware and environment available were the following:
+Before the implementation is showcased, it is explained why and how representation is defined for the context of the thesis.
+Since not every micro frontend landscape is the same, a general definition was required before developing the prototypes.
+For clarification, the term prototype is a synonym for landscape and vise versa, in the following context.
+Those prototypes had to fulfill most of the following requirements, to be considered representative:
 
 \begin{enumerate}
-	\item \textbf{Laptop:}
-	\begin{itemize}[noitemsep]
-		\item MacBook Pro (15-inch, 2017)
-		\item \textbf{Processor:} 2.9 GHz Quad-Core Intel Core i7
-		\item \textbf{Memory:} 16 GB 2133 MHz LPDDR3 
-		\item \textbf{Graphics:} Radeon Pro 560 4 GB and Intel HD Graphics 630 1536 MB
-		\item \textbf{macOS Monetary - Version:} 12.2.1 (21D62)
-	\end{itemize} 
-	
-	\item \textbf{Browser, Network and Lighthouse:}
-	\begin{itemize}[noitemsep]
-		\item \textbf{Browser:} Google Chrome
-		\item \textbf{Version:} 99.0.4844.51 (Official Build) (x86\_64)
-		\item \textbf{Chrome DevTools version:} Chrome 99
-		\item \textbf{Lighthouse version:} 100.0.0.0
-		\item \textbf{JavaScript version:} V8 9.9.115.8
-		\item \textbf{Network-Bandwidth:} 180-200 MB/s
-	\end{itemize}
-	
-	\item \textbf{Runtime environment for prototypes:} surge.sh \footnote{surge.sh is a platform for static web publishing
-		for frontend developers via the command line.}
-	
-	\item \textbf{CDN:} Unpkg.com \footnote{This part of the environment was explained in chapter \ref{Chapter3}}
+	\item The landscape has to contain at least 6 or more micro frontends
+	\item The different micro frontends in the landscape, have to load the same libraries/dependencies to cause redundancies
+	\item The tech stack of the landscape has to be heterogenic (not only one UI framework is used).
+	\item The embedded micro frontends have to be isolated projects
+	\item The landscape contains different versions of a dependency
 \end{enumerate}
 
-Additionally to the specified hardware specs, version 1.18.1 of the \texttt{@luigi-project} was used. This dependency enables the Luigi framework and is therefore used in every implemented version of the prototype.
+In specific cases, not all requirements could be met, it is explained why though.
 
-\subsection{Testing process}
+\section{Prototype overviews}
 
-Since multiple landscapes were implemented a unified process was required to collect comparable data. The BPMN diagram \ref{fig:data_collection_process_har} contains the process steps in detail.
+This section will shortly describe the developed landscapes.
+
+\subsection{Prototype 1 - CDN/NPM}
+
+The first prototype developed was the CDN/NPM landscape. Totaling 8 micro frontends embedded as iFrames into a Luigi-Core-React application.
+Figure \ref{fig:unpkg_prototype_architecture} visualizes this environment.
+ 
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{Figures/unpkg.architecture.drawio.png}
+	\caption{Overview of the Luigi prototype using Unpkg.com}
+	\label{fig:unpkg_prototype_architecture}
+\end{figure}
+
+This prototype represents a Luigi micro frontend landscape, where each Luigi node is a single-page application (SPA). 
+The 4 NPM apps, embedded in the landscape, were implemented for comparison. They are meant to show, how the the CDN technology performs, in direct comparison to a bundled application.
+In their core, each application contains the same UI-elements. Thus, it is made possible to compare them, in terms of loading times and bytes loaded.
+The goals to show with this environment were:
+
+\begin{itemize}
+	\item How redundancies occur in a micro frontend landscape
+	\item That the browser can´t distinguish between bundled resources, contrary to resources loaded from the CDN
+	\item If the UI framework, has an effect on the performance of the site
+\end{itemize}
+
+This landscape, fulfills 4 out of the 5 requirements, missing the aspect of different versions. The reason behind this is that, even though it is possible to request different versions of a resource from the CDN, the CDN itself does not offer any means to resolve multiple versions inside the landscape. That means that the library is imported 2 times in different versions. That just increases the redundancies inside the landscape. Due to this predictability, this aspect was not considered for that landscape.
+
+\subsection{Prototype 2 - WMF/Web Components}
+
+The second prototype developed was the WMF and Web Components landscape. It contains 36 micro frontends in total, which are split over 6 Luigi Nodes.
+Each Luigi Node, is therefore a compound of micro frontends.
+Figure \ref{fig:compound_prototype_architecture} provides an overview of the Node landscape.
 
 \begin{figure}[!h]
 	\centering
-	\includegraphics[width=0.7\textwidth]{Figures/Data_Collection_Process_har.drawio.png}
-	\caption{Data collection process for .har files}
-	\label{fig:data_collection_process_har}
+	\includegraphics[width=0.7\textwidth]{Figures/compound_views_overview.drawio.png}
+	\caption{Overview of the Luigi Nodes in the WMF/Web Components environment}
+	\label{fig:compound_prototype_architecture}
 \end{figure}
 
-As it can be seen in \ref{fig:data_collection_process_har} there are actually two processes executed to collect data. The first one was with caching disabled, the second had it enabled. The intention behind it was to gather an average initial loading time for the picked side, therefore the resources must not be cached. 
-The second process was used to gather information about caching behavior in general. Since each landscape contains basically the same views, the browser should be able to pull already loaded resources from the cache instead via the network. To showcase this behavior and prove the performance gain through caching, this data was gathered too.
-Each process was executed 5 times, therefore 10 HTTP Archive (\texttt{.har}) files were generated per landscape. These \texttt{.har} files were then transformed into \texttt{.csv} files using a self-developed script. 
+The 6 Nodes displayed in figure \ref{fig:compound_prototype_architecture} contain 6 micro frontends each. 
+Figure \ref{fig:compound_wmf_single_node} provides an overview on how the micro frontends are arranged inside a Node to a compound. 
 
-Additionally to the \texttt{.har} files a website performance report was collected, using the Lighthouse tool embedded in the Google Chrome browser. Such a report provides information about how much of the imported bytes are actually used by a web application, distinguished by resource URL.
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{Figures/compound_wmf_single_node.drawio.png}
+	\caption{Example overview of a single Node inside the WMF/Web Components environment}
+	\label{fig:compound_wmf_single_node}
+\end{figure}
 
-In summary it means:
+Even though these two technologies are embedded in the same Luigi dashboard, they are referred to as separate landscapes in certain cases. This is due to used technologies, the first one be the Web Components.
+
+\subsubsection{Embedding a micro frontend into a compound in Luigi}
+
+The micro frontends in the 3 Web Component Nodes are embedded as part of compounds. The according configuration is made in the \texttt{luigi.config.js}.\cite{luigi_wc} \cite{luigi_compound}
+Contrary to WMF, this configuration allows to embed the referred components in so called \texttt{compoundItemContainer}. The arrangement and number of columns inside the Node are defined in the \texttt{luigi.config.js}.
+Listing \ref{list:compound_luigi_config} shows the exact configuration for that.
+
+\begin{lstlisting}[caption=Configuration of Web Components Node for a compound view, label=list:compound_luigi_config,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
+Luigi.setConfig({
+	navigation: {
+		nodes: [{
+			label: 'Home',
+			pathSegment: 'home',
+			icon: 'home',
+			hideFromNav: true,
+			globalNav: true,
+			hideSideNav: true,
+			defaultChildNode: 'mixedVersions',
+			children: [
+				// Mixed Versions
+				{
+					label: 'Luigi Compound mixed versions',
+					pathSegment: 'mixedVersions',
+					icon: 'activate',
+					compound: {
+						renderer: {
+							use: {
+								extends: 'grid',
+								createCompoundItemContainer: (itemConfig, 
+																						containerConfig, 
+																						superRenderer) => 
+								{
+									const itemContainer = superRenderer
+									.createCompoundItemContainer(itemConfig);
+									if (!itemConfig.noPadding) {
+										itemContainer.style = itemContainer
+										.getAttribute('style') + 
+										' ; padding: 20px ; overflow: hidden';
+									}
+									return itemContainer;
+								}
+							},
+							config: {
+								columns: '1fr 1fr 1fr',
+								layouts: [{
+									minWidth: 0,
+									maxWidth: 1024,
+									columns: '3fr',
+									gap: 0
+								}]
+							}
+						},
+						children: [
+						// MFEs for this compound go here
+						{
+							webcomponent: true,
+							viewUrl: 'URL to the view to be embedded',
+							label: 'A label for the MFE',
+							layoutConfig: {
+								column: "auto"
+							}
+						},
+						...
+						]
+					}
+				},
+\end{lstlisting}
+
+Line 14 to 16 define the central Node navigation element for the Luigi dashboard. In line 17 it is defined that the content of this Node is to be a compound. The following line 18 defines the renderer for the content and the tools are the properties of the \texttt{use} property in line 19. Line 20 to 34 define the actual CSS attributes of the to be rendered container for the compound elements. The arrangement of the container , is managed in the \texttt{config} property in line 35. In this scenario, the containers can be arranged in 3 columns, each one taking 1 fraction of 1024 pixels.
+At line 45 the actual compound elements or micro frontends are defined as an array of JavaScript objects.
+
+\subsubsection{Embedding a micro frontend into a compound in WMF}
+
+Contrary to the Web Component Nodes, the WMF Nodes are actually embedded as iFrames into the Luigi dashboard. Therefore, the Luigi configuration for that landscape, is similar to the CDN/NPM environements. The listing \ref{list:wmf_luigi_config}, shows an example on how it was done.
+
+\begin{lstlisting}[caption=Example configuration to embed a WMF micro frontend compound as a Node in Luigi, label=list:wmf_luigi_config,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
+	Luigi.setConfig({
+		navigation: {
+			nodes: [{
+				label: 'Home',
+				pathSegment: 'home',
+				icon: 'home',
+				hideFromNav: true,
+				globalNav: true,
+				hideSideNav: true,
+				defaultChildNode: 'sameVersions',
+				children: [
+                {
+					pathSegment: 'wmfHostSame',
+					label: 'WMF Compound Same',
+					icon: 'technical-object',
+					viewUrl: 'https://angular-wmf-same-shell.surge.sh/',
+					loadingIndicator: {
+						enabled: false
+					}
+				},
+			...
+\end{lstlisting}
+
+As it can be seen, the integration is done via an URL. The same view displayed in the dashboard, can be found under the referred URL. This means, to create a compound view in WMF, the creation of the necessary container, the arrangement and the actual placements of the micro frontends, is managed by the host application of the WMF environment and not Luigi.
+The code for these development, is shown and explained in section \ref{wmf_implementation_prototype} of this chapter.
+
+\section{CDN - Unpkg.com} 
+
+Chapter \ref{Chapter3}, introduced the concept of the CDN. A remote server is provides the necessary platform resources via an API, thus avoiding the necessity of bundling those resources.
+To evaluate the impact of this technology on a micro frontend landscape, the first prototype was developed using the public cloud based CDN Unpkg.com. It is an open-source project, built and maintained by Michael Jackson. It runs on the Cloudflare platform, and auto-scalable servers are provided by Fly.io, which are located in 17 cities around the world.\cite{unpkg_doc}
+
+An open API is available, through which resources can be requested. Via path and query parameters in the URL, necessary information like the dependency version can be provided.
+
+The usage of the Unpkg.com-CDN is embedded in the code. Instead of loading the dependencies via the local \texttt{node\_modules} directory, they are directly loaded using the CDNs API, the usage of which is displayed in the listing \ref{list:unpkg_import}.
+
+\begin{lstlisting}[caption=Import of a dependecy using the unpkg API, label=list:unpkg_import]
+	<script src="https://unpkg.com/@ui5/webcomponents@1.0.0-rc.15/dist/StandardListItem.js?module" type="module"></script>
+\end{lstlisting}
+
+This script tag is placed in the central \texttt{index.html}. The loaded resource can be read from the URL. The first part of the URL refers to the protocol and the host. The first path parameter is the npm dependency name. In the case of \ref{unpkg_import} it is \texttt{@ui5}, followed by a subdirectory with its respective version annotated with an @.
+As it is described in the documentation, the CDN supports two query parameters.
 
 \begin{itemize}[noitemsep]
-	\item 12 landscapes were developed
-	\item Each landscape was loaded 10 times, 5 times with cache enabled and 5 with cache disabled
-	\item Each loading of a landscape is represented by a HTTP Archive file
-	\item In summary, the testing processes were executed 120 times overall
-	\item Generating 120 \texttt{.har} files
-	\item Which then were aggregated and transformed into 12 \texttt{.csv} files
-	\item Which then again were copied into one Excel file, where the data was analyzed
-	\item In addition 12 Lighthouse reports where collected (one per landscape) and added to the excel
+	\item \texttt{?meta} - to request meta data about the loaded package, in a JSON format
+	\item \texttt{?module} - to expand all import specifiers in JavaScript modules to unpkg URLs
 \end{itemize}
 
-The reason why this testing procedure was chosen was, due to the low variety in the parameters when a landscape was loaded. First it was tested if the parameters would vary when a landscape is loaded up to 1000 times, but that case did not occur. Due the constant resource sizes and stable network, not many fluctuations could be observed. Only when changes on technological level were made (e.g. usage of cache, network outage) fluctuations started to appeared. But other than that, it was observed that the results were stable. Therefore it was decided that loading a landscape 10 times does suffice for the experiment.
+If the import is handled via a script tag, as it is done in \ref{list:unpkg_import}, the \texttt{type="module"} attribute has to be added, depending on the resource loaded.
+In the case of the given example, the resource is a JavaScript module type. To ensure it is parsed by the runtime as such, this attribute has to be added.\cite{js_module_type}
 
-After the collection process, another self-developed script was used to aggregate all the gather data into one single file. This was later used to define and calculate the metrics, which are described next.
+\section{Web Components - UI5 Web Components} 
 
-\subsection{Defined metrics}
+The Web Components standard was partially used in the development of the second prototype. For development itself no UI application framework was used, which means all three compounds were developed using plain JavaScript. The actual components used in the micro frontends of the compounds, were taken from a component library called UI5 Web Components. Each element in that library is in fact a Web Component.\cite{ui5_wc_github}
+Consisting of the picked elements and under the usage of the scoping feature of the component library, the compounds where created. This made it possible to scope the tags of the UI5 Web Components.\cite{ui5_webcomponents_scoping}
 
-The central file, containing all the data, was split into separate sheets in which the metrics for each micro frontend were calculated. The parameters for calculation were:
+\begin{lstlisting}[caption=Scoping feature used in the prototype, label=list:scoping_wc_prototype,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
+import { LuigiElement, html } 
+from "@luigi-project/client/luigi-element.js";
+import { setCustomElementsScopingSuffix } 
+from "@ui5/webcomponents-base/dist/CustomElementsScope.js";
+setCustomElementsScopingSuffix("placeholder");
+import "@ui5/webcomponents/dist/Dialog.js";
+import "@ui5/webcomponents/dist/Button.js";
+[...]
 
-\begin{itemize}
-	\item \textbf{connection} - This is an ID with which each opened TCP connection is tagged by the browser. This value can be an indicator for the parallelity of the requests. Since HTTP/2 several requests can be handled by a server via the same TCP connection, reducing the time costs for TCP handshakes. It has to be considered that the application requesting the sources can not implement this HTTP/2 feature. It has to be enabled on server side and by the browser, which is already the case for most modern browsers.\cite{http2} As of writing this transcript, Surge the web server platform, onto which the application landscapes are deployed, does not support HTTP/2.
+export default class extends LuigiElement {
+	constructor() {
+		super();
+		[...]
+		render() {
+			return html`
+			<div>
+			<div class="header">
+			<h2>Products table - Version: placeholder</h2>
+			</div>
+			
+			<ui5-table-placeholder id="ui5-table" 
+			ui5-table sticky-column-header>
+			<!-- Columns -->
+			<ui5-table-column-placeholder 
+			slot="columns" 
+			style="width: 4rem">
+			<span 
+			style="line-height: 1.4rem">
+			Product
+			</span>
+			</ui5-table-column-placeholder>
+			
+			[...]
+			
+			</ui5-table-placeholder>
+			</div>`;
+		}
+	}
+\end{lstlisting}
 	
-	\item \textbf{loadedFromCache} - This is a string value with three possible characteristics, \textit{not loaded from cache, disk} or \textit{memory}, whereas \textit{disk} and \textit{memory} are semantically the same. This value explains from where the resource was loaded. Either via the network from a remote server or from the local cache. It helps indicating the caching behavior of bundled resources in comparison with resources loaded from a unified URL (e.g. a CDN). 
+Listing \ref{list:scoping_wc_prototype} shows the exact usage of the scoping feature. 
+The imported \textit{setCustomElementsScopingSuffix} function enables to define a custom suffix to all UI5 Web Component elements, if not configured otherwise. Also, as it can be seen in the same listing, the suffix is set to \textit{placeholder} using the imported method \textit{setCustomElementsScopingSuffix("placeholder")}.
+This is done for the sake of the experiment itself. It was intended to deploy six similar looking micro frontends, using Web Components, into the Luigi landscape, to test how many redundancies occur. In addition it was meant to be tested how different versions of the same elements could be registered. For example the \textit{Bar} element in version \textit{1.0.1} is registered under same tag as the same element in version \textit{1.1.0}. This scenario has to be handled and the scoping feature is one way of doing so.
+By defining a version suffix for the \textit{Bar} element tag, the browser can distinguish those elements.
+In case of the prototype to create this exact scenario, one global tag suffix \textit{placeholder} was picked and later replaced. The replacement itself happened during the bundling of the project. The RollUp bundler provided the necessary functionality for that.
+Inside the \texttt{rollup.config.js} several configurations were defined, which are shown in listing \ref{list:rollupconfigjs}.
 	
-	\item \textbf{pageRef} - This is a page reference provided by the browser with possibly an infinite amount of characteristics. Each request is tagged with this value, so it can be distinguished, which request was sent by which web application. Since the data is separated by sheets inside the file and is always website specific, no further information can be pulled from this value.
-	
-	\item \textbf{startedDateTime} - This is a time stamp given to each request, marking its starting time in a DateTime format. This value can serve as an indicator for parallelity, since multiple TCP connections can be opened at the same time. 
-	
-	\item \textbf{requestMethod} - This is a string value with a limited amount of characteristics. The possible values are the different HTTP methods. It indicates which type of request was executed for the loaded resource. In almost all cases it is \textbf{GET}.
-	
-	\item \textbf{requestUrl} - This is a string value, containing the request URL used by the browser to load the resource. This value is mainly categorizing the calculation results, since neither \textit{connection} nor \textit{pageRef} are valid options to distinguish the loaded resources of a website. 
-	
-	\item \textbf{requestHeaderSize} - This is a number value, indicating the byte size of the request header sent by the web application to the server.
-	
-	\item \textbf{responseStatus} - This is a number value with a limited amount of characteristics, containing the HTTP response code from the server. The range of the possible values is the same as the possible response codes of the HTTP.
-	
-	\item \textbf{responseContentSize} - This number value is the byte size of the loaded resource.
-	
-	\item \textbf{timeInMs} - This value represents the round trip time of the request in milliseconds. 
-\end{itemize}
-
-Based on the given values from the \texttt{.har} files, following key performance indicators were calculated.
-
-\begin{itemize}
-	\item \textbf{Avg. Content Size} - Numerical value calculated by averaging the \textbf{responseContentSize} values of all the websites resources
-	\item \textbf{Avg. Time in MS Loaded values} - Numerical value, calculated by averaging the \textbf{timeInMs} values of all the websites resources
-	\item \textbf{Occurrences Connection Duplicates} - Numerical value to represent parallelity by counting the amount of duplicate/multiple occurring \textbf{connection} values
-	\item \textbf{Connection IDs} - List of all \textbf{connection} characteristics for the website 
-	\item \textbf{Connection IDs occurrence} - Amount of how often the connection occurred during the loading of the website
-	\item \textbf{Parallel start time} - Numerical value, calculated by counting reoccurring \textbf{startedDateTime} values
-	\item \textbf{Avg. Response content size per Loading Type} - Numerical value, calculated by averaging the \textbf{responseContentSize}, differentiated by the characteristics of the \textbf{loadedFromCache} property
-	\item \textbf{URLs loaded} - List of all unique \textbf{requestUrl} values
-	\item \textbf{Avg. Response Time per URL loaded in MS} - Numerical value, representing the average loading time of each loaded resource URL of the website
-	\item \textbf{Avg. Response Size per URL loaded} - Numerical value, representing the average loading byte size of each resource URL
-	\item \textbf{Avg. Response Size per URL loaded via network} - Numerical value, calculated by averaging the \textbf{responseContentSize} differentiated by the \textbf{requestUrl} for all resources with the \textbf{loadedFromCache} value of \textit{not loaded from cache}. For the test scenarios with cache disabled, this value equals \textbf{Avg. Response Size per URL loaded}
-	\item \textbf{Avg. Response Size per URL loaded from Disk} - Numerical value, calculated by averaging the \textbf{responseContentSize} differentiated by the \textbf{requestUrl}, for all resources with the \textbf{loadedFromCache} value of \textit{disk}
-	\item \textbf{Avg. Response Size per URL loaded from Memory} - Numerical value, calculated by averaging the \textbf{responseContentSize} differentiated by the \textbf{requestUrl}, for all resources with the \textbf{loadedFromCache} value of \textit{memory}
-\end{itemize}
-
-The main focus of this thesis is to reduce redundant libraries in micro frontend landscapes, by using different types of technologies. Therefore, the calculated metrics were used to partially determine the gain a technology brings. Nonetheless, it has to be considered, that certain indicators are hard to measure such as the complexity of the implemented technology.  
-A metric like this, must not be ignored for the context of this transcript, since the gain or rather the value a technology brings, highly depends on it. Thus a subjective retrospective will be provided in chapter \ref{Chapter7}, describing the experience of the author with the used technologies.
-
-In the following sections the results of the introduced metrics for each landscape are showcased. This display is distinguished by the fact, if the collected data was with caching enabled or not. Additionally to the metrics, the individual graphs for the landscapes are referred to in the appendixes \ref{appendix1}, \ref{appendix2} and \ref{appendix3}.
-
-\section{CDN landscapes}
-
-\subsection{Implementation with NPM}
-
-The table \ref{tab:cdn_result_table} contains the results for the implemented landscapes with a regular bundler and a package manager, namely NPM. Certain metrics are not added to the table for readability, but a graphical representation can be found in \ref{appendix1}.
-
-\scriptsize
-\setlength{\mycolwidth}{\dimexpr \textwidth/5 - 2\tabcolsep}
-
-\begin{longtable}[c]{*{3}{p{\mycolwidth}}}
-	
-	\caption{Table of numerical KPI results for the NPM landscapes with caching disabled}
-	\label{tab:cdn_result_table} \\
-	
-	\toprule
-	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{Angular NPM}}}                              
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{Vue NPM}}} \\ 
-	\midrule
-	\endfirsthead
-	
-	\multicolumn{3}{l}{\footnotesize\itshape\tablename~\thetable:
-		continued from previous page} \\
-	\toprule   
-	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{Angular NPM}}}                              
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{Vue NPM}}} \\*
-	\midrule
-	\endhead
-	%		
-	\multicolumn{1}{l|}{URLs loaded count}                                         															
-	& \multicolumn{1}{l|}{\makecell[c]{14}} 	
-	& \multicolumn{1}{l}{\makecell[c]{13}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Avg. Response content size\\per Loading Type}}   
-	& \multicolumn{1}{l|}{\makecell[c]{\textit{not loaded from cache} - 129529.13, \\ \textit{memory} - 0, \\ \textit{disk} - 0}} 											
-	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 156131.63, \\ \textit{memory} - 0, \\ \textit{disk} - 0}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{Parallel start time}                                 													
-	& \multicolumn{1}{l|}{\makecell[c]{33}} 				
-	& \multicolumn{1}{l}{\makecell[c]{45}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{Connection IDs occurence}                            											
-	& \multicolumn{1}{l|}{\makecell[c]{\textit{none established} - 10,\\ \textit{207393} - 10}} 												   
-	& \multicolumn{1}{l}{\makecell[c]{\textit{241394} - 10}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{Connection IDs count}                                      																
-	& \multicolumn{1}{l|}{\makecell[c]{62}} 															     
-	& \multicolumn{1}{l}{\makecell[c]{71}}   \\ \midrule
+	\begin{lstlisting}[language=JavaScript, caption=Content of the \texttt{rollup.config.js}, label=list:rollupconfigjs,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
+		imp\part{ort resolve from '@rollup/plugin-node-resolve';
+			import json from '@rollup/plugin-json';
+			import url from "@rollup/plugin-url";
+			import { terser } from "rollup-plugin-terser";
+			import replace from '@rollup/plugin-replace';
+			import { SameVersions } from './rollup_files/same_version';
+			import { DiffVersions } from './rollup_files/different_version';
+			import { MixedVersions } from './rollup_files/mixed_version';
+			
+			let buildArray = [];
+			
+			function aggregateConfigs() {
+				for(let buildConfig of SameVersions) {
+					buildArray.push(buildConfig);
+				}
+				
+				for(let buildConfig of DiffVersions) {
+					buildArray.push(buildConfig);
+				}
+				
+				for(let buildConfig of MixedVersions) {
+					buildArray.push(buildConfig);
+				}
+			}
+			
+			aggregateConfigs();
+			
+			export default buildArray;
+		\end{lstlisting}
 		
-	\multicolumn{1}{l|}{\makecell[l]{Connection Duplicates}}                        
-	& \multicolumn{1}{l|}{\makecell[c]{20}} 						   
-	& \multicolumn{1}{l}{\makecell[c]{10}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Loaded values \& occurrences}}                        
-	& \multicolumn{1}{c|}{\makecell[c]{\textit{not loaded from cache} - 80,\\ \textit{memory} - 0, \\ \textit{disk} - 0}} 						   
-	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 80, \\ \textit{memory} - 0, \\ \textit{disk} - 0}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Avg. Time in MS}}                        
-	& \multicolumn{1}{l|}{\makecell[c]{162.22}} 						   
-	& \multicolumn{1}{l}{\makecell[c]{5323.54}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Avg. Content Size}}                                         
-	& \multicolumn{1}{l|}{\makecell[c]{129529.13}}  				  
-	&   \multicolumn{1}{l}{\makecell[c]{156131.63}} \\ \bottomrule
-\end{longtable}
+		The configuration of the bundler was split into several Java Script files, to improve the readability of the configuration file itself. The content of such a file can be seen in \ref{list:rollupconfigfile}.
+		
+		\begin{lstlisting}[language=JavaScript, caption=Actual configuration for the \texttt{rollup.config.js}, label=list:rollupconfigfile, xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
+			import resolve from '@rollup/plugin-node-resolve';
+			import json from '@rollup/plugin-json';
+			import url from "@rollup/plugin-url";
+			import { terser } from "rollup-plugin-terser";
+			import replace from '@rollup/plugin-replace';
+			
+			export const MixedVersions = [
+			// 1
+			{
+				input: 'src/tableView.js',
+				output: {
+					file: 'dist/tableViewMixedVersions1.js',
+					format: 'es',
+					compact: true
+				},
+				plugins: [
+				replace({
+					'placeholder': '0-9-0',
+				}),
+				terser(),
+				resolve(),
+				json(),
+				url({
+					limit: 0,
+					include: [
+					/.*assets\/.*\.json/,
+					],
+					emitFiles: true,
+					fileName: "[name].[hash][extname]",
+					publicPath: "\" + new URL(\".\", import.meta.url) + \"", // relative configuration for assets (TBD with UI5 Web Components team)
+				})
+				]
+			},
+			// 2
+			{
+				input: 'src/tableView.js',
+				output: {
+					file: 'dist/tableViewMixedVersions2.js',
+					format: 'es',
+					compact: true
+				},
+				plugins: [
+				replace({
+					'placeholder': '1-1-0',
+				}),
+				terser(),
+				resolve(),
+				json(),
+				url({
+					limit: 0,
+					include: [
+					/.*assets\/.*\.json/,
+					],
+					emitFiles: true,
+					fileName: "[name].[hash][extname]",
+					publicPath: "\" + new URL(\".\", import.meta.url) + \"", // relative configuration for assets (TBD with UI5 Web Components team)
+				})
+				]
+			},
+			[...]
+			]
+		\end{lstlisting}
+		
+		The same file is used for bundling and each time it is bundled differently. The \texttt{replace} method of to configuration object replaces a string inside the input file. In this case the string \textit{placeholder} is first replaced with \textit{0-9-0} and in the second bundle configuration with \textit{1-1-0}. Also the files generated in the process are called differently, the first one is called \texttt{tableViewMixedVersions1.js} and the second \texttt{tableViewMixedVersions2.js}.
+		Even though the elements inside those files are actually the same, they are handled as differently, since their tags differ in the browser. Elements register for the first view are called for example \texttt{<ui5-bar-0-9-0>} and for the second then \texttt{<ui5-bar-1-1-0>}.
+		
+		That means out of the same file, several differently bundled and named files were generated. Each one of the bundled files register the same elements under different tags which are therefore treated as new elements.
 
-\normalsize
-The results shown in table \ref{tab:cdn_result_table} were collected without caching enabled. This explains for instance, why no resources were loaded from cache and therefore the values for the \textit{memory} or \textit{disk} characteristics are missing.
-The main takeaway from these results, is an average initial loading time for the landscapes which range from \textbf{129529.125} to \textbf{156131.625} milliseconds, depending on the framework. It can also be seen, that even though less resources are loaded via URLs by the VueJS landscape, it has a longer loading time compared to the Angular one.
+\section{Webpack Module Federation with Angular} 
+\label{wmf_implementation_prototype}
 
-\scriptsize
-\setlength{\mycolwidth}{\dimexpr \textwidth/5 - 2\tabcolsep}
+The three implemented versions for the the WMF landscape are similar to one another, the only difference can be found are the dependencies and their configured sharing. Listing \ref{list:wmf_sameversions_shell} shows the configuration for the \textit{sameVersion} environment.
 
-\begin{longtable}[c]{*{3}{p{\mycolwidth}}}
-	
-	\caption{Table of numerical KPI results for the NPM landscapes with caching enabled}
-	\label{tab:cdn_result_table_caching} \\
-	
-	\toprule
-	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{Angular NPM}}}                              
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{Vue NPM}}} \\ 
-	\midrule
-	\endfirsthead
-	
-	\multicolumn{3}{l}{\footnotesize\itshape\tablename~\thetable:
-		continued from previous page} \\
-	\toprule   
-	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{Angular NPM}}}                              
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{Vue NPM}}} \\*
-	\midrule
-	\endhead
-	%		
-	\multicolumn{1}{l|}{URLs loaded count}                                         															
-	& \multicolumn{1}{l|}{\makecell[c]{14}} 	
-	& \multicolumn{1}{l}{\makecell[c]{13}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Avg. Response content size\\per Loading Type}}   
-	& \multicolumn{1}{l|}{\makecell[c]{\textit{not loaded from cache} - 166856, \\ \textit{memory} - 17548.5, \\ \textit{disk} - 17548.5}} 											
-	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 145646.67,\\ \textit{memory} - 0, \\ \textit{disk} - 187586.5}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{Parallel start time}                                 													
-	& \multicolumn{1}{l|}{\makecell[c]{32}} 				
-	& \multicolumn{1}{l}{\makecell[c]{39}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{Connection IDs occurence}                            											
-	& \multicolumn{1}{l|}{\makecell[c]{\textit{none established} - 20}} 												   
-	& \multicolumn{1}{l}{\makecell[c]{\textit{none established} - 20}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{Connection IDs count}                                      																
-	& \multicolumn{1}{l|}{\makecell[c]{61}} 															     
-	& \multicolumn{1}{l}{\makecell[c]{61}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Connection Duplicates}}                        
-	& \multicolumn{1}{l|}{\makecell[c]{20}} 						   
-	& \multicolumn{1}{l}{\makecell[c]{20}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Loaded values \& occurrences}}                        
-	& \multicolumn{1}{c|}{\makecell[c]{\textit{not loaded from cache} - 60, \\ \textit{memory} - 6, \\ \textit{disk} - 14}} 						   
-	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 60, \\ \textit{memory} - 0, \\ \textit{disk} - 20}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Avg. Time in MS}}                        
-	& \multicolumn{1}{l|}{\makecell[c]{150.90}} 						   
-	& \multicolumn{1}{l}{\makecell[c]{1890.6}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Avg. Content Size}}                                         
-	& \multicolumn{1}{l|}{\makecell[c]{129529.13}}  				  
-	&   \multicolumn{1}{l}{\makecell[c]{156131.63}} \\ \bottomrule
-	
-\end{longtable}
+\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{webpack.config.js} of the shell of the same versions WMF project, label=list:wmf_sameversions_shell, xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
+	[...]
+	module.exports = {
+		[...]
+		plugins: [
+		new ModuleFederationPlugin({
+			name: "shell",
+			filename: "remoteEntry.js",
+			shared: share({
+				"@angular/core": { 
+					singleton: true, 
+					strictVersion: false, 
+					requiredVersion: '= 12.2.0'
+				},
+				"@angular/common": { 
+					singleton: true, 
+					strictVersion: false, 
+					requiredVersion: '= 12.2.0' 
+				},
+				...sharedMappings.getDescriptors()
+			})
+			
+		}),
+		sharedMappings.getPlugin()
+		]};
+\end{lstlisting}
 
-\normalsize
-The results of table \ref{tab:cdn_result_table_caching} show the effect caching has on the performance of a site. The average loading time of the site decreases, as do the opened TCP connections. In table \ref{cdn_result_table}, the Angular landscape is loaded faster compared to Vue JS.
+As it can be seen the shared dependencies are defined in between lines 22 and 24. Line 18 and 19 define the name of the application in the landscape and the name of the file after bundling. For the above case it has to be mentioned that the remotes are separate applications in their own runtime. Therefore, they have to be imported via the network, thus no \texttt{remote} property is configured in this file. To add the dynamically loaded remotes, a service had to be developed which imports the remotes at runtime. This service is shown in listing \ref{list:wmf_lookup_service}.\cite{wmf_angular_dynamicfederation}
 
-Both environments were implemented using a regular bundler and therefore it can not be ensured that redundant libraries were not loaded.
+\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{lookup.service.ts} for remote module loading in shell applications, label=list:wmf_lookup_service,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
+	[...]
+	@Injectable({ providedIn: 'root' })
+	export class LookupService {
+		lookup(): Promise<PluginOptions[]> {
+			return Promise.resolve([
+			{
+				remoteEntry: 'https://angular-wmf-same-mfe1.surge.sh/remoteEntry.js',
+				remoteName: 'mfe1',
+				exposedModule: './Mfe1',
+				
+				displayName: 'Mfe1',
+				componentName: 'Mfe1Component'
+			},
+			[...]	
+			] as PluginOptions[]);
+		}
+	}
+\end{lstlisting}
 
-\subsection{Implementation with Unpkg}
-
-Table \ref{tab:cdn_result_table_unpkg} contains the results for the implemented landscapes with a use of a public CDN, namely Unpkg. Certain metrics are not added to the table for readability, but a graphical representation can be found in \ref{appendix1}. 
-
-\scriptsize
-\setlength{\mycolwidth}{\dimexpr \textwidth/5 - 2\tabcolsep}
-
-\begin{longtable}[c]{*{3}{p{\mycolwidth}}}
-	
-	\caption{Table of numerical KPI results for the landscapes using the Unpkg CDN with caching disabled}
-	\label{tab:cdn_result_table_unpkg} \\
-	
-	\toprule
-	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{Angular Unpkg}}}                              
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{Vue Unpkg}}} \\ 
-	\midrule
-	\endfirsthead
-	
-	\multicolumn{3}{l}{\footnotesize\itshape\tablename~\thetable:
-		continued from previous page} \\
-	\toprule                        
-	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{Angular Unpkg}}}                              
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{Vue Unpkg}}} \\*
-	\midrule
-	\endhead
-	%		
-	\multicolumn{1}{l|}{URLs loaded count}                                         															
-	& \multicolumn{1}{l|}{\makecell[c]{171}} 	
-	& \multicolumn{1}{l}{\makecell[c]{165}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Avg. Response content size\\per Loading Type}}   
-	& \multicolumn{1}{l|}{\makecell[c]{\textit{not loaded from cache} - 9768.62, \\ \textit{memory} - 0, \\ \textit{disk} - 0}} 											
-	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 8205.19, \\ \textit{memory} - 0, \\ \textit{disk} - 0}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{Parallel start time}                                 													
-	& \multicolumn{1}{l|}{\makecell[c]{871}} 				
-	& \multicolumn{1}{l}{\makecell[c]{989}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{Connection IDs occurence}                            											
-	& \multicolumn{1}{l|}{\makecell[c]{\textit{223736} - 20,\\ \textit{223722} - 1574,\\ \textit{none established} - 10}} 												   
-	& \multicolumn{1}{l}{\makecell[c]{\textit{241394} - 20,\\ \textit{249654} - 1560}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{Connection IDs count}                                      																
-	& \multicolumn{1}{l|}{\makecell[c]{53}} 															     
-	& \multicolumn{1}{l}{\makecell[c]{42}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Connection Duplicates}}                        
-	& \multicolumn{1}{l|}{\makecell[c]{1604}} 						   
-	& \multicolumn{1}{l}{\makecell[c]{1580}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Loaded values \&\\ occurrences}}                        
-	& \multicolumn{1}{c|}{\makecell[c]{\textit{not loaded from cache} - 1654, \\ \textit{memory} - 0, \\ \textit{disk} - 0}} 						   
-	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 1620, \\ \textit{memory} - 0, \\ \textit{disk} - 0}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Avg. Time in MS}}                        
-	& \multicolumn{1}{l|}{\makecell[c]{97.23}} 						   
-	& \multicolumn{1}{l}{\makecell[c]{194.01}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Avg. Content Size}}                                         
-	& \multicolumn{1}{l|}{\makecell[c]{9768.62}}  				  
-	&   \multicolumn{1}{l}{\makecell[c]{8205.19}} \\ \bottomrule
-	
-\end{longtable}
-
-\normalsize
-The data shown in table \ref{tab:cdn_result_table_unpkg} are again collected without caching enabled. An approximate estimation for the initial loading times can be drawn from this. It is made visible that the VueJS environment takes longer to load for less content. A similar behavior was present in the NPM implementation.
-Nonetheless it is an improvement in performance compared to the NPM counterparts for both landscapes. The trade-off of this technology is that single component resources, like a button or a table, were imported via script tags one by one, thus the increase in loaded URLs.
-
-\scriptsize
-\setlength{\mycolwidth}{\dimexpr \textwidth/5 - 2\tabcolsep}
-
-\begin{longtable}[c]{*{3}{p{\mycolwidth}}}
- 	
- 	\caption{Table of numerical KPI results for the landscapes using the Unpkg CDN with caching enabled}
- 	\label{tab:cdn_result_table_unpkg_cache} \\
- 	
- 	\toprule
-	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{Angular Unpkg}}}                              
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{Vue Unpkg}}} \\ 
- 	\midrule
- 	\endfirsthead
- 	
- 	\multicolumn{3}{l}{\footnotesize\itshape\tablename~\thetable:
- 		continued from previous page} \\
- 	\toprule   
-	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{Angular Unpkg}}}                              
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{Vue Unpkg}}} \\*
- 	\midrule
- 	\endhead
- 	%		
- 	\multicolumn{1}{l|}{URLs loaded count}                                         															
- 	& \multicolumn{1}{l|}{\makecell[c]{171}} 	
- 	& \multicolumn{1}{l}{\makecell[c]{165}}   \\ \midrule
- 	
- 	\multicolumn{1}{l|}{\makecell[l]{Avg. Response content size\\per Loading Type}}   
- 	& \multicolumn{1}{l|}{\makecell[c]{\textit{not loaded from cache} - 63972.08, \\ \textit{memory} - 208838, \\ \textit{disk} - 7166.1}} 											
- 	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 28143.2, \\ \textit{memory} - 0, \\ \textit{disk} - 7570.22}}   \\ \midrule
- 	
- 	\multicolumn{1}{l|}{Parallel start time}                                 													
- 	& \multicolumn{1}{l|}{\makecell[c]{1111}} 				
- 	& \multicolumn{1}{l}{\makecell[c]{1069}}   \\ \midrule
- 	
- 	\multicolumn{1}{l|}{Connection IDs occurence}                            											
- 	& \multicolumn{1}{l|}{\makecell[c]{\textit{none established} - 1590,\\ \textit{223722} - 15}} 												   
- 	& \multicolumn{1}{l}{\makecell[c]{\textit{none established} - 1570,\\ \textit{249654} - 10}}   \\ \midrule
- 	
- 	\multicolumn{1}{l|}{Connection IDs count}                                      																
- 	& \multicolumn{1}{l|}{\makecell[c]{52}} 															     
- 	& \multicolumn{1}{l}{\makecell[c]{42}}   \\ \midrule
- 	
- 	\multicolumn{1}{l|}{\makecell[l]{Connection Duplicates}}                        
- 	& \multicolumn{1}{l|}{\makecell[c]{1605}} 						   
- 	& \multicolumn{1}{l}{\makecell[c]{1580}}   \\ \midrule
- 	
- 	\multicolumn{1}{l|}{\makecell[l]{Loaded values \& occurrences}}                        
- 	& \multicolumn{1}{c|}{\makecell[c]{\textit{not loaded from cache} - 65, \\ \textit{memory} - 3, \\ \textit{disk} - 1587}} 						   
- 	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 50, \\ \textit{memory} - 0, \\ \textit{disk} - 1570}}   \\ \midrule
- 	
- 	\multicolumn{1}{l|}{\makecell[l]{Avg. Time in MS}}                        
- 	& \multicolumn{1}{l|}{\makecell[c]{58.73}} 						   
- 	& \multicolumn{1}{l}{\makecell[c]{87.1}}   \\ \midrule
- 	
- 	\multicolumn{1}{l|}{\makecell[l]{Avg. Content Size}}                                         
- 	& \multicolumn{1}{l|}{\makecell[c]{9762.72}}  				  
- 	&   \multicolumn{1}{l}{\makecell[c]{8205.19}} \\ \bottomrule
- 	
-\end{longtable}
-
-\normalsize
-A similar development can be observed in table \ref{tab:cdn_result_table_unpkg_cache} as previously. Primarily with caching enabled, the average loading times decrease, secondly the amount of loaded resources from cache increases significantly and lastly the Angular environments show shorter average loading times despite more resources were requested by them.
-
-\section{Web Components/Compound and WMF landscapes}
-
-As the described in chapter \ref{Chapter4}, these environments exist in different versions. They were designed that way to showcase how the used technologies handle multi-version landscapes and how they affect the performance.
-Table \ref{tab:wmf_compound} shows the above mentioned KPIs of those environments.
- 
-
-\scriptsize
-\setlength{\mycolwidth}{\dimexpr \textwidth/5 - 2\tabcolsep}
-
-\begin{longtable}[c]{*{3}{p{\mycolwidth}}}
-	
-	\caption{Table of numerical KPI results for the landscapes implemented with Web Components as compound views and WMF with caching disabled}
-	\label{tab:wmf_compound} \\
-	
-	\toprule
-	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{WC/Compound}}}                              
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{WMF}}} \\ 
-	\midrule
-	\endfirsthead
-	
-	\multicolumn{3}{l}{\footnotesize\itshape\tablename~\thetable: continued from previous page} \\
-	\toprule                        
-	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{WC/Compound }}}                              
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{WMF}}} \\*
-	\midrule
-	\endhead
-	%		
-	\multicolumn{1}{l|}{URLs loaded count}                                         															
-	& \multicolumn{1}{l|}{\makecell[c]{27}} 	       
-	& \multicolumn{1}{l}{\makecell[c]{118}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Avg. Response content size\\per Loading Type}}   
-	& \multicolumn{1}{l|}{\makecell[c]{\textit{not loaded from cache} - 213266.74, \\ \textit{memory} - 0,\\ \textit{disk} - 0}} 			         
-	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 507168.76, \\ \textit{memory} - 0, \\ \textit{disk} - 0}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{Parallel start time}                                 													
-	& \multicolumn{1}{l|}{\makecell[c]{29}} 				                  
-	& \multicolumn{1}{l}{\makecell[c]{109}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{Connection IDs occurence}                            											
-	& \multicolumn{1}{l|}{\makecell[c]{\textit{78725} - 15,\\ \textit{78890} - 15}} 		              
-	& \multicolumn{1}{l}{\makecell[c]{\textit{728247} - 3,\\ \textit{none established} - 14}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{Connection IDs count}                                      																
-	& \multicolumn{1}{l|}{\makecell[c]{546}} 		         											     
-	& \multicolumn{1}{l}{\makecell[c]{42}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Connection Duplicates}}                        
-	& \multicolumn{1}{l|}{\makecell[c]{30}} 					
-	& \multicolumn{1}{l}{\makecell[c]{20}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Loaded values \& occurrences}}                          
-	& \multicolumn{1}{c|}{\makecell[c]{\textit{not loaded from cache} - 135, \\ \textit{memory} - 30, \\ \textit{disk} - 0}} 						   
-	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 563, \\ \textit{memory} - 0, \\ \textit{disk} - 0}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Avg. Time in MS}}                        
-	& \multicolumn{1}{l|}{\makecell[c]{2454.95}} 	                			   
-	& \multicolumn{1}{l}{\makecell[c]{552.7}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Avg. Content Size}}                                         
-	& \multicolumn{1}{l|}{\makecell[c]{213266.74}}  		          
-	&   \multicolumn{1}{l}{\makecell[c]{507168.76}} \\ \bottomrule
-	
-\end{longtable}
-
-\normalsize
-As the data in table \ref{tab:wmf_compound} shows, the initial loading time for the Compound/Web Components environments is significantly lower compared to the WMF counterpart. Also the amount of loaded resources differs. This is due to the fact, that WMF has to be used in combination with the Webpack 5 bundler. Therefore certain resources might be loaded several times, if not configured as shared dependencies in the Module Federation. 
-Table \ref{tab:wmf_compound_cache} showcases the same landscapes, but with caching enabled.
-
-\scriptsize
-\setlength{\mycolwidth}{\dimexpr \textwidth/5 - 2\tabcolsep}
-
-\begin{longtable}[c]{*{3}{p{\mycolwidth}}}
-	
-	\caption{Table of numerical KPI results for the landscapes implemented with Web Components as compound views and WMF with caching enabled}
-	\label{tab:wmf_compound_cache} \\
-	
-	\toprule
-	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{WC/Compound}}}                              
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{WMF}}} \\ 
-	\midrule
-	\endfirsthead
-	
-	\multicolumn{3}{l}{\footnotesize\itshape\tablename~\thetable: continued from previous page} \\
-	\toprule                        
-	\multicolumn{1}{l}{\makecell[c]{\textbf{Metric}}}   
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{WC/Compound}}}                              
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{WMF}}} \\*
-	\midrule
-	\endhead
-	%		
-	\multicolumn{1}{l|}{URLs loaded count}                                         															
-	& \multicolumn{1}{l|}{\makecell[c]{27}} 	       
-	& \multicolumn{1}{l}{\makecell[c]{109}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Avg. Response content size\\per Loading Type}}   
-	& \multicolumn{1}{l|}{\makecell[c]{\textit{not loaded from cache} - 215385.36, \\ \textit{memory} - 167973, \\ \textit{disk} - 588082}} 			         
-	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 525243.08, \\ \textit{memory} - 0, \\ \textit{disk} - 1959}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{Parallel start time}                                 													
-	& \multicolumn{1}{l|}{\makecell[c]{35}} 				                  
-	& \multicolumn{1}{l}{\makecell[c]{105}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{Connection IDs occurence}                            											
-	& \multicolumn{1}{l|}{\makecell[c]{\textit{none established} - 4,\\ \textit{78890} - 15,\\ \textit{78725} - 11}} 		              
-	& \multicolumn{1}{l}{\makecell[c]{\textit{none established} - 15}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{Connection IDs count}                                      																
-	& \multicolumn{1}{l|}{\makecell[c]{104}} 		         											     
-	& \multicolumn{1}{l}{\makecell[c]{537}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Connection Duplicates}}                        
-	& \multicolumn{1}{l|}{\makecell[c]{30}} 					
-	& \multicolumn{1}{l}{\makecell[c]{15}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Loaded values \& occurrences}}                          
-	& \multicolumn{1}{c|}{\makecell[c]{\textit{not loaded from cache} - 107, \\ \textit{memory} - 20, \\ \textit{disk} - 4}} 						   
-	& \multicolumn{1}{l}{\makecell[c]{\textit{not loaded from cache} - 536, \\ \textit{memory} - 0, \\ \textit{disk} - 15}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Avg. Time in MS}}                        
-	& \multicolumn{1}{l|}{\makecell[c]{897.62}} 	                			   
-	& \multicolumn{1}{l}{\makecell[c]{356.53}}   \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Avg. Content Size}}                                         
-	& \multicolumn{1}{l|}{\makecell[c]{219526.89}}  		          
-	&   \multicolumn{1}{l}{\makecell[c]{510997.6}} \\ \bottomrule
-	
-\end{longtable}
-
-\normalsize
-The results with the caching enabled are not so different compared to the disabled caching ones. For instances, in both cases the average loading time for the compound landscape has longer loading times for fewer resources. One aspect differs though, compared to the compound landscape the WMF one has little cached resources. Also it becomes visible that the average content size loaded is smaller. Therefore, the Lighthouse tool was used to gather further information and data about those applications. The next section will showcase and explain the analysis done.
-
-\section{Lighthouse analysis}
-
-It has to be mentioned in advance that the following data is considered to be representative. Therefore, it is assumed that similar landscapes would follow a similar result in general. Nonetheless it is possible that for single cases the reports differ, since the within lying calculations are highly application dependent.
-For the sake of completeness the reports are shown below.
-
-The given data was gathered based on the previously introduced landscapes. It contains the analysis of the imported resources and how much of the corresponding imports were not used by the application, measured in bytes. First a tabular view is provided, following by the corresponding graph.
-
+This service serves the information of the remotely loaded modules to plugins for actual rendering. The rendering itself is done in a proxy plugin component. This component defines a plain template as some sort of placeholder for the remotes. \cite{wmf_angular_dynamicfederation}
 \newpage
-
-\scriptsize 
-\setlength{\mycolwidthtwo}{\dimexpr \textwidth/5 - 2\tabcolsep}%
-
-\begin{longtable}[c]{*{4}{p{\mycolwidthtwo}}}
-	
-	\caption{Table of the average imported and unused bytes values, collected via the Lighthouse tool in the prototype landscapes}
-	\label{tab:lighthouse_used_report} \\
-	
-	\toprule
-	\textbf{Landscape}                        
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{Avg. imported bytes}}}   
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{Avg. unused bytes}}}                              
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{Avg. unused bytes in \%}}} \\                                    
-	\midrule
-	\endfirsthead
-	
-	\multicolumn{4}{l}{\footnotesize\itshape\tablename~\thetable: continued from previous page} \\
-	\toprule        
-	\textbf{Landscape}                        
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{Avg. imported bytes}}}   
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{Avg. unused bytes}}}                              
-	& \multicolumn{1}{l}{\makecell[c]{\textbf{Avg. unused bytes in \%}}} \\*
-	\midrule
-	\endhead
-	%		
-	\multicolumn{1}{l|}{Angular NPM}                                         															
-	& \multicolumn{1}{l|}{\makecell[c]{219257.14}} 	       
-	& \multicolumn{1}{l|}{\makecell[c]{93671.43}}   
-	& \multicolumn{1}{l}{\makecell[c]{42.72}} 	\\ \midrule
+\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{plugin-proxy.component.ts} for remote module loading in shell applications, label=list:wmf_pluginproxy,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
+	[...]	
+	@Component({
+		selector: 'plugin-proxy',
+		template: `
+		<ng-container #placeHolder></ng-container>
+		`
+	})
+	export class PluginProxyComponent implements OnChanges {
+		@ViewChild('placeHolder', { read: ViewContainerRef, static: true })
+		viewContainer: ViewContainerRef;
 		
-	\multicolumn{1}{l|}{Angular Unpkg}                                 													
-	& \multicolumn{1}{l|}{\makecell[c]{13126.84}} 				                  
-	& \multicolumn{1}{l|}{\makecell[c]{7425.87}}   
-	& \multicolumn{1}{l}{\makecell[c]{56.57}} \\ \midrule
-	
-	\multicolumn{1}{l|}{Vue NPM}                            											
-	& \multicolumn{1}{l|}{\makecell[c]{281262.33}} 		              
-	& \multicolumn{1}{l|}{\makecell[c]{123902}}    
-	& \multicolumn{1}{l}{\makecell[c]{44.05}} \\ \midrule
-	
-	\multicolumn{1}{l|}{Vue Unpkg}                                      																
-	& \multicolumn{1}{l|}{\makecell[c]{12057.91}} 		         											     
-	& \multicolumn{1}{l|}{\makecell[c]{6844.21}}    
-	& \multicolumn{1}{l}{\makecell[c]{56.76}} \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Compound/\\Web Components}}                        
-	& \multicolumn{1}{l|}{\makecell[c]{229483.67}} 					
-	& \multicolumn{1}{l|}{\makecell[c]{90265.19}}    
-	& \multicolumn{1}{l}{\makecell[c]{39.33}} \\ \midrule
-	
-	\multicolumn{1}{l|}{\makecell[l]{Webpack\\Module\\Federation}}                         
-	& \multicolumn{1}{l|}{\makecell[c]{551111.19}} 						   
-	& \multicolumn{1}{l|}{\makecell[c]{222113.73}}   
-	& \multicolumn{1}{l}{\makecell[c]{40.31}}  \\ \midrule
-\end{longtable}
+		constructor(
+		private injector: Injector,
+		private cfr: ComponentFactoryResolver) { }
+		
+		@Input() options: PluginOptions;
+		
+		async ngOnChanges() {
+			this.viewContainer.clear();
+			
+			const Component = await loadRemoteModule(this.options)
+			.then(m => m[this.options.componentName]);
+			
+			const factory = this.cfr.resolveComponentFactory(Component);
+			const compRef = this.viewContainer.createComponent(factory, null, this.injector);		
+		}
+	}
+\end{lstlisting}
 
-\begin{figure}[!h]
-	\centering
-	\includegraphics[width=1\textwidth]{Figures/avg_unsed_imported_1.png}
-	\caption{Unused and imported bytes per landscape}
-	\label{fig:unsed_imported_1}
-\end{figure}
+Line 8 of listing \ref{list:wmf_pluginproxy} defines the \texttt{ng-container} with the identifier called \texttt{placeholder}. This identifier is used in the code below to select and actually fill the container with a remote module. The functionality is placed in one of Angulars Lifecycle hook methods \texttt{ngOnChanges}, which is triggered when changes to input properties occur.\cite{wmf_angular_lifecyclehooks} 
+In there, the container is first cleared, then a remote loading option is selected from the array of the \texttt{lookup.service.ts}. The following line creates an Angular component out of the loaded remote and inserts it into the placeholder container, using the imported dependencies.
+The type of the plugin options was defined in an interface, exporting a type definition. The code for is displayed in listing \ref{list:wmf_plugintype}.
+\newpage
+\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{plugin.ts} for remote module loading in shell applications, label=list:wmf_plugintype,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
+	import { LoadRemoteModuleOptions } from '@angular-architects/module-federation';
+	export type PluginOptions = LoadRemoteModuleOptions & {
+		displayName: string;
+		componentName: string;
+	};
+\end{lstlisting}
 
-%\begin{figure}[!h]
-%	\centering
-%	\includegraphics[width=1\textwidth]{Figures/avg_unsed_imported_2.png}
-%	\caption{Unused and imported bytes per landscape in \%}
-%	\label{fig:unsed_imported_2}
-%\end{figure}
+The previously imported \texttt{@angular-architects/module-federation} dependency offers an existing type interface for that use case. This is extended by two more properties in line 4 and 5 of listing \ref{list:wmf_plugintype}.
+By configuring the above service and component, it is made possible to load federated modules via the network into the host application.
+The configuration for a federated module can be seen in listing \ref{list:wmf_sameversions_mfe1}.
 
-\normalsize
-The shown data in table \ref{tab:lighthouse_used_report} and figure \ref{fig:unsed_imported_1} is highly application dependent. Still as these landscapes are considered to be generally representative, a display in efficiency can be drawn from the charts.
-The Unpkg CDN landscapes show a low unused bytes ratio. Since only the required resources were requested from the CDN, only a few unused bytes were detected by the Lighthouse tool. 
-For the WMF landscape, it can be argued, that due to the bundling with Webpack, a lot of bytes were imported but only a few of them were not used. This can be explained through how the Module Federation works, since every configured shared resource is checked if it should be shared or not.
+\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{webpack.config.js} of the mfe1 remote app of the same versions WMF project, label=list:wmf_sameversions_mfe1,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
+	[...]
+	module.exports = {
+		[...]
+		plugins: [
+		new ModuleFederationPlugin({
+			name: "mfe1",
+			filename: "remoteEntry.js",
+			exposes: {
+				'./Mfe1': './src/app/mfe1.component.ts'
+			},
+			shared: share({
+				"@angular/core": { 
+					singleton: true, 
+					strictVersion: false, 
+					requiredVersion: '<= 12.2.0' 
+				},
+				"@angular/common": { 
+					singleton: true, 
+					strictVersion: false, 
+					requiredVersion: '<= 12.2.0' 
+				},
+				"@fundamental-ngx/core": { 
+					singleton: true, 
+					strictVersion: false,
+					requiredVersion: '0.33.0-rc.214' 
+				},
+				...sharedMappings.getDescriptors()
+			})
+		}),
+		sharedMappings.getPlugin()
+		]};
+\end{lstlisting}
 
-The following chapter will be concluding the displayed data. Detailed tables and information can be found in the appendixes \ref{appendix1}, \ref{appendix2} and \ref{appendix3}.
+As mentioned in chapter \ref{Chapter2}, to share dependencies every participant has to bulk in. Therefore, similarities can be found in the sharing configurations of the remotes and hosts. 
+Between line 7 and 11, the actual federation of the module is configured. The reference to the module is later bundled in a file with the name defined in the \texttt{filename} property. In this case it is the \texttt{remoteEntry.js}.
+This is the file, which is automatically generated when the remote is compiled and serves as the entry point for the application when it is loaded into the host. Therefore this is the file accessed via the server url in the \texttt{lookup.service.ts} \ref{list:wmf_lookup_service}.
+As soon as the script is loaded via the service, the exposed module paths and names become known to the host and can be used to load the module. Thus the \texttt{expose} property contains a Java Script object, which maps the path to the actual component. In this case to \texttt{./Mfe1}.\cite{wmf_concepts}
+
+The implementations of the other versions are similar and only differ in the the shared dependencies configured. The effects of a multi-version environment and how it is handled by the Module Federation were explained in chapter \ref{Chapter2}.

@@ -4,14 +4,22 @@
 
 \lhead{Chapter 3. \emph{Content Delivery Networks}}
 
-This chapter will give further information about the CDN technology and how it was implemented for the context of this thesis.
+One way of avoiding redundant libraries can be a central source, where all resources are stored and can be requested from via an API. Such a concept exists in the idea of Content Delivery Networks (CDNs).
+Since the resources are loaded via the CDN API, a dependency is available under a unique URL. Loading a dependency twice means the browser requests the resource from the same URL with the same parameters. Therefore, the browser can determine if the given resource is already present and decide to either load it from the CDN or from the browser cache, if it is already loaded.\cite{caching_in_browser}
 
-\section{CDNs in general}
+Nonetheless, a CDN has its limits which have to be considered. Costs can play a key role in the decision process.
+Even though free CDN services like \textbf{Unpkg.com} or \textbf{cdnjs} are valid options, the advantages of using these might differ depending on the business case.
+For instance, those services might solve the issue of redundant libraries in a micro frontend landscape, but do not necessarily improve the user experience of the application. 
+Since the resources would be loaded from a cloud based service, the server location has significant influence on the latency of the requests. Therefore, depending from where the website is accessed, this circumstance could lead to a performance decrease when initially loading the page.\cite{cdn_general}
 
-CDNs are commonly used on the Internet these days. This is due to the fact that CDNs have become a convenient way of providing the resources a website needs in split seconds, thus increasing its performance and the overall user experience.\cite{cdn_general}
-The following sections will provide an overview of the CDN technology.
+Also the technological dependency on a public cloud based CDN has to be considered. Most cloud based services are scalable and replicable. However, a down time could lead to immense costs for a platform provider relying on a public CDN to deliver the platform resources.
+Besides, it is never guaranteed that certain dependencies are always available on the public CDN.
 
-\subsection{Architecture}
+Another option is self-hosting a CDN and providing all required resources independently. A business would need to acquire hardware-resources (physically or via a hardware-as-a-service provider like Amazon Web Services), maintain the servers, fill the CDN with the necessary content and keep it up to date. However costs attached to this scenario can be immense and exclude this method due to cost inefficiency.\cite{Meassuring_a_commercial_CDN}
+
+This chapter will give further information about the CDN technology, how it functions and what further features it offers to optimize a micro frontends or websites performance.
+
+\section{Architecture}
 
 The basic architecture of a CDN can be split into three different building blocks.
 
@@ -34,7 +42,7 @@ An example for a basic CDN distribution is shown in figure \ref{fig:cdn_general_
 
 It has to be mentioned that the geographical distribution in figure \ref{fig:cdn_general_arch} is simplified, for the sake of readability. In a real scenario, the cache servers of each PoP would themselves be distributed over different data centers on the continent. A client requesting resources from the CDN always communicates with the nearest cache server to their designated location.\cite{cdn_general}
 
-\subsection{Design}
+\section{Design}
 
 For a CDN to fulfill its purpose, four requirements have to be met. These are not only technical requirements, like necessary hardware, but rather concerning the general design of the CDN.
 The four pillars of CDN design are:
@@ -58,18 +66,18 @@ Additionally to those four requirements, the topology of a CDN has to be conside
 
 The design decision is of course dependent on the business case for the CDN, as both topologies are intended to solve specific issues or challenges. \cite{cdn_architecture} 
 
-\subsection{Optimization}
+\section{Optimization}
 
 The CDN technology offers several ways of optimizing a websites performance and therefore, improving the user experience. In the following section these optimizations will be showcased and explained.
 
-\subsubsection{Route optimization with Anycast}
+\subsection{Route optimization with Anycast}
 
 As previously mentioned, a CDN can be designed with different topologies which can affect its performance. Another factor which has to be considered in this equation is the routing itself. Basically, it does not matter if a cache server is located in close proximity to a client, if the requested resource is not present there. In this case, the client would have to be routed to different, cache servers located further away. 
 To circumvent this, the Anycast routing is used in modern CDNs. This traffic routing algorithm is best explained in direct comparison with Unicast. Both serve the same purpose of routing requests to their designated destination, but they do it in different ways. Where with Unicast each node has a unique address, Anycast advertises multiple nodes with the same address.
 For instance, in a Unicast orchestrated network the server address \texttt{10.10.0.1} would be only present once. Anycast, on the other hand, would advertise this exact address over multiple different servers around the globe. Thus, a request towards the address would reach its destination via the shortest path, given that the path will be identified and prioritized by devices that actually govern the flow of traffic.
 The shortest path itself is counted in hops. Hops represent the number of time a request changes hands between hosts.\cite{cdn_route_opt}
 
-\subsubsection{TLS Performance}
+\subsection{TLS Performance}
 
 The route optimization with Anycast, also improves the RTT when using the TLS/SSL protocol. Since this section does not focus on explaining the protocol, only a short description is given.
 SSL (Secure Socket Layer) or, as it now should be called, TLS (Transport Layer Security) is a protocol via which secure communications are ensured on the Internet. The communicating parties establish a connection via the following steps:
@@ -85,7 +93,7 @@ These steps are necessary to ensure secure communication and are a welcome trade
 
 A CDN can provide improvement to this overhead and decrease the RTT of a request. Through the aspect of route optimization and general proximity, the overall request distance is decreased. Therefore, the RTT is shortened as well. The steps are still processed, they just do not have to travel that long. Additionally, the SSL/TLS negotiation process is shorter, too.\cite{cdn_ssl_tsl}
 
-\subsubsection{Frontend optimization}
+\subsection{Frontend optimization}
 
 The term frontend optimization refers to the process of making a website more browser-friendly and reducing loading times. There are multiple ways to optimize a frontend. These will be explained under consideration of the role a CDN plays in them.
 
@@ -106,51 +114,8 @@ The term frontend optimization refers to the process of making a website more br
 \end{itemize}
 
 These methods in combination with the CDN technology provide a possible gain in user experience for a website host. \cite{cdn_fe_opt}
-\section{Unpkg}
 
-As described in \ref{cdn_intro}, the concept of CDN is fairly simple. A remote server is providing the necessary platform resources via an API, thus avoiding the necessity of bundling those resources.
-To evaluate the impact of this technology on a micro frontend landscape, a prototype was developed using the public cloud based CDN Unpkg.com.
-%\begin{figure}[!h]
-%	\centering
-%	\includegraphics[width=0.7\textwidth]{Figures/cdn_unpkg.drawio.png}
-%	\caption{Basic architecture of the unpkg.com public CDN}
-%	\label{fig:unpkg_architecture}
-%\end{figure}
-
-%Figure \ref{fig:unpkg_architecture} shows the Unpkg.com architecture, as it is described in its official documentation. 
-It is an open-source project, built and maintained by Michael Jackson. It runs on the Cloudflare platform, and auto-scalable servers are provided by Fly.io, which are located in 17 cities around the world.\cite{unpkg_doc}
-
-An open API is available, through which resources can be requested. Via path and query parameters in the URL, necessary information like the dependency version can be provided.
-
-The previously mentioned prototype was developed using Unpkg.com. Figure \ref{fig:unpkg_prototype_architecture} visualizes the architecture of the prototype.
-
-\begin{figure}[!h]
-	\centering
-	\includegraphics[width=0.7\textwidth]{Figures/unpkg.architecture.drawio.png}
-	\caption{Architecture of the Luigi prototype using unpkg.com}
-	\label{fig:unpkg_prototype_architecture}
-\end{figure}
-\newpage
-Several Nodes were embedded in the Luigi landscape, some of which are Angular apps, other are implemented with Vue. It has to be noted, that apart from the difference regarding the UI-Frameworks, each micro frontend displays the same elements. This design decision was made to ensure a base for later comparisons. Additionally, each micro frontend was implemented using a regular bundler and package manager. This way, a direct comparison is possible between the two technologies.
-
-The usage of the Unpkg-CDN itself is embedded in the code. Instead of loading the dependencies via the local \texttt{node\_modules} directory, they are directly loaded using the CDNs API, the usage of which is displayed in the listing \ref{unpkg_import}.
-
-\begin{lstlisting}[caption=Import of a dependecy using the unpkg API, label=list:unpkg_import]
-	<script src="https://unpkg.com/@ui5/webcomponents@1.0.0-rc.15/dist/StandardListItem.js?module" type="module"></script>
-\end{lstlisting}
-
-This script tag is placed in the central \texttt{index.html}. The loaded resource can be read from the URL. The first part of the URL refers to the protocol and the host. The first path parameter is the npm dependency name. In the case of \ref{unpkg_import} it is \texttt{@ui5}, followed by a subdirectory with its respective version annotated with an @.
-As it is described in the documentation, the CDN supports two query parameters.
-
-\begin{itemize}[noitemsep]
-	\item \texttt{?meta} - to request meta data about the loaded package, in a JSON format
-	\item \texttt{?module} - to expand all import specifiers in JavaScript modules to unpkg URLs
-\end{itemize}
-
-If the import is handled via a script tag, as it is done in \ref{unpkg_import}, the \texttt{type="module"} attribute has to be added, depending on the resource loaded.
-In the case of the given example, the resource is a JavaScript module type. To ensure it is parsed by the runtime as such, this attribute has to be added.\cite{js_module_type}
-
-\section{Owning a CDN}
+\section{Hosting a CDN}
 
 Even though the method of a self-hosted CDN was not implemented in the developed prototype, it has to be considered for the context of this thesis. Since the basic principle of a CDN was already explained, this section will focus on the financial aspect of the technology.
 

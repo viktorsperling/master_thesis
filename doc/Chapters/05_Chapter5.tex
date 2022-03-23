@@ -4,199 +4,88 @@
 
 \lhead{Chapter 5. \emph{Webpack Module Federation}}
 
-Since an introduction of this technology was given in chapter \ref{Chapter2}, only a short recap of WMF is given here. Main focus of this chapter will be to showcase how the technology was implemented in the prototype. As mentioned before the implementation of the WMF was mainly done in combination with Angular. Therefore, all the examples and explanations below will have their focus on exactly that framework. It has to be mentioned though, that WMF is not restricted to Angular alone. The only restriction applied is concerning the bundler, which has to be Webpack.\cite{wmf_concepts}
+A rather new way of creating micro frontends is the \textbf{Webpack 5 Module Federation (WMF)}. With the release of version 5 on October 10, 2020, this technology added certain features which improved its usage for developing micro frontends.\cite{wmf_concepts}
+The way it does that, is via modularizing self-compiled code parts and publishing them for integration by other modules. This published modules can be micro frontends themselves and are called \textbf{remotes} whereas the integrating modules are called \textbf{hosts}. 
+\textbf{Hosts} refer to \textbf{remotes} under a configured name. This name is not actually known to the \textbf{host} during the compile time, but is first resolved at runtime.
+The self-compiled \textbf{remote} in this case can be anything, a micro frontend or some sort of utility script. This way the Module Federation provides a way to avoid external or manual script loading and instead gives opportunities to automatically lazy load necessary code blocks during runtime.\cite{wmf_concepts}
+The usage of the WMF is tied to the Webpack bundler, since the necessary configuration is done in the \texttt{webpack.config.js}. This restriction is applied to every \textbf{remote} in the WMF landscape, not only to the \texttt{host}.
 
-WMF is a new way to create micro frontends using the Webpack bundler in version 5. The way it does that, is via modularizing self-compiled code parts and publishing them for integration by other modules. This published modules can be micro frontends themselves and are called remotes whereas the integrating modules are called hosts. 
-Hosts refer to remotes under a configured name. This name is not actually known to the host during the compile time, but is first resolved at runtime.
-The self compiled remote in this case can be anything, a micro frontend or some sort of utility script. This way the Module Federation provides a way to avoid external or manual script loading and instead gives opportunities to automatically lazy load necessary code blocks during runtime.\cite{wmf_concepts}
+Since the main focus of this document is to propose methods of avoiding redundancies in micro frontend landscapes, an introduction of this WMF feature is given here.
+WMF can be used in combination with most of the common UI Frameworks. Since the implementation for this thesis was done with Angular, the further examples and explanations will be Angular-based.
 
-Integrating several remotes using the same dependencies leads to the issue of redundancies, which WMF is able to resolve. Via configuration of shared dependencies WMF provides a way to reduce redundant libraries in its landscape. A more detailed explanation was given in \ref{Chapter2}.
+\section{Enabling the Module Federation}
 
-\section{Implementation in the prototype}
-
-As previously mentioned the main functionality of WMF used in the prototype, is the shared dependencies feature. It is explained how it was implemented and an overview of the landscape is given.
-
-For the WMF landscape of the prototype the Angular framework was used. The component library for the user interface was \texttt{@Fundamental-NGX/Core}. To showcase the handling of shared libraries and multi-versions in a micro frontend landscape with WMF, several WMF projects where created and accordingly configured.
-For the rest of this chapter the WMF specific terminology will be used.
-
-\begin{itemize}
-	\item \textbf{Same versions} - This is the host containing remotes of the same Angular version. The dependency itself is shared. This application was implemented to be used as comparison to the multi-version hosts.
-	
-	\item \textbf{Mixed versions} - This is the host containing partially the same and different Angular versions. Each version of the library is shared inside the landscape between. Purpose of this implementation was to showcase how many redundant versions of the same library are maintained by WMF in a multi-version landscape and how it affects the performance.
-	
-	\item \textbf{Different versions} - This host contains only different Angular versions. Therefore, it is an extreme version of the \textit{Mixed versions} implementation. Every remote published requires a different version of Angular. Goal with this implementation was to showcase the performance losses in comparison to the other two landscapes. It rather serves as a negative example of how WMF should not be used.
-\end{itemize}
-
-To guarantee a basis for comparison, the user interface of each remote is the same. The figure \ref{fig:wmf_screenshot} shows the elements displayed in each remote.
-
-\begin{figure}[!h]
-	\centering
-	\includegraphics[width=0.7\textwidth]{Figures/WMF_SameVersions.png}
-	\caption{Example of an implemented remote in the prototype WMF landscape}
-	\label{fig:wmf_screenshot}
-\end{figure}
-
-It contains a table with several table items in it. The angular version of each element is displayed above in the header.
-
- \subsection{The Webpack bundler}
- 
-Prior to introducing the implemented landscape in detail, it is necessary to talk about Webpack itself first. As mentioned before, Webpack is a mandatory feature for using the Module Federation. Popular UI frameworks like React, VueJS or Angular use Webpack under the hood anyway, so it isn't as much of a restriction as it seems.\cite{webpack_angular}\cite{webpack_react}\cite{webpack_vue}
+Prior to introducing the usage of the Module Federation, it is necessary to introduce Webpack itself first, as it is a mandatory feature for using the Module Federation. Popular UI frameworks like React, VueJS or Angular use Webpack under the hood anyway, so it isn't as much of a restriction as it seems.\cite{webpack_angular}\cite{webpack_react}\cite{webpack_vue}
 The documentation of the named frameworks imply that Webpack is used by default, but can be customized if necessary by the developer.
 
 For Angular in particular, it is necessary to install two dependencies via the Angular CLI, to enable the features of the Module Federation. The command used for this is shown in \ref{list:angluar_wmf_command}. 
 
 \begin{lstlisting}[language=Bash, caption=Angular CLI console command to enable Module Federation in an Angular project, label=list:angluar_wmf_command,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
-ng add @angular-architects/module-federation --project name --port port
+	ng add @angular-architects/module-federation --project name --port port
 \end{lstlisting}
 
 These commands enable the Module Federation for an Angular project. Since the CLI protects the Webpack configuration from access, a custom builder is required. The \texttt{@angular-architects/module-federation} package provides exactly that.
 After installing this dependency in an Angular project, a \texttt{webpack.config.js} will appear on root level of the corresponding project.\cite{wmf_angular_dependency_install}
-This dependency has to be added in each remote or host of the WMF landscape. 
+This dependency has to be added in each \textbf{remote} or \textbf{host} of the WMF landscape. 
 
-After enabling the Module Federation inside a project, the necessary configuration can be applied to the \texttt{webpack.config.js} file. The remotes publish their modules and hosts consume them. Thus a developer can distinguish what module has which role.
-The examples of such configurations for hosts and remotes are shown in section \ref{wmf_implementation_prototype}, accompanied by the usage if the shared dependencies feature.
+After enabling the Module Federation inside a project, the necessary configuration can be applied to the \texttt{webpack.config.js} file. The \textbf{remotes} publish their modules and \textbf{hosts} consume them. Thus a developer can distinguish what module has which role.
 
-Since the implementation of the remotes is always similar, it won't be mentioned, instead the configurations of the corresponding \texttt{webpack.config.js} files will be explained in addition to the project structures.
+\section{Shared dependency feature}
 
-\subsection{Implementation of the prototype versions}
-\label{wmf_implementation_prototype}
+As noted before WMF is a micro frontend framework, which offers means to solve the issue of redundant libraries in its landscapes.
+This feature is enabled and configured, as well as the rest of the WMF, via the \texttt{webpack.config.js}. When configuring the components of the landscape, it is possible to define a section where shared dependencies are described. These dependencies can be defined in different ways. For instance, it is possible to define a strict version of the dependency, which would result in the framework loading this specific version. Or one can define a less restricted dependency, which would mean that if another \texttt{remote} loads the same dependency but in a different version, the framework would automatically apply the highest major version of the dependency to both micro frontends.
 
-The three implemented versions for the the WMF landscape are similar to one another, the only difference can be found are the dependencies and their configured sharing. Listing \ref{list:wmf_sameversions_shell} shows the configuration for the \textit{sameVersion} environment.
-
-\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{webpack.config.js} of the shell of the same versions WMF project, label=list:wmf_sameversions_shell, xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
-[...]
-module.exports = {
-	[...]
-	plugins: [
-	new ModuleFederationPlugin({
-		name: "shell",
-		filename: "remoteEntry.js",
-		shared: share({
-			"@angular/core": { 
-				singleton: true, 
-				strictVersion: false, 
-				requiredVersion: '= 12.2.0'
-			},
-			"@angular/common": { 
-				singleton: true, 
-				strictVersion: false, 
-				requiredVersion: '= 12.2.0' 
-			},
-			...sharedMappings.getDescriptors()
-		})
-		
-	}),
-	sharedMappings.getPlugin()
-	]};
-\end{lstlisting}
-
-As it can be seen the shared dependencies are defined in between lines 22 and 24. Line 18 and 19 define the name of the application in the landscape and the name of the file after bundling. For the above case it has to be mentioned that the remotes are separate applications in their own runtime. Therefore, they have to be imported via the network, thus no \texttt{remote} property is configured in this file. To add the dynamically loaded remotes, a service had to be developed which imports the remotes at runtime. This service is shown in listing \ref{list:wmf_lookup_service}.\cite{wmf_angular_dynamicfederation}
-
-\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{lookup.service.ts} for remote module loading in shell applications, label=list:wmf_lookup_service,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
-[...]
-@Injectable({ providedIn: 'root' })
-export class LookupService {
-	lookup(): Promise<PluginOptions[]> {
-		return Promise.resolve([
-		{
-			remoteEntry: 'https://angular-wmf-same-mfe1.surge.sh/remoteEntry.js',
-			remoteName: 'mfe1',
-			exposedModule: './Mfe1',
-			
-			displayName: 'Mfe1',
-			componentName: 'Mfe1Component'
+\begin{lstlisting}[language=JavaScript, caption=Example of sharing dependencies configured in the \texttt{webpack.config.js}, label=list:shared_mapping_wmf,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
+	shared: share({
+		"@angular/core": { 
+			singleton: true, 
+			strictVersion: false, 
+			requiredVersion: '12.2.0' 
 		},
-		[...]	
-		] as PluginOptions[]);
-	}
-}
-\end{lstlisting}
-
-This service serves the information of the remotely loaded modules to plugins for actual rendering. The rendering itself is done in a proxy plugin component. This component defines a plain template as some sort of placeholder for the remotes. \cite{wmf_angular_dynamicfederation}
-\newpage
-\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{plugin-proxy.component.ts} for remote module loading in shell applications, label=list:wmf_pluginproxy,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
-[...]	
-@Component({
-	selector: 'plugin-proxy',
-	template: `
-	<ng-container #placeHolder></ng-container>
-	`
-})
-export class PluginProxyComponent implements OnChanges {
-	@ViewChild('placeHolder', { read: ViewContainerRef, static: true })
-	viewContainer: ViewContainerRef;
-	
-	constructor(
-		private injector: Injector,
-		private cfr: ComponentFactoryResolver) { }
-	
-	@Input() options: PluginOptions;
-	
-	async ngOnChanges() {
-		this.viewContainer.clear();
-		
-		const Component = await loadRemoteModule(this.options)
-		.then(m => m[this.options.componentName]);
-		
-		const factory = this.cfr.resolveComponentFactory(Component);
-		const compRef = this.viewContainer.createComponent(factory, null, this.injector);		
-	}
-}
-\end{lstlisting}
-
-Line 8 of listing \ref{list:wmf_pluginproxy} defines the \texttt{ng-container} with the identifier called \texttt{placeholder}. This identifier is used in the code below to select and actually fill the container with a remote module. The functionality is placed in one of Angulars Lifecycle hook methods \texttt{ngOnChanges}, which is triggered when changes to input properties occur.\cite{wmf_angular_lifecyclehooks} 
-In there, the container is first cleared, then a remote loading option is selected from the array of the \texttt{lookup.service.ts}. The following line creates an Angular component out of the loaded remote and inserts it into the placeholder container, using the imported dependencies.
-The type of the plugin options was defined in an interface, exporting a type definition. The code for is displayed in listing \ref{list:wmf_plugintype}.
-\newpage
-\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{plugin.ts} for remote module loading in shell applications, label=list:wmf_plugintype,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
-import { LoadRemoteModuleOptions } from '@angular-architects/module-federation';
-export type PluginOptions = LoadRemoteModuleOptions & {
-	displayName: string;
-	componentName: string;
-};
-\end{lstlisting}
-
-The previously imported \texttt{@angular-architects/module-federation} dependency offers an existing type interface for that use case. This is extended by two more properties in line 4 and 5 of listing \ref{list:wmf_plugintype}.
-By configuring the above service and component, it is made possible to load federated modules via the network into the host application.
-The configuration for a federated module can be seen in listing \ref{list:wmf_sameversions_mfe1}.
-
-\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{webpack.config.js} of the mfe1 remote app of the same versions WMF project, label=list:wmf_sameversions_mfe1,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
-[...]
-module.exports = {
-	[...]
-	plugins: [
-	new ModuleFederationPlugin({
-		name: "mfe1",
-		filename: "remoteEntry.js",
-		exposes: {
-			'./Mfe1': './src/app/mfe1.component.ts'
+		"@angular/common": { 
+			singleton: true, 
+			strictVersion: false, 
+			requiredVersion: '12.2.0' 
 		},
-		shared: share({
-			"@angular/core": { 
-				singleton: true, 
-				strictVersion: false, 
-				requiredVersion: '<= 12.2.0' 
-			},
-			"@angular/common": { 
-				singleton: true, 
-				strictVersion: false, 
-				requiredVersion: '<= 12.2.0' 
-			},
-			"@fundamental-ngx/core": { 
-				singleton: true, 
-				strictVersion: false,
-				requiredVersion: '0.33.0-rc.214' 
-			},
-			...sharedMappings.getDescriptors()
-		})
-	}),
-	sharedMappings.getPlugin()
-	]};
+		"@fundamental-ngx/core": { 
+			singleton: true, 
+			strictVersion: false, 
+			requiredVersion: '0.33.0-rc.214' 
+		},
+		
+		...sharedMappings.getDescriptors()
+	})
 \end{lstlisting}
 
-As mentioned in chapter \ref{Chapter2}, to share dependencies every participant has to bulk in. Therefore, similarities can be found in the sharing configurations of the remotes and hosts. 
-Between line 7 and 11, the actual federation of the module is configured. The reference to the module is later bundled in a file with the name defined in the \texttt{filename} property. In this case it is the \texttt{remoteEntry.js}.
-This is the file, which is automatically generated when the remote is compiled and serves as the entry point for the application when it is loaded into the host. Therefore this is the file accessed via the server url in the \texttt{lookup.service.ts} \ref{list:wmf_lookup_service}.
-As soon as the script is loaded via the service, the exposed module paths and names become known to the host and can be used to load the module. Thus the \texttt{expose} property contains a Java Script object, which maps the path to the actual component. In this case to \texttt{./Mfe1}.\cite{wmf_concepts}
+Listing \ref{list:shared_mapping_wmf} is an example of how to share libraries in a restrictive way. To provide a less restricted configuration, a simple array of the shared dependency names suffices. But to ensure a redundant free landscape, these restrictions are necessary. Each configuration property will be explained below.
 
-The implementations of the other versions are similar and only differ in the the shared dependencies configured. The effects of a multi-version environment and how it is handled by the Module Federation were explained in chapter \ref{Chapter2}.
+\begin{itemize}
+	\item \texttt{singleton} - This property defines if the dependency should be able to be loaded more than once in different versions or not. If set to \texttt{true}, WMF will automatically pick the highest version of a major release of this dependency available and distribute it to the \textbf{remotes}.\cite{wmf_version_mismatch}
+	
+	\item \texttt{strictVersion} - This property defines if the dependency requires a specific version to work. If set to \texttt{true} WMF, will load the required version even if another dependency mapping with the same name is present. This can lead to conflicts with the \texttt{singleton} property, if configured poorly.
+	
+	\item \texttt{requiredVersion} - This property defines the required version of the dependency. When working with a package manager (e.g. NPM), this version has to be aligned with the locally installed version of the dependency. If the \texttt{strictVersion} property is set to \texttt{false}, this property defines the minimum version for the micro frontend. 
+	
+	It has to be mentioned that WMF is able to distinguish between major releases. If a higher version of the same major release is available, it will be loaded (e.g. \texttt{@angular/common@12.3.1}). For instance, if the next higher version is of a different major release e.g. 13.X.X, WMF would not consider to load it for the \textbf{remotes} which have the \texttt{requiredVersion} of release 12.X.X configured.
+\end{itemize}
+
+Now, when it comes to sharing the dependencies inside the micro frontend landscape, each \textbf{remote} has to participate. That means each micro frontend has to define its required dependencies in their respective versions. Additionally, it has to be mentioned that the micro frontends themselves have to use dynamic imports when importing shared dependencies. Through the asynchronous behavior of the import, Webpack has time to pick the correct version of the dependency inside the landscape.\cite{wmf_concepts}
+Analyzing this statement in combination with the information taken from \ref{list:shared_mapping_wmf}, it becomes obvious that multiple versions of the same framework can exist in a landscape. 
+
+\section{Multi-version landscapes in WMF}
+
+Figure \ref{fig:wmf_multiversions} illustrates the case, of how WMF handles a multi-version landscape.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{Figures/multi_version_diagramm.drawio.png}
+	\caption{WMF way of handling multi-versions}
+	\label{fig:wmf_multiversions}
+\end{figure}
+
+As it can be seen, WMF always picks the latest major release, assuming the respective micro frontends have a similar configuration as shown in listing \ref{list:shared_mapping_wmf} applied. If, for instance, \textbf{MF3} has its \texttt{strictVersion} property set to \texttt{true}, it would cause the loading of its libraries too.
+
+There are side effects to sharing the same dependency over the whole micro frontend landscape. One of which is the increase in bundle sizes, since every \textbf{remote} bundles its local dependencies. WMF then picks the one to serve during the runtime of the landscape.
+This impact has a trade-off tough. Returning users can benefit from cached dependencies.\cite{wmf_multi_versions}
+
+Integrating several \textbf{remotes} using the same dependencies leads to the issue of redundancies, which WMF is able to resolve. Via configuration of shared dependencies WMF provides a way to reduce redundant libraries in its landscape.
