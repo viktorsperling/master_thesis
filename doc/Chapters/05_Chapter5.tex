@@ -35,7 +35,7 @@ After enabling the Module Federation inside a project, the necessary configurati
 As noted before WMF is a micro frontend framework, which offers means to solve the issue of redundant libraries in its landscapes.
 This feature is enabled and configured, as well as the rest of the WMF, via the \texttt{webpack.config.js}. When configuring the components of the landscape, it is possible to define a section where shared dependencies are described. These dependencies can be defined in different ways. For instance, it is possible to define a strict version of the dependency, which would result in the framework loading this specific version. Or one can define a less restricted dependency, which would mean that if another \texttt{remote} loads the same dependency but in a different version, the framework would automatically apply the highest major version of the dependency to both micro frontends.
 
-\begin{lstlisting}[language=JavaScript, caption=Example of sharing dependencies configured in the \texttt{webpack.config.js}, label=list:shared_mapping_wmf,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
+\begin{lstlisting}[language=JavaScript, caption=Example of sharing dependencies configured in the \texttt{webpack.config.js}, label=list:shared_mapping_wmf,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
 	shared: share({
 		"@angular/core": { 
 			singleton: true, 

@@ -396,7 +396,7 @@ module.exports = {
 
 As it is shown, the shared dependencies are defined in between lines 22 and 24. Line 18 and 19 define the name of the application in the landscape and the name of the file after bundling. For the above case it has to be mentioned that the remotes are separate applications in their own runtime. Therefore, they have to be imported via the network, thus no \texttt{remote} property is not configured in this file. To add the dynamically loaded remotes, a service had to be developed which imports the remotes at runtime \cite{wmf_angular_dynamicfederation}. This service is shown in listing \ref{list:wmf_lookup_service}.
 
-\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{lookup.service.ts} for remote module loading in shell applications, label=list:wmf_lookup_service,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
+\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{lookup.service.ts} for remote module loading in shell applications, label=list:wmf_lookup_service,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
 [...]
 @Injectable({ providedIn: 'root' })
 export class LookupService {

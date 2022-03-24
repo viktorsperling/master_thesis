@@ -38,7 +38,7 @@ Following conclusions can be drawn by comparing the numbers of the NPM implement
 	\item The cache usage of the CDN landscapes significantly increases. This information is taken from the amount of \textit{none established} ID occurrences. For each connection not established, a resource is loaded from the cache, thus the faster loading times, when cache is enabled.
 	\item A similar result is present in the loaded bytes from connection type. Compared to the NPM implementations, the Unpkg environments load significantly more bytes from \textit{disk} or \textit{memory}. This behavior was anticipated in the CDN implementations, since it is one of the desired features of this technologies. Every resource has a designated URL where it is loaded from, thus the browser can distinguish if it already present or not.
 	\item Additionally the average loaded content size of the Unpkg apps is lower, since only specific resources are requested from the CDN. Therefore big bundles with unused features are generally not present.
-	\item The graph \ref{fig:unsed_imported_2} shows, that approximately half of the imported bytes were not used according to the Lighthouse report, the absolute amount of loaded bytes is significantly lower, compared with the NPM environments.
+	\item The graph \ref{fig:unsed_imported_1} shows, that approximately half of the imported bytes were not used according to the Lighthouse report, the absolute amount of loaded bytes is significantly lower, compared with the NPM environments.
 	\item When comparing the variances of the loading times, the Unpkg implementations show a lower value. Reasons for that could either be the protocol used by the CDN server or the smaller sizes of the loaded resources.
 \end{enumerate}
 
