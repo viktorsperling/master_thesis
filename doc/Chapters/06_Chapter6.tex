@@ -75,7 +75,10 @@ Figure \ref{fig:compound_wmf_single_node} provides an overview on how the micro 
 	\label{fig:compound_wmf_single_node}
 \end{figure}
 
-Even though these two technologies are embedded in the same Luigi dashboard, they are referred to as separate landscapes in certain cases. This is due to used technologies, the first one be the Web Components.
+Even though these two technologies are embedded in the same Luigi dashboard, they are referred to as separate landscapes. This is due to used technologies used for implementation.
+Nonetheless, this prototype fulfills 5 out of the 5 defined requirements for representation and therefore can be considered to be representative.
+
+The following section will shortly explain, how the micro frontends are embedded in the Luigi Nodes and showcase their differences.
 
 \subsubsection{Embedding a micro frontend into a compound in Luigi}
 
@@ -148,6 +151,7 @@ Line 14 to 16 define the central Node navigation element for the Luigi dashboard
 At line 45 the actual compound elements or micro frontends are defined as an array of JavaScript objects.
 
 \subsubsection{Embedding a micro frontend into a compound in WMF}
+\label{embedd_mfe_in_wmf}
 
 Contrary to the Web Component Nodes, the WMF Nodes are actually embedded as iFrames into the Luigi dashboard. Therefore, the Luigi configuration for that landscape, is similar to the CDN/NPM environements. The listing \ref{list:wmf_luigi_config}, shows an example on how it was done.
 
@@ -205,7 +209,7 @@ In the case of the given example, the resource is a JavaScript module type. To e
 \section{Web Components - UI5 Web Components} 
 
 The Web Components standard was partially used in the development of the second prototype. For development itself no UI application framework was used, which means all three compounds were developed using plain JavaScript. The actual components used in the micro frontends of the compounds, were taken from a component library called UI5 Web Components. Each element in that library is in fact a Web Component.\cite{ui5_wc_github}
-Consisting of the picked elements and under the usage of the scoping feature of the component library, the compounds where created. This made it possible to scope the tags of the UI5 Web Components.\cite{ui5_webcomponents_scoping}
+Consisting of the picked elements, and under the usage of the scoping feature of the component library, the 3 compounds where created. The scoping feature in particular, made it possible to scope the tags of the UI5 Web Components, this way a multi version landscape was simulated.\cite{ui5_webcomponents_scoping}
 
 \begin{lstlisting}[caption=Scoping feature used in the prototype, label=list:scoping_wc_prototype,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
 import { LuigiElement, html } 
@@ -249,171 +253,172 @@ export default class extends LuigiElement {
 \end{lstlisting}
 	
 Listing \ref{list:scoping_wc_prototype} shows the exact usage of the scoping feature. 
-The imported \textit{setCustomElementsScopingSuffix} function enables to define a custom suffix to all UI5 Web Component elements, if not configured otherwise. Also, as it can be seen in the same listing, the suffix is set to \textit{placeholder} using the imported method \textit{setCustomElementsScopingSuffix("placeholder")}.
-This is done for the sake of the experiment itself. It was intended to deploy six similar looking micro frontends, using Web Components, into the Luigi landscape, to test how many redundancies occur. In addition it was meant to be tested how different versions of the same elements could be registered. For example the \textit{Bar} element in version \textit{1.0.1} is registered under same tag as the same element in version \textit{1.1.0}. This scenario has to be handled and the scoping feature is one way of doing so.
-By defining a version suffix for the \textit{Bar} element tag, the browser can distinguish those elements.
+The imported \textit{setCustomElementsScopingSuffix} function enables to define a custom suffix to all UI5 Web Component elements. Also, as it can be seen in the same listing, the suffix is set to \textit{placeholder} using the imported method \textit{setCustomElementsScopingSuffix("placeholder")}.
+This is done for the sake of the experiment itself. It was intended to deploy six similar looking micro frontends, using Web Components, into the Luigi landscape, to test how many redundancies occur. In addition it was meant to be tested how different versions of the same elements could be registered. For example, without the scoping feature, the \textit{Bar} element in version \textit{1.0.1} and \textit{1.1.0}, are usually registered under the same tag name. By using the scoping feature, this conflict can be resolved.
+Through defining a version suffix for the \textit{Bar} element, the elements are registered under distinguishable tags in the browser.
 In case of the prototype to create this exact scenario, one global tag suffix \textit{placeholder} was picked and later replaced. The replacement itself happened during the bundling of the project. The RollUp bundler provided the necessary functionality for that.
 Inside the \texttt{rollup.config.js} several configurations were defined, which are shown in listing \ref{list:rollupconfigjs}.
 	
-	\begin{lstlisting}[language=JavaScript, caption=Content of the \texttt{rollup.config.js}, label=list:rollupconfigjs,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
-		imp\part{ort resolve from '@rollup/plugin-node-resolve';
-			import json from '@rollup/plugin-json';
-			import url from "@rollup/plugin-url";
-			import { terser } from "rollup-plugin-terser";
-			import replace from '@rollup/plugin-replace';
-			import { SameVersions } from './rollup_files/same_version';
-			import { DiffVersions } from './rollup_files/different_version';
-			import { MixedVersions } from './rollup_files/mixed_version';
-			
-			let buildArray = [];
-			
-			function aggregateConfigs() {
-				for(let buildConfig of SameVersions) {
-					buildArray.push(buildConfig);
-				}
-				
-				for(let buildConfig of DiffVersions) {
-					buildArray.push(buildConfig);
-				}
-				
-				for(let buildConfig of MixedVersions) {
-					buildArray.push(buildConfig);
-				}
-			}
-			
-			aggregateConfigs();
-			
-			export default buildArray;
-		\end{lstlisting}
-		
-		The configuration of the bundler was split into several Java Script files, to improve the readability of the configuration file itself. The content of such a file can be seen in \ref{list:rollupconfigfile}.
-		
-		\begin{lstlisting}[language=JavaScript, caption=Actual configuration for the \texttt{rollup.config.js}, label=list:rollupconfigfile, xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
-			import resolve from '@rollup/plugin-node-resolve';
-			import json from '@rollup/plugin-json';
-			import url from "@rollup/plugin-url";
-			import { terser } from "rollup-plugin-terser";
-			import replace from '@rollup/plugin-replace';
-			
-			export const MixedVersions = [
-			// 1
-			{
-				input: 'src/tableView.js',
-				output: {
-					file: 'dist/tableViewMixedVersions1.js',
-					format: 'es',
-					compact: true
-				},
-				plugins: [
-				replace({
-					'placeholder': '0-9-0',
-				}),
-				terser(),
-				resolve(),
-				json(),
-				url({
-					limit: 0,
-					include: [
-					/.*assets\/.*\.json/,
-					],
-					emitFiles: true,
-					fileName: "[name].[hash][extname]",
-					publicPath: "\" + new URL(\".\", import.meta.url) + \"", // relative configuration for assets (TBD with UI5 Web Components team)
-				})
-				]
-			},
-			// 2
-			{
-				input: 'src/tableView.js',
-				output: {
-					file: 'dist/tableViewMixedVersions2.js',
-					format: 'es',
-					compact: true
-				},
-				plugins: [
-				replace({
-					'placeholder': '1-1-0',
-				}),
-				terser(),
-				resolve(),
-				json(),
-				url({
-					limit: 0,
-					include: [
-					/.*assets\/.*\.json/,
-					],
-					emitFiles: true,
-					fileName: "[name].[hash][extname]",
-					publicPath: "\" + new URL(\".\", import.meta.url) + \"", // relative configuration for assets (TBD with UI5 Web Components team)
-				})
-				]
-			},
-			[...]
-			]
-		\end{lstlisting}
-		
-		The same file is used for bundling and each time it is bundled differently. The \texttt{replace} method of to configuration object replaces a string inside the input file. In this case the string \textit{placeholder} is first replaced with \textit{0-9-0} and in the second bundle configuration with \textit{1-1-0}. Also the files generated in the process are called differently, the first one is called \texttt{tableViewMixedVersions1.js} and the second \texttt{tableViewMixedVersions2.js}.
-		Even though the elements inside those files are actually the same, they are handled as differently, since their tags differ in the browser. Elements register for the first view are called for example \texttt{<ui5-bar-0-9-0>} and for the second then \texttt{<ui5-bar-1-1-0>}.
-		
-		That means out of the same file, several differently bundled and named files were generated. Each one of the bundled files register the same elements under different tags which are therefore treated as new elements.
+\begin{lstlisting}[language=JavaScript, caption=Content of the \texttt{rollup.config.js}, label=list:rollupconfigjs,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
+import resolve from '@rollup/plugin-node-resolve';
+import json from '@rollup/plugin-json';
+import url from "@rollup/plugin-url";
+import { terser } from "rollup-plugin-terser";
+import replace from '@rollup/plugin-replace';
+import { SameVersions } from './rollup_files/same_version';
+import { DiffVersions } from './rollup_files/different_version';
+import { MixedVersions } from './rollup_files/mixed_version';
+
+let buildArray = [];
+
+function aggregateConfigs() {
+	for(let buildConfig of SameVersions) {
+		buildArray.push(buildConfig);
+	}
+	
+	for(let buildConfig of DiffVersions) {
+		buildArray.push(buildConfig);
+	}
+	
+	for(let buildConfig of MixedVersions) {
+		buildArray.push(buildConfig);
+	}
+}
+	
+aggregateConfigs();
+
+export default buildArray;
+\end{lstlisting}
+	
+The configuration of the bundler was split into several JavaScript files, to improve the readability of the file itself. The content of such a file can be seen in listing \ref{list:rollupconfigfile}.
+	
+\begin{lstlisting}[language=JavaScript, caption=Configuration content for the \texttt{rollup.config.js}, label=list:rollupconfigfile, xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
+import resolve from '@rollup/plugin-node-resolve';
+import json from '@rollup/plugin-json';
+import url from "@rollup/plugin-url";
+import { terser } from "rollup-plugin-terser";
+import replace from '@rollup/plugin-replace';
+
+export const MixedVersions = [
+// 1
+{
+	input: 'src/tableView.js',
+	output: {
+		file: 'dist/tableViewMixedVersions1.js',
+		format: 'es',
+		compact: true
+	},
+	plugins: [
+	replace({
+		'placeholder': '0-9-0',
+	}),
+	terser(),
+	resolve(),
+	json(),
+	url({
+		limit: 0,
+		include: [
+		/.*assets\/.*\.json/,
+		],
+		emitFiles: true,
+		fileName: "[name].[hash][extname]",
+		publicPath: "\" + new URL(\".\", import.meta.url) + \"", // relative configuration for assets (TBD with UI5 Web Components team)
+	})
+	]
+},
+// 2
+{
+	input: 'src/tableView.js',
+	output: {
+		file: 'dist/tableViewMixedVersions2.js',
+		format: 'es',
+		compact: true
+	},
+	plugins: [
+	replace({
+		'placeholder': '1-1-0',
+	}),
+	terser(),
+	resolve(),
+	json(),
+	url({
+		limit: 0,
+		include: [
+		/.*assets\/.*\.json/,
+		],
+		emitFiles: true,
+		fileName: "[name].[hash][extname]",
+		publicPath: "\" + new URL(\".\", import.meta.url) + \"", // relative configuration for assets (TBD with UI5 Web Components team)
+	})
+	]
+},
+[...]
+]
+\end{lstlisting}
+	
+The file, which is bundled for each configuration, in the shown listing \ref{list:rollupconfigfile}, is always the same. This can be taken from the \texttt{input} property. The bundling result though, is named differently, which can be read from the \texttt{output} property. The first bundle result is called \texttt{tableViewMixedVersions1.js}, the second \texttt{tableViewMixedVersions2.js} etc.
+The \texttt{replace} method, in e.g. line 17, of the first configuration object replaces a string inside the input file. In the shown case, the string \textit{placeholder} is first replaced with \textit{0-9-0} and in line 43 with \textit{1-1-0}. 
+This leads to, that the elements inside those files are named and later registered under different tags in the browser. Therefore, elements registered by the first micro frontend are called for example \texttt{<ui5-bar-0-9-0>} and for the second then \texttt{<ui5-bar-1-1-0>}.
+
+This results in, one file is bundled several time. Each bundle result, has a different name and replaces the placeholder string with a different string. This way, multiple micro frontends can be generated, which then again register the same elements under differently named tags. Therefore, those elements are treated as new elements.
 
 \section{Webpack Module Federation with Angular} 
 \label{wmf_implementation_prototype}
 
-The three implemented versions for the the WMF landscape are similar to one another, the only difference can be found are the dependencies and their configured sharing. Listing \ref{list:wmf_sameversions_shell} shows the configuration for the \textit{sameVersion} environment.
+The three implemented versions for the the WMF landscape are similar to one another, the only difference can be found are the dependencies and their configured sharing. Listing \ref{list:wmf_sameversions_shell} shows the configuration for the \textit{sameVersions} Node.
 
-\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{webpack.config.js} of the shell of the same versions WMF project, label=list:wmf_sameversions_shell, xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
+\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{webpack.config.js} of the shell of the sameVersions WMF project, label=list:wmf_sameversions_shell, xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
+[...]
+module.exports = {
 	[...]
-	module.exports = {
-		[...]
-		plugins: [
-		new ModuleFederationPlugin({
-			name: "shell",
-			filename: "remoteEntry.js",
-			shared: share({
-				"@angular/core": { 
-					singleton: true, 
-					strictVersion: false, 
-					requiredVersion: '= 12.2.0'
-				},
-				"@angular/common": { 
-					singleton: true, 
-					strictVersion: false, 
-					requiredVersion: '= 12.2.0' 
-				},
-				...sharedMappings.getDescriptors()
-			})
-			
-		}),
-		sharedMappings.getPlugin()
-		]};
+	plugins: [
+	new ModuleFederationPlugin({
+		name: "shell",
+		filename: "remoteEntry.js",
+		shared: share({
+			"@angular/core": { 
+				singleton: true, 
+				strictVersion: false, 
+				requiredVersion: '= 12.2.0'
+			},
+			"@angular/common": { 
+				singleton: true, 
+				strictVersion: false, 
+				requiredVersion: '= 12.2.0' 
+			},
+			...sharedMappings.getDescriptors()
+		})
+		
+	}),
+	sharedMappings.getPlugin()
+	]};
 \end{lstlisting}
 
-As it can be seen the shared dependencies are defined in between lines 22 and 24. Line 18 and 19 define the name of the application in the landscape and the name of the file after bundling. For the above case it has to be mentioned that the remotes are separate applications in their own runtime. Therefore, they have to be imported via the network, thus no \texttt{remote} property is configured in this file. To add the dynamically loaded remotes, a service had to be developed which imports the remotes at runtime. This service is shown in listing \ref{list:wmf_lookup_service}.\cite{wmf_angular_dynamicfederation}
+As it is shown, the shared dependencies are defined in between lines 22 and 24. Line 18 and 19 define the name of the application in the landscape and the name of the file after bundling. For the above case it has to be mentioned that the remotes are separate applications in their own runtime. Therefore, they have to be imported via the network, thus no \texttt{remote} property is not configured in this file. To add the dynamically loaded remotes, a service had to be developed which imports the remotes at runtime \cite{wmf_angular_dynamicfederation}. This service is shown in listing \ref{list:wmf_lookup_service}.
 
 \begin{lstlisting}[language=JavaScript, caption=Content of \texttt{lookup.service.ts} for remote module loading in shell applications, label=list:wmf_lookup_service,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
-	[...]
-	@Injectable({ providedIn: 'root' })
-	export class LookupService {
-		lookup(): Promise<PluginOptions[]> {
-			return Promise.resolve([
-			{
-				remoteEntry: 'https://angular-wmf-same-mfe1.surge.sh/remoteEntry.js',
-				remoteName: 'mfe1',
-				exposedModule: './Mfe1',
-				
-				displayName: 'Mfe1',
-				componentName: 'Mfe1Component'
-			},
-			[...]	
-			] as PluginOptions[]);
-		}
+[...]
+@Injectable({ providedIn: 'root' })
+export class LookupService {
+	lookup(): Promise<PluginOptions[]> {
+		return Promise.resolve([
+		{
+			remoteEntry: 'https://angular-wmf-same-mfe1.surge.sh/remoteEntry.js',
+			remoteName: 'mfe1',
+			exposedModule: './Mfe1',
+			
+			displayName: 'Mfe1',
+			componentName: 'Mfe1Component'
+		},
+		[...]	
+		] as PluginOptions[]);
 	}
+}
 \end{lstlisting}
 
-This service serves the information of the remotely loaded modules to plugins for actual rendering. The rendering itself is done in a proxy plugin component. This component defines a plain template as some sort of placeholder for the remotes. \cite{wmf_angular_dynamicfederation}
+This service serves the information of the remotely loaded modules to a proxy plugin, which is responsible for the actual rendering of the components. This proxy plugin is responsible for creating the container, as some sort of placeholder for the remotes. \cite{wmf_angular_dynamicfederation}
 \newpage
-\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{plugin-proxy.component.ts} for remote module loading in shell applications, label=list:wmf_pluginproxy,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
+\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{plugin-proxy.component.ts} for remote module loading in shell applications, label=list:wmf_pluginproxy,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
 	[...]	
 	@Component({
 		selector: 'plugin-proxy',
@@ -444,58 +449,63 @@ This service serves the information of the remotely loaded modules to plugins fo
 \end{lstlisting}
 
 Line 8 of listing \ref{list:wmf_pluginproxy} defines the \texttt{ng-container} with the identifier called \texttt{placeholder}. This identifier is used in the code below to select and actually fill the container with a remote module. The functionality is placed in one of Angulars Lifecycle hook methods \texttt{ngOnChanges}, which is triggered when changes to input properties occur.\cite{wmf_angular_lifecyclehooks} 
-In there, the container is first cleared, then a remote loading option is selected from the array of the \texttt{lookup.service.ts}. The following line creates an Angular component out of the loaded remote and inserts it into the placeholder container, using the imported dependencies.
-The type of the plugin options was defined in an interface, exporting a type definition. The code for is displayed in listing \ref{list:wmf_plugintype}.
+In there, the container is first cleared, then a remote loading option is selected from the array of the \texttt{lookup.service.ts}. The following line, creates an Angular component out of the loaded remote and inserts it into the placeholder container, using the imported dependencies.
+The type \texttt{PluginOptions}, was defined in an interface, exporting a type definition. The code for it, is displayed in listing \ref{list:wmf_plugintype}.
 \newpage
-\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{plugin.ts} for remote module loading in shell applications, label=list:wmf_plugintype,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
-	import { LoadRemoteModuleOptions } from '@angular-architects/module-federation';
-	export type PluginOptions = LoadRemoteModuleOptions & {
-		displayName: string;
-		componentName: string;
-	};
+\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{plugin.ts} for remote module loading in shell applications, label=list:wmf_plugintype,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
+import { LoadRemoteModuleOptions } from '@angular-architects/module-federation';
+export type PluginOptions = LoadRemoteModuleOptions & {
+	displayName: string;
+	componentName: string;
+};
 \end{lstlisting}
 
 The previously imported \texttt{@angular-architects/module-federation} dependency offers an existing type interface for that use case. This is extended by two more properties in line 4 and 5 of listing \ref{list:wmf_plugintype}.
-By configuring the above service and component, it is made possible to load federated modules via the network into the host application.
-The configuration for a federated module can be seen in listing \ref{list:wmf_sameversions_mfe1}.
 
-\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{webpack.config.js} of the mfe1 remote app of the same versions WMF project, label=list:wmf_sameversions_mfe1,  xleftmargin=.01\textwidth, xrightmargin=.01\textwidth]
+By configuring the above service and component, it is made possible to load federated modules via the network into the host application.
+The configuration for a federated module (aka remote) can be seen in listing \ref{list:wmf_sameversions_mfe1}.
+
+\begin{lstlisting}[language=JavaScript, caption=Content of \texttt{webpack.config.js} of the mfe1 remote app of the same versions WMF project, label=list:wmf_sameversions_mfe1,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
+[...]
+module.exports = {
 	[...]
-	module.exports = {
-		[...]
-		plugins: [
-		new ModuleFederationPlugin({
-			name: "mfe1",
-			filename: "remoteEntry.js",
-			exposes: {
-				'./Mfe1': './src/app/mfe1.component.ts'
+	plugins: [
+	new ModuleFederationPlugin({
+		name: "mfe1",
+		filename: "remoteEntry.js",
+		exposes: {
+			'./Mfe1': './src/app/mfe1.component.ts'
+		},
+		shared: share({
+			"@angular/core": { 
+				singleton: true, 
+				strictVersion: false, 
+				requiredVersion: '<= 12.2.0' 
 			},
-			shared: share({
-				"@angular/core": { 
-					singleton: true, 
-					strictVersion: false, 
-					requiredVersion: '<= 12.2.0' 
-				},
-				"@angular/common": { 
-					singleton: true, 
-					strictVersion: false, 
-					requiredVersion: '<= 12.2.0' 
-				},
-				"@fundamental-ngx/core": { 
-					singleton: true, 
-					strictVersion: false,
-					requiredVersion: '0.33.0-rc.214' 
-				},
-				...sharedMappings.getDescriptors()
-			})
-		}),
-		sharedMappings.getPlugin()
-		]};
+			"@angular/common": { 
+				singleton: true, 
+				strictVersion: false, 
+				requiredVersion: '<= 12.2.0' 
+			},
+			"@fundamental-ngx/core": { 
+				singleton: true, 
+				strictVersion: false,
+				requiredVersion: '0.33.0-rc.214' 
+			},
+			...sharedMappings.getDescriptors()
+		})
+	}),
+	sharedMappings.getPlugin()
+	]};
 \end{lstlisting}
 
-As mentioned in chapter \ref{Chapter2}, to share dependencies every participant has to bulk in. Therefore, similarities can be found in the sharing configurations of the remotes and hosts. 
-Between line 7 and 11, the actual federation of the module is configured. The reference to the module is later bundled in a file with the name defined in the \texttt{filename} property. In this case it is the \texttt{remoteEntry.js}.
-This is the file, which is automatically generated when the remote is compiled and serves as the entry point for the application when it is loaded into the host. Therefore this is the file accessed via the server url in the \texttt{lookup.service.ts} \ref{list:wmf_lookup_service}.
-As soon as the script is loaded via the service, the exposed module paths and names become known to the host and can be used to load the module. Thus the \texttt{expose} property contains a Java Script object, which maps the path to the actual component. In this case to \texttt{./Mfe1}.\cite{wmf_concepts}
+As mentioned in chapter \ref{Chapter5}, to share dependencies every remote has participate. Therefore, similarities can be found in the sharing configurations of the remotes and hosts. 
+Between line 7 and 11, the actual federation of the module is configured. The reference to the module is later bundled in a file with the name defined in the \texttt{filename} property. In this case it is \texttt{remoteEntry.js}.
+This is the file, which is automatically generated when the remote is compiled and serves as the entry point for the application when it is loaded into the host. Therefore, this is the file accessed via the server url in the \texttt{lookup.service.ts} \ref{list:wmf_lookup_service}.
+As soon as the script is loaded via the service, the exposed module paths and names become known to the host and can be used to load the module. Thus the \texttt{expose} property contains a JavaScript object, which maps the path to the actual component. In the shown case, it is mapped to \texttt{./Mfe1}.\cite{wmf_concepts}
 
-The implementations of the other versions are similar and only differ in the the shared dependencies configured. The effects of a multi-version environment and how it is handled by the Module Federation were explained in chapter \ref{Chapter2}.
+In the section \ref{embedd_mfe_in_wmf}, it was shown how the developed WMF nodes are embedded in the Luigi dashboard. The shown snippets in this section have shown how a compound of micro frontends is created using WMF. In direct comparison with the Luigi compounds, it becomes obvious, that WMF does not really offer support for heterogenic landscapes. This is shown indirectly in the implemented prototype, but can be applied to any WMF landscape, too. 
+Through the necessity of a separate service for rendering the micro frontends as part of a compound, it is shown that, WMF does not offer any functionality for this case. 
+Additionally, the only reason this prototype was implemented without conflicts is, because each remote is actually an Angular project/component. If for instance, one project would be a VueJS based remote, the integration of it would be connected to more obstacles. This can be showcased, in lines 21 and 24 of the plugin proxy from listing \ref{list:wmf_pluginproxy}, which responsible to load a remote component into the created container. The methods used in those lines, expect an Angular component. If now a VueJS remote would be loaded into, a conflict occurs.
+Furthermore, routing inside a compound view of WMF, requires further workarounds, even in a homogenic landscape. For example, in the case of the implemented prototype, the routers of the Angular micro frontends are not shared with the other members of the compound. Therefore, a router would have to be either loaded via an API or a dynamic import by the other participants or else routing between the micro frontends is impossible.
+Additionally, enabling the \texttt{webpack.config.js} and with it the Module Federation, is different for every framework. In case of Angular it was via the installation of the mentioned dependencies.
