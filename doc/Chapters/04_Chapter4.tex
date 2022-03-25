@@ -4,7 +4,7 @@
 
 \lhead{Chapter 4. \emph{Web Components}}
 
-Another option to address the issue of redundancies are Web Components. Consisting of the following four standards, they provide reusable elements closed in HTML tags.\cite{mdn_web_docs}
+Another option to address the issue of redundancies are Web Components. Consisting of the following four standards, they provide reusable elements encapsulated in HTML tags.\cite{mdn_web_docs}
 
 \begin{itemize}[noitemsep]
 	\item Custom Elements
@@ -57,46 +57,53 @@ Figure \ref{fig:shadow_dom} visualizes the relations between the newly introduce
 
 Through the isolation of the Shadow DOMs code, this standard offers a way to provide scoped HTML and CSS code to custom elements. As mentioned before, the nodes of the Shadow DOM are rendered separately. Therefore, styles, ids, names or even CSS classes and other configurations applied to a tag inside the Shadow DOM are not applied to the actual DOM.
 
-Listing \ref{list:shadow_dom_definition} provides be a simple example.
+%Listing \ref{list:shadow_dom_definition} provides be a simple example.
+%
+%\begin{lstlisting}[caption=Definition of a custom element using the Shadow DOM \cite{simon_thesis}, label=list:shadow_dom_definition,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
+%<!DOCTYPE html> 
+%	...
+%	<body>
+%		<p>Plain</p> 
+%		<custom-element></custom-element>
+%		
+%		<script>
+%			class CustomElement extends HTMLElement {
+%				constructor() { 
+%					super();
+%					const shadow = this.attachShadow({mode: 'open'}); 
+%					shadow.innerHTML = `<style> p {color: red;} </style>`; 
+%					const shadowParagraph = document.createElement('p'); 
+%					shadowParagraph.textContent = 'Blue'; 
+%					shadow.appendChild(shadowParagraph);
+%				}
+%			}
+%			customElements.define('custom-element', CustomElement); 
+%			customElement = new CustomElement(); 
+%			console.log(customElement.shadowRoot)
+%		</script>
+%	</body>
+%</html>
+%\end{lstlisting}
+%
+%The listing shows the usage of the Shadow DOM in combination with registering a custom element (named \texttt{custom-element}) using the customElements API.
+%The \texttt{script} tag of the snippet starts with creating a new HTML element called CustomElement. It is an extension to the HTMLElement class. This new element has the Shadow DOM attached to it. Therefore, it is the Shadow host in the DOM tree. Via the \texttt{innerHTML} attribute a Shadow DOM Node is created. In this case it is a styling for paragraphs,followed by the creation of a paragraph onto which the styling is applied. Additionally the text color of the paragraph is set to blue and lastly it is attached to the Shadow root.
+%The last three lines of the script, are the definition and registration of the new \texttt{custom-element}, the creation of a new \texttt{customElement} object and the output of the attached Shadow DOM in the console.
+%
+%Now when looking at the body of the above snippet, it becomes visible that beside the \texttt{custom-element} another paragraph is defined in the document. Usually the styles defined in the \texttt{script} below would apply to this paragraph, too. Through the encapsulation of the two separate DOMs this is not the case. The paragraph defined in the body of the document will be completely unaffected by the changes applied to the paragraphs in the Shadow DOM.\cite{simon_thesis}
+%
+%Now another configuration which is shown in the snippet is the \texttt{this.attachShadow({mode: 'open'})}. This mode property defines the visibility of the Shadow DOM to the browser. If set to \texttt{open}, the elements of the Shadow DOM can be inspected inside the sources. Thus, the \texttt{console.log(customElement.shadowRoot)} line would work if executed. 
+%If the mode would be set to \texttt{closed}  the \texttt{console.log()} command in line 20 would return \texttt{null}.\cite{simon_thesis}
 
-\begin{lstlisting}[caption=Definition of a custom element using the Shadow DOM \cite{simon_thesis}, label=list:shadow_dom_definition,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
-<!DOCTYPE html> 
-	...
-	<body>
-		<p>Plain</p> 
-		<custom-element></custom-element>
-		
-		<script>
-			class CustomElement extends HTMLElement {
-				constructor() { 
-					super();
-					const shadow = this.attachShadow({mode: 'open'}); 
-					shadow.innerHTML = `<style> p {color: red;} </style>`; 
-					const shadowParagraph = document.createElement('p'); 
-					shadowParagraph.textContent = 'Blue'; 
-					shadow.appendChild(shadowParagraph);
-				}
-			}
-			customElements.define('custom-element', CustomElement); 
-			customElement = new CustomElement(); 
-			console.log(customElement.shadowRoot)
-		</script>
-	</body>
-</html>
-\end{lstlisting}
+The Shadow DOM, even though separated from the DOM, has an attribute via which it can be made accessible. By adding the \texttt{mode} attribute to the \texttt{this.attachShadow()} method, the visibility of the Shadow DOM, to the document can be defined \cite{simon_thesis}. Possible values for the \texttt{mode} property are:
 
-The listing shows the usage of the Shadow DOM in combination with registering a custom element (named \texttt{custom-element}) using the customElements API.
-The \texttt{script} tag of the snippet starts with creating a new HTML element called CustomElement. It is an extension to the HTMLElement class. This new element has the Shadow DOM attached to it. Therefore, it is the Shadow host in the DOM tree. Via the \texttt{innerHTML} attribute a Shadow DOM Node is created. In this case it is a styling for paragraphs,followed by the creation of a paragraph onto which the styling is applied. Additionally the text color of the paragraph is set to blue and lastly it is attached to the Shadow root.
-The last three lines of the script, are the definition and registration of the new \texttt{custom-element}, the creation of a new \texttt{customElement} object and the output of the attached Shadow DOM in the console.
-
-Now when looking at the body of the above snippet, it becomes visible that beside the \texttt{custom-element} another paragraph is defined in the document. Usually the styles defined in the \texttt{script} below would apply to this paragraph, too. Through the encapsulation of the two separate DOMs this is not the case. The paragraph defined in the body of the document will be completely unaffected by the changes applied to the paragraphs in the Shadow DOM.\cite{simon_thesis}
-
-Now another configuration which is shown in the snippet is the \texttt{this.attachShadow({mode: 'open'})}. This mode property defines the visibility of the Shadow DOM to the browser. If set to \texttt{open}, the elements of the Shadow DOM can be inspected inside the sources. Thus, the \texttt{console.log(customElement.shadowRoot)} line would work if executed. 
-If the mode would be set to \texttt{closed}  the \texttt{console.log()} command in line 20 would return \texttt{null}.\cite{simon_thesis}
+\begin{itemize}
+	\item \textbf{open}
+	\item \textbf{closed}
+\end{itemize}
 
 This behavior is not meant to be used as a measure of security, since it can be overwritten. The Shadow DOM encapsulates every part of its DOM elements, that means HTML, CSS and JavaScript. The \texttt{document} object, available during runtime, stays the same for the regular DOM as for the Shadow DOM though. Therefore, each configuration done in the Shadow DOM via scripts can be easily overwritten from any other script in the document, thus the mode can be changed even if initially set to \texttt{closed}.\cite{shadow_dom_encapsulation} For Web Components in particular it is not recommended to use this mode at all, since it would make them less flexible for end users.\cite{wc_shadow_dom_google}
 
-This feature can be used in combination with a component library like UI5 Web Components, to customize styles or appearances of individual components. For the context of this thesis, this feature offers means to individualize the registered Web Components of the landscape. This comes with a trade-off though. The level of isolation increases through the encapsulation of code elements between the single components. This increase makes it difficult to guaranteed that e.g. the same CSS class is not rendered in multiple different Shadow DOMs. Even though the redundancies would occur on code level and not on dependency level, they are redundancies nonetheless.
+For the context of this thesis, the Shadow DOM standard offers means to individualize the registered Web Components of a landscape. It can be used to apply customizations or add individual event listeners to specific components. This comes with a trade-off though. The level of isolation increases through the encapsulation of code elements between the single components. This increase makes it difficult to guaranteed that e.g. the same CSS class is not rendered in multiple different Shadow DOMs. Even though the redundancies would occur on code level and not on dependency level, they are redundancies nonetheless.
 
 \section{HTML Template}
 
@@ -125,7 +132,7 @@ class extends HTMLElement {
 });
 \end{lstlisting}
 
-It is important to note, that the defined template in the listing is not rendered unless somehow included in a DOM (either Shadow DOM or the regular DOM), via Java Script.
+It is important to note, that the defined template in the listing is not rendered unless somehow included in a DOM (either Shadow DOM or the regular DOM), via JavaScript.
 
 \begin{lstlisting}[language=HTML5, caption=Definition and usage of the \texttt{slot} standard \cite{wc_html_template_slots}, label=list:slot_example,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
 <!-- Definition of the slot -->
@@ -142,7 +149,7 @@ It is important to note, that the defined template in the listing is not rendere
 </my-paragraph>
 \end{lstlisting}
 
-As it can be seen in \ref{list:slot_example}, the \texttt{slot} definition has some default content defined. In the above case it´s a simple text. When the slot is used, this content is overwritten by the content in the element which is calling the \texttt{slot} by its name.
+As it can be seen in listing \ref{list:slot_example}, the \texttt{slot} definition has some default content defined. In the above case it´s a simple text. When the slot is used, this content is overwritten by the content in the element which is calling the \texttt{slot} by its name.
 In that case the content is replaced by some list items.
 Other than the templates, slots are always rendered if included in the markup via their respective names. The content which is rendered is depended on, if the default content is overwritten or not.
 
@@ -150,7 +157,7 @@ Even though slots are a HTML standard just as templates, their support for brows
 
 In combination these two standards offer a way to define flexible, reusable markup code for Web Components.\cite{wc_html_template_slots} 
 
-When developing own Web Components for a micro frontend landscape, this aspect can be used to reduce repetitive HTML code elements by serving them a templates. Similar to the Shadow DOM this feature could be used to apply more flexibility to the Web Components, by adding placeholders for customization. But contrary to the Shadow DOM, this does not increase the level of isolation, since the rendered elements are not separated from the actual DOM. Redundant code snippets can be defined as reusable templates but, thereby reducing the redundancies in the code itself.
+When developing own Web Components for a micro frontend landscape, this aspect can be used to reduce repetitive HTML code elements by serving them a templates. Similar to the Shadow DOM this feature could be used to apply more flexibility to the Web Components, by adding placeholders for customization. But contrary to the Shadow DOM, this does not increase the level of isolation, since the rendered elements are not separated from the actual DOM. Redundant code snippets can be defined as reusable templates, thereby reducing the redundancies in the code itself.
 
 \section{ES Modules}
 

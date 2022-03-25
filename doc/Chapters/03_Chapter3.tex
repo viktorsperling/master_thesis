@@ -4,7 +4,7 @@
 
 \lhead{Chapter 3. \emph{Content Delivery Networks}}
 
-One way of avoiding redundant libraries can be a central source, where all resources are stored and can be requested from via an API. Such a concept exists in the idea of Content Delivery Networks (CDNs).
+One way of avoiding redundant libraries can be a central source, where all resources are stored and can be requested via an API. Such a concept exists in the idea of Content Delivery Networks (CDNs).
 Since the resources are loaded via the CDN API, a dependency is available under a unique URL. Loading a dependency twice means the browser requests the resource from the same URL with the same parameters. Therefore, the browser can determine if the given resource is already present and decide to either load it from the CDN or from the browser cache, if it is already loaded.\cite{caching_in_browser}
 
 Nonetheless, a CDN has its limits which have to be considered. Costs can play a key role in the decision process.
@@ -68,7 +68,7 @@ The design decision is of course dependent on the business case for the CDN, as 
 
 \section{Optimization}
 
-The CDN technology offers several ways of optimizing a websites performance and therefore, improving the user experience. In the following section these optimizations will be showcased and explained.
+The CDN technology offers several ways of optimizing a websites performance and therefore, improving the user experience. In the following sections these optimizations will be showcased and explained.
 
 \subsection{Route optimization with Anycast}
 
@@ -160,7 +160,7 @@ Based on those requirements, the following values are calculated for the monthly
 	\end{center} 
 \end{quote}
 
-In the following text, it will be analyzed how much it would cost a company or department to pay for the CDN defined in this scenario.
+Next, it will be calculated how much it would cost a company or department to pay for the CDN defined in this scenario.
 
 There are multiple CDN solution providers on the market, including \textbf{Amazon CloudFront, Azure CDN, Google Cloud CDN}. \cite{top_10_cdn}
 Since the pricing models of the mentioned providers differ, it is difficult to compare them directly. Applying the given scenario to the pricing calculator of the respective providers results in the following numbers.
