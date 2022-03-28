@@ -88,4 +88,4 @@ As it can be seen, WMF always picks the latest major release, assuming the respe
 There are side effects to sharing the same dependency over the whole micro frontend landscape. One of which is the increase in bundle sizes, since every \textbf{remote} bundles its local dependencies. WMF then, picks the ones to serve during the runtime of the landscape.
 This impact has a trade-off tough. Returning users can benefit from cached dependencies, since the same bundles are reused, loading the site.\cite{wmf_multi_versions}
 
-Therefore, WMF is able to reduce redundant libraries and in parallel supports multiple versions in its landscape, via the shared dependency feature.
+Therefore, WMF is able to reduce redundant libraries in micro frontend landscapes and additionally supports multi-version environments, via the shared dependency feature.
