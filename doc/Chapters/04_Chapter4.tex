@@ -110,7 +110,7 @@ For the context of this thesis, the Shadow DOM standard offers means to individu
 This standard offers a way to define reusable markup code. As a part of the HTML standard itself, the \texttt{template} tag is used to define templates. These are not rendered unless used by another element. Similar to \texttt{template}, \texttt{slot} serves the same purpose, but in a different way. Templates are defined HTML code snippets which can be cloned and inserted in other document elements or even elements rendered in the Shadow DOM.
 Slots on the other hand serve as placeholder for either default markup texts or other DOM elements. Therefore, a template is a rather static piece of reusable HTML code, compared to slots.
 Slot themselves are identified by their name, the content is inserted when the slot is addressed by its name.
-Listings \ref{list:template_example} and \ref{slot_example} provide examples how exactly these two standards are used. \cite{wc_html_template_slots}
+Listings \ref{list:template_example} and \ref{list:slot_example} provide examples how exactly these two standards are used. \cite{wc_html_template_slots}
 
 \begin{lstlisting}[language=HTML5,caption=Definition and usage of the \texttt{template} standard \cite{wc_html_template_slots}, label=list:template_example,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
 <!-- Definition of the template -->
@@ -151,13 +151,13 @@ It is important to note, that the defined template in the listing is not rendere
 
 As it can be seen in listing \ref{list:slot_example}, the \texttt{slot} definition has some default content defined. In the above case it´s a simple text. When the slot is used, this content is overwritten by the content in the element which is calling the \texttt{slot} by its name.
 In that case the content is replaced by some list items.
-Other than the templates, slots are always rendered if included in the markup via their respective names. The content which is rendered is depended on, if the default content is overwritten or not.
+Other than the templates, slots are always rendered if included in the markup via their respective names. If not changed, the default content is rendered for the slot.
 
 Even though slots are a HTML standard just as templates, their support for browsers is not always guaranteed. This is due to the fact, that compared to templates it is a rather new standard.
 
 In combination these two standards offer a way to define flexible, reusable markup code for Web Components.\cite{wc_html_template_slots} 
 
-When developing own Web Components for a micro frontend landscape, this aspect can be used to reduce repetitive HTML code elements by serving them a templates. Similar to the Shadow DOM this feature could be used to apply more flexibility to the Web Components, by adding placeholders for customization. But contrary to the Shadow DOM, this does not increase the level of isolation, since the rendered elements are not separated from the actual DOM. Redundant code snippets can be defined as reusable templates, thereby reducing the redundancies in the code itself.
+When developing new Web Components for a micro frontend landscape, this aspect can be used to reduce repetitive HTML code elements by serving them a templates. Similar to the Shadow DOM this feature could be used to apply more flexibility to the Web Components, by adding placeholders for customization. But contrary to the Shadow DOM, this does not increase the level of isolation, since the rendered elements are not separated from the actual DOM. Redundant code snippets can be defined as reusable templates, thereby reducing the redundancies in the code itself.
 
 \section{ES Modules}
 
@@ -182,7 +182,7 @@ Thus the development of Web Components can be done in a modular way, making ever
 
 Listing \ref{list:es_modules_example} shows such an import. Assuming the \texttt{awesome-explosion.js} files contains the definition of an element called \texttt{awesome-explosion}, these lines enable the document to use this element.\cite{wc_specifications}
 
-This feature is essential for the prototype developed, since via this aspect the components are made available to the landscape. The used Web Components are served as ES Modules to the landscape and are imported similarly as shown in \ref{es_modules_example}. Therefore, this aspect enables a component to be imported in multiple micro frontends as a module.
+This feature is essential for the prototype developed, since via this aspect the components are made available to the landscape. The used Web Components are served as ES Modules to the landscape and are imported similarly as shown in \ref{list:es_modules_example}. Therefore, this aspect enables a component to be imported in multiple micro frontends as a module.
 
 \section{Additional considerations}
 
@@ -194,7 +194,7 @@ Assuming a common micro frontend landscape where every micro frontend is develop
 
 One way would be to define a namespace for every team when creating Web Components e.g. Team 1 has the namespace \texttt{team-1}, causing a Web Component registered by the micro frontend of Team 1 to be named \texttt{team-1-tagname}. This could lead to redundancies, because there is no way of assuring that the \texttt{team-1-tagname} and \texttt{team-2-tagname} Web Components are not the same.\cite{wc_best_practices}
 
-A better way might be to assign a common Web Components library like \textbf{UI5 Web Components}. That way, the registered elements are provided by the library and are limited to a set of unique registrable tags. If another micro frontend would try and register an already registered element of the library, a warning is thrown but no error occurs.
+A better way might be to assign a common Web Components library like \textbf{UI5 Web Components} \cite{ui5_wc_github}. That way, the registered elements are provided by the library and are limited to a set of unique registrable tags. If another micro frontend would try and register an already registered element of the library, a warning is thrown but no error occurs.
 
 Most Web Component libraries also offer so called scoping options. This feature is employed, when versions of the used components differ between micro frontends. It enables the developers to customize their Web Components and register them under different tags. With this feature, it is made possible to register components according to their respective versions, by adding a version-specific suffix. That, of course, might lead to redundancies again. But it also reduces the dependency of the developer teams to always use the latest version of the component library or the first registered element in the landscape. \cite{ui5_webcomponents_scoping} \cite{openwc_scoping}
 

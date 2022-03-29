@@ -5,7 +5,7 @@
 \lhead{Chapter 7. \emph{Presentation of the results}}
 
 In this chapter it will be explained how and which data was collected using the prototype, and which metrics were defined for comparison.
-Afterwards the landscapes will be compared, using the defined metrics as KPIs. The conclusion based on the results will be made in chapter \ref{Chapter8}.
+Afterwards the landscapes will be compared, using the defined metrics as KPIs. The conclusion based on the results will be given in chapter \ref{Chapter8}.
 
 \section{Basis of the experiment} 
 
@@ -192,7 +192,7 @@ The table \ref{tab:cdn_result_table} contains the results for the implemented No
 
 \normalsize
 The results shown in table \ref{tab:cdn_result_table} were collected without caching enabled. This explains for instance, why no resources were loaded from cache and therefore, the values for the \textit{memory} or \textit{disk} characteristics are missing.
-The main takeaway from these results, is an average initial loading time for the Nodes which range from \textbf{129529.125} to \textbf{156131.625} milliseconds, depending on the framework. It can also be seen, that even though less resources are loaded via URLs by the VueJS Nodes, they have a longer loading time compared to the Angular ones.
+The main takeaway from these results, is an average initial loading time for the Nodes, which differ depending on the framework. It can also be seen, that even though less resources are loaded via URLs by the VueJS Nodes, they have a longer loading time compared to the Angular ones.
 
 \scriptsize
 \setlength{\mycolwidth}{\dimexpr \textwidth/5 - 2\tabcolsep}
@@ -612,7 +612,7 @@ The given data was gathered based on the previously introduced prototypes and th
 
 \normalsize
 The shown data in table \ref{tab:lighthouse_used_report} and figure \ref{fig:unsed_imported_1} is highly application dependent. As these landscapes are considered to be generally representative, a display in efficiency can be drawn from the charts.
-The Unpkg CDN Nodes show a high unused bytes ratio. But is has to be taken into account, that the overall imported sum of bytes is lower to the NPM counterparts, since only the required resources were requested from the CDN.
+The Unpkg CDN Nodes show a high unused bytes ratio. But it has to be taken into account, that the overall imported sum of bytes is lower to the NPM counterparts, since only the required resources were requested from the CDN.
 For the WMF Nodes, it can be argued, that due to the bundling with Webpack, a lot of bytes were imported but only a few of them were not used. This can be explained through how the Module Federation works, since every configured shared resource is checked if it should be shared or not.
 Web Components have the lowest unused bytes ratio of all the Nodes. This might be due to the fact, that no UI framework was used for development. Therefore, no unnecessary framework features are present in this landscape.
 

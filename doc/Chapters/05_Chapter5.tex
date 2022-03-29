@@ -32,7 +32,7 @@ After the enabling, the necessary configuration can be applied to the \texttt{we
 
 \section{Shared dependency feature}
 
-The shared dependency feature of WMF, is a way to solve the issue of redundant libraries in its landscapes.
+The shared dependency feature of WMF, is a way to solve the issue of redundant libraries in micro frontend landscapes.
 This feature is enabled and configured, as well as the rest of the WMF, via the \texttt{webpack.config.js}. When configuring the components of the landscape, it is possible to define a section where shared dependencies are described. These dependencies can be defined in different ways. For instance, it is possible to define a strict version of the dependency, which would result in the framework loading this specific version. Another option can be, a less restricted dependency definition, which results in the framework, loading of highest major version available. WMF is able to distinguish between major versions of the dependencies, shared in its landscapes. If not configured otherwise, it automatically picks the highest major version and applies it to the sharing modules. 
 
 \begin{lstlisting}[language=JavaScript, caption=Example of sharing dependencies configured in the \texttt{webpack.config.js}, label=list:shared_mapping_wmf,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
@@ -79,7 +79,7 @@ Figure \ref{fig:wmf_multiversions} illustrates the case, of how WMF handles a mu
 \begin{figure}[!h]
 	\centering
 	\includegraphics[width=0.7\textwidth]{Figures/multi_version_diagramm.drawio.png}
-	\caption{WMF way of handling multi-versions}
+	\caption{Assignment of major release versions, of same dependencies in different versions, for micro frontends in a WMF micro frontend landscape}
 	\label{fig:wmf_multiversions}
 \end{figure}
 

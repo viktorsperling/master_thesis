@@ -36,7 +36,7 @@ Following conclusions can be drawn by comparing the numbers of the NPM implement
 
 \begin{enumerate}
 	\item The amount of requested URLs is significantly increased when CDN is used.
-	\item Even though approximately ten times the amount of URLs is requested by the CDN landscapes, the initial loading time decreases by ~60 MS for the Angular Unpkg landscapes and for Vue it's even more.
+	\item Even though approximately ten times the amount of URLs is requested by the CDN landscapes, the initial loading time decreases by ~60 ms for the Angular Unpkg landscapes and for Vue it's even more.
 	\item The cache usage of the CDN landscapes significantly increases. This information is taken from the amount of \textit{none established} ID occurrences. For each connection not established, a resource is loaded from the cache, thus the faster loading times, when cache is enabled.
 	\item A similar result is present in the loaded bytes from connection type. Compared to the NPM implementations, the Unpkg environments load significantly more bytes from \textit{disk} or \textit{memory}. This behavior was anticipated in the CDN implementations, since it is one of the desired features of this technologies. Every resource has a designated URL where it is loaded from, thus the browser can distinguish if it already present or not.
 	\item Additionally the average loaded content size of the Unpkg apps is lower, since only specific resources are requested from the CDN. Therefore big bundles with unused features are generally not present.

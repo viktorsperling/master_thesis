@@ -154,7 +154,7 @@ At line 45 the actual compound elements or micro frontends are defined as an arr
 \subsubsection{Embedding a micro frontend into a compound in WMF}
 \label{embedd_mfe_in_wmf}
 
-Other then the to the Web Component Nodes, the WMF Nodes are actually embedded as iFrames into the Luigi dashboard. Therefore, the Luigi configuration for that landscape, is similar to the CDN/NPM environements. The listing \ref{list:wmf_luigi_config}, shows how it was achieved.
+Other than the Web Component Nodes, the WMF Nodes are actually embedded as iFrames into the Luigi dashboard. Therefore, the Luigi configuration for that landscape, is similar to the CDN/NPM environements. The listing \ref{list:wmf_luigi_config}, shows how it was achieved.
 
 \begin{lstlisting}[caption=Example configuration to embed a WMF micro frontend compound as a Node in Luigi, label=list:wmf_luigi_config,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
 	Luigi.setConfig({
@@ -205,7 +205,7 @@ As it is described in the documentation, the Unpkg.com supports two query parame
 \end{itemize}
 
 If the import is handled via a script tag, as it is done in \ref{list:unpkg_import}, the \texttt{type="module"} attribute has to be added, depending on the resource loaded.
-In the case of the given example, the resource is a JavaScript module type. To ensure it is parsed by the runtime as such, this attribute has to be added.\cite{js_module_type}
+In the case of the given example, the resource is a JavaScript module type. To ensure this is parsed by the runtime as such, this attribute has to be added.\cite{js_module_type}
 
 \section{Web Components - UI5 Web Components} 
 
@@ -418,7 +418,7 @@ export class LookupService {
 }
 \end{lstlisting}
 
-This service serves the information of the remotely loaded modules to a proxy plugin, which is responsible for the actual rendering of the components. This proxy plugin creates the container, as some sort of placeholder for the remotes. \cite{wmf_angular_dynamicfederation}
+This service serves the information of the remotely loaded modules to a proxy plugin, which is responsible for the actual rendering of the components. This proxy plugin creates the container as some sort of placeholder for the remotes. \cite{wmf_angular_dynamicfederation}
 \newpage
 \begin{lstlisting}[language=JavaScript, caption=Content of \texttt{plugin-proxy.component.ts} for remote module loading in shell applications, label=list:wmf_pluginproxy,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
 	[...]	
@@ -506,7 +506,7 @@ Between line 7 and 11, the actual federation of the module is configured. The re
 This is the file, which is automatically generated when the remote is compiled and serves as the entry point for the application when it is loaded into the host. Therefore, this is the file accessed via the server URL in the \texttt{lookup.service.ts} \ref{list:wmf_lookup_service}.
 As soon as the script is loaded via the service, the exposed module paths and names become known to the host and can be used to load the module \cite{wmf_concepts}. Thus the \texttt{expose} property contains a JavaScript object, which maps the path to the actual component. In the shown case, it is mapped to \texttt{./Mfe1}.
 
-In section \ref{embedd_mfe_in_wmf}, it was shown how the developed WMF Nodes are embedded in the Luigi dashboard. The shown snippets in this section have shown how a compound of micro frontends is created using WMF. In direct comparison with the Luigi compounds, it becomes obvious, that WMF does not really offer support for heterogenic landscapes. This is shown indirectly in the implemented prototype, but can be applied to any WMF landscape, too. 
+In section \ref{embedd_mfe_in_wmf}, it was shown how the developed WMF Nodes are embedded in the Luigi dashboard. The shown snippets in this section have shown how a compound of micro frontends is created using WMF. In direct comparison with the Luigi compounds, it becomes obvious, that WMF does not really offer support for heterogeneous landscapes. This is shown indirectly in the implemented prototype, but can be applied to any WMF landscape, too. 
 The first indicator is, the necessity of a separate service and plugin, for the dynamic loading and rendering of the remotes.
 
 Additionally, the only reason this prototype was implemented without conflicts is, because each remote is actually an Angular project/component. If for instance, one project would be a VueJS based remote, the integration of it would be connected to more obstacles. This can be showcased, in lines 21 and 24 of the plugin proxy from listing \ref{list:wmf_pluginproxy}, which responsible to load a remote component into the created container. The methods used in those lines, expect an Angular component. If now a VueJS remote would be loaded into, a conflict occurs.
