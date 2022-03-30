@@ -36,11 +36,11 @@ An example for a basic CDN distribution is shown in figure \ref{fig:cdn_general_
 \begin{figure}[!h]
 	\centering
 	\includegraphics[width=1\textwidth]{Figures/basic_cdn_arch.drawio.png}
-	\caption{Basic distribution a CDN}
+	\caption{Basic distribution of a CDN}
 	\label{fig:cdn_general_arch}
 \end{figure}
 
-It has to be mentioned that the geographical distribution in figure \ref{fig:cdn_general_arch} is simplified, for the sake of readability. In a real scenario, the cache servers of each PoP would themselves be distributed over different data centers on the continent. A client requesting resources from the CDN always communicates with the nearest cache server to their designated location.\cite{cdn_general}
+It has to be mentioned that the geographical distribution in figure \ref{fig:cdn_general_arch} is simplified, for the sake of readability. In a real scenario, the cache servers of each PoP would themselves be distributed over different data centers on the continent. A client requesting resources from the CDN always communicates with the nearest possible cache server to their designated location.\cite{cdn_general}
 
 \section{Design}
 
@@ -49,15 +49,15 @@ The four pillars of CDN design are:
 
 \begin{itemize}
 	\item \textbf{Performance} - First and foremost, the CDN has to provide a benefit when it comes to website performance. When the usage of a CDN increases the loading time of a website, the negative effect on user experience can cause financial harm to the host.\cite{cdn_general}
-	\item \textbf{Scalability} - Since a cache server can serve multiple resources to different websites, it has to be able to handle traffic peaks. Without the aspect of scalability (either horizontal or vertical), these requirements cannot be met which would affect the CDNs performance.
-	\item \textbf{Reliability} -  A website host has to rely on the CDN to deliver the websites resources. An outage on CDN side would cause the same effect to the relying websites, resulting in additional costs for the designated hosts. Therefore, CDN providers commit to 99.9\% service level agreements (SLAs).
+	\item \textbf{Scalability} - Since a cache server can serve multiple resources to different websites, it has to be able to handle traffic peaks. Without the aspect of scalability (either horizontal or vertical), this requirement cannot be met which would affect the CDNs performance.
+	\item \textbf{Reliability} -  A website host has to rely on the CDN to deliver the websites resources. An outage on CDN side would cause the same effect to the relying websites, resulting in additional losses for the designated hosts. Therefore, most CDN providers commit to 99.9\% availability in their service level agreements (SLAs).
 	\item \textbf{Responsiveness} -  The aspect of responsiveness targets the issue of synchronization inside the CDN. A CDN has to be capable to react to changes and distribute those to its PoPs over the globe accordingly. Otherwise inconsistencies could occur on the websites relying on the CDN. This is ensured through an automated pull mechanism, via which edge servers pull changes from the origin server.\cite{cdn_origin_server}
 \end{itemize}
 
 Additionally to those four requirements, the topology of a CDN has to be considered. There are two options which can be used. Both would serve their purpose, but have different advantages as well as disadvantages. 
 
 \begin{itemize}
-	\item \textbf{The scattered CDN} - This topology focuses on physical proximity. The PoPs are kept rather small in size, but are scattered around the world in greater frequency, thus providing as much proximity to their client as possible. This topology excels in providing the CDN's resources into low-connectivity regions, since it is not highly dependent on wire infrastructure. When it comes to latency, it does not suffer as much due to the short distance between client and server. The trade-off with this topology is that it accrues more maintenance costs, since more PoPs are required to be maintained. Also, deploying new configurations can be connected to a lot of effort, depending on the number of PoPs scattered across the CDN. 
+	\item \textbf{The scattered CDN} - This topology focuses on physical proximity. The PoPs are kept rather small in size, but are scattered around the world in greater frequency, thus providing as much proximity to their clients as possible. This topology excels in providing the CDN's resources into low-connectivity regions, since it is not highly dependent on wire infrastructure. When it comes to latency, it does not suffer as much due to the short distance between client and server. The trade-off with this topology is that it accrues more maintenance costs, since more PoPs are required to be maintained. Also, deploying new configurations can be connected to a lot of effort, depending on the number of PoPs scattered across the CDN. 
 	Additionally, this number can also affect the RTT since every PoP inbetween the client and the server is a connection point.
 	
 	\item \textbf{The consolidated CDN} - Contrary to the scattered CDN, this topology is designed to consolidate its resources at strategically located data centers. Since the PoPs are only located in those major data centers, the servers available to the PoPs are highly advanced and provide a lot of hardware capacity. Additionally, since the number of major data centers around the world is rather limited, the number of PoPs is reduced as well, compared to the scattered topology. Following the quality over quantity principle, a PoP in this topology can handle a greater amount of traffic compared to its counterpart, and is also more resilient, specifically when it comes to DDoS attacks. Also, due to the moderate number of PoPs, it is easier and faster for the operators of the CDN to deploy new configurations.
@@ -166,9 +166,9 @@ There are multiple CDN solution providers on the market, including \textbf{Amazo
 Since the pricing models of the mentioned providers differ, it is difficult to compare them directly. Applying the given scenario to the pricing calculator of the respective providers results in the following numbers.
 
 \begin{itemize}[noitemsep]
-	\item Amazon CloudFront - $1426.22$\$ per month
-	\item Google Cloud CDN - $1168.99$\$ per month
-	\item Azure CDN - $1123.90$\$ per month
+	\item Amazon CloudFront - $1426.22$ \$ per month
+	\item Google Cloud CDN - $1168.99$ \$ per month
+	\item Azure CDN - $1123.90$ \$ per month
 \end{itemize} 
 
 After averaging those values an $Avg. price$ is calculated.  

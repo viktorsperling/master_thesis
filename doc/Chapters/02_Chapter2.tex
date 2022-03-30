@@ -4,14 +4,12 @@
 
 \lhead{Chapter 2. \emph{Micro frontend framework Luigi}}
 
-In this chapter, an overview of the used Luigi framework is given.
-
-Currently there are different micro frontend frameworks available on the market, including but not limited to \textbf{Bit, SystemJS, Webpack 5 Module Federation, Piral, Single SPA} and \textbf{Luigi}.\cite{top10_mffs}
-For the implementation of the representative landscapes the Luigi framework was used. Therefore, a short introduction to Luigi it is given here.
+In this chapter, an overview of the used Luigi framework is given. Currently there are multiple different micro frontend frameworks available on the market, including but not limited to \textbf{Bit, SystemJS, Webpack 5 Module Federation, Piral, Single SPA} and \textbf{Luigi} \cite{top10_mffs}.
+For the implementation of the representative landscapes the Luigi framework was used. Therefore, a short introduction to Luigi is given here.
 
 \section{Luigi}
 
-Luigi is an open-source JavaScript framework for micro frontends, consisting of two main parts, the \textbf{Luigi Core} and the \textbf{Luigi Client}. It provides a basis to integrate micro frontends, also called \textbf{Nodes} in this context. Both parts serve different purposes in the micro frontend landscape.\cite{luigi_doc_overview}
+Luigi is an open-source JavaScript framework for micro frontends, consisting of two main parts, the \textbf{Luigi Core} and the \textbf{Luigi Client}. It provides a basis to integrate micro frontends, also called \textbf{Nodes} in this context. Both parts serve different purposes within the micro frontend landscape.\cite{luigi_doc_overview}
 
 \subsection{Core}
 
@@ -26,9 +24,9 @@ The \textbf{Luigi Core} is the basis of the whole landscape. It defines the main
 \end{itemize} 
 
 The core application inside the landscape is determined via the \texttt{luigi.config.js}. Any project containing it can fulfill this role, which is the only prerequisite. In the context of the framework, this app is later referred to as the \textbf{Core}.
-Following this principle, the project structure of the \textbf{Core} could look as shown in listing \ref{list:luigi_core_structure}.\footnote{This example is taken directly from the implemented core project.}  
+Following this principle, the project structure of the \textbf{Core} could look as shown in listing \ref{list:luigi_core_structure}.\footnote{This example is taken directly from the implemented core project.}
 
-\begin{lstlisting}[language=Bash, caption=Project structure for a Luigi Core application including the \texttt{luigi.config.js}, label=list:luigi_core_structure,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
+\begin{lstlisting}[language=Bash, caption=Project structure for a Luigi Core application including the \texttt{luigi.config.js} , label=list:luigi_core_structure,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
 	- react-core-mf
 		- [...]
 		- node_modules
@@ -40,7 +38,7 @@ Following this principle, the project structure of the \textbf{Core} could look 
 		- src
 \end{lstlisting}
 
-In the \texttt{luigi.config.js} itself the above mentioned possible configurations are defined.\cite{luigi_doc_core}
+In the \texttt{luigi.config.js} itself the above mentioned possible configurations are defined \newline \cite{luigi_doc_core}.
 
 \subsection{Client}
 
@@ -69,9 +67,9 @@ After the short introduction of the framework's core components, a general archi
 \end{figure}
 
 As can be seen in figure \ref{fig:luigi_architecture_fig}, the displayed micro frontends in the Web App have a distinguished position in the Micro Frontends Container. The embedded projects can either be integrated via iFrames or as Web Components.
-Via the provided dashboard (Navigation Frame), the Luigi Core features are used. Through it, the navigation or search feature can be accessed.
+The provided dashboard (Navigation Frame), grants accesses to Luigi Core features, like the navigation or global search.
 
-As described in the first chapter of this transcript, the issue in such a landscape are the redundantly imported libraries of the embedded micro frontends. The reason for this problem is that each node is an isolated application.
+As described in the first chapter of this transcript, the issue in such a landscape are the redundantly imported libraries of the embedded micro frontends. The reason being that each node is an isolated application.
 For instance, navigating to the first micro frontend, followed by the second one, will load the bundled projects with their corresponding dependencies. In this case, the browser has no way to distinguish if a loaded resource is already present or not. The reason for that is the bundling of projects which makes the references indistinguishable to the browser.
 The following chapters will introduce technologies, which offer methods to resolve this issue. 
  

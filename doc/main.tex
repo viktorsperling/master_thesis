@@ -483,7 +483,7 @@ parskip=half			% Abstand zwischen Absätzen
 	
 	\pagestyle{fancy} % The page style headers have been "empty" all this time, now use the "fancy" headers as defined before to bring them back
 	
-	\lhead{\emph{Content}} % Set the left side page header to "Contents"
+	\lhead{\emph{Contents}} % Set the left side page header to "Contents"
 	\setcounter{tocdepth}{3}
 	\tableofcontents % Write out the Table of Contents
 	
@@ -519,6 +519,7 @@ parskip=half			% Abstand zwischen Absätzen
 	\lhead{}
 	\begingroup
 	\raggedright
+	\phantomsection{}
 	\addcontentsline{toc}{chapter}{Bibliography}
 	\bibliographystyle{unsrt} % Use the "unsrtnat" BibTeX style for formatting the Bibliography
 	\bibliography{sources} % The references (bibliography) information are stored in the file named "Bibliography.bib"
@@ -528,7 +529,7 @@ parskip=half			% Abstand zwischen Absätzen
 	%	THESIS CONTENT - APPENDICES
 	%----------------------------------------------------------------------------------------
 	
-	
+	\phantomsection{}
 	\listoffigures % Write out the List of Figures
 	
 	\listoftables % Write out the List of Tables
@@ -545,13 +546,23 @@ parskip=half			% Abstand zwischen Absätzen
 	\listofsymbols{ll} % Include a list of Abbreviations (a table of two columns)
 	{
 		\textbf{API} & \textbf{A}pplication \textbf{P}rogramming \textbf{I}nterface \\
-		\textbf{WMF} & \textbf{W}ebpack \textbf{M}odule \textbf{F}ederation \\
-		\textbf{WC} & \textbf{W}eb \textbf{C}omponent \\
 		\textbf{CDN} & \textbf{C}ontent \textbf{D}elivery \textbf{N}etwork \\
-		\textbf{KPI} & \textbf{K}ey \textbf{P}erformance \textbf{I}ndicator \\
+		\textbf{CLI} & \textbf{C}ommand \textbf{L}ine \textbf{I}nterface \\
+		\textbf{CSS} & \textbf{C}ascading \textbf{S}tyle \textbf{S}heets \\
 		\textbf{DOM} & \textbf{D}ocument \textbf{O}bject \textbf{M}odell \\
+		\textbf{ES} & \textbf{E}cma \textbf{S}cript \\
+		\textbf{HTML} & \textbf{H}yper \textbf{T}ext \textbf{M}arkup \textbf{L}anguage \\
+		\textbf{HTTP} & \textbf{H}yper \textbf{T}ext \textbf{T}ransfer \textbf{P}rotocol \\
+		\textbf{KPI} & \textbf{K}ey \textbf{P}erformance \textbf{I}ndicator \\
 		\textbf{PoP} & \textbf{P}oint \textbf{o}f \textbf{P}resence \\
 		\textbf{RTT} & \textbf{R}ound \textbf{T}rip \textbf{T}ime \\
+		\textbf{SSL} & \textbf{S}ecure \textbf{S}ockets \textbf{L}ayer \\
+		\textbf{TCP} & \textbf{T}ransport \textbf{C}ontrol \textbf{P}rotocol \\
+		\textbf{TLS} & \textbf{T}ransport \textbf{L}ayer \textbf{S}ecurity \\
+		\textbf{UI} & \textbf{U}ser \textbf{I}nterface \\
+		\textbf{URL} & \textbf{U}niform \textbf{R}esource \textbf{L}ocator \\
+		\textbf{WC} & \textbf{W}eb \textbf{C}omponent \\
+		\textbf{WMF} & \textbf{W}ebpack \textbf{M}odule \textbf{F}ederation \\
 	}
 	
 	\appendix % Cue to tell LaTeX that the following 'chapters' are Appendices
