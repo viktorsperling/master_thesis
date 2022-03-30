@@ -29,12 +29,12 @@ This standard of Web Components provides an API via which new HTML tags can be d
 Figure \ref{fig:same_wc_example} shows a simple micro frontend landscape with Luigi using Web Components. As displayed, both micro frontends are registering the same tag name \texttt{custom-element} using the \texttt{customElements} object. This object is a read-only property of the \texttt{Window} interface.
 The scenario shown will cause a  \texttt{DOMException}, making it impossible to register the same tag twice.
 
-The registration of Web Components follows the \textit{"first come, first serve"} principle: The first micro frontend to register a tag name defines this tag and cannot be overwritten without reloading the page.\cite{mdn_web_docs_define}
+The registration of Web Components follows the \textit{"first come, first serve"} principle: The first micro frontend to register a tag name defines this tag and cannot be overwritten without reloading the page \cite{mdn_web_docs_define}.
 Therefore, this standard is crucial for avoiding redundancies in micro frontend landscapes, by making it impossible to register same components with the same tag name.
 
 \section{Shadow DOM}
 
-The DOM (Document Object Model) represents the elements of a markup document in a tree-like structure, consisting of connected nodes. The commonly used markup language for websites is HTML. \cite{wc_shadow_dom}
+The DOM (Document Object Model) represents the elements of a markup document in a tree-like structure, consisting of connected nodes. The commonly used markup language for websites is HTML  \cite{wc_shadow_dom}.
 The Shadow DOM is also a DOM, but is attached to the actual DOM of the document. Underneath it, elements can be defined in the same way as they are in the regular DOM. The difference becomes apparent during the rendering of the document, when a page is loaded. The Shadow DOM elements are rendered separately from the DOM it is attached to.\cite{simon_thesis}
 
 To understand the relationship between the two connected DOMs, the following terms have to be explained.
@@ -101,7 +101,7 @@ The Shadow DOM, even though separated from the DOM, has an attribute via which i
 	\item \textbf{closed}
 \end{itemize}
 
-This behavior is not meant to be used as a measure of security, since it can be overwritten. The Shadow DOM encapsulates every part of its DOM elements, that means HTML, CSS and JavaScript. The \texttt{document} object, available during runtime, remains the same for the regular DOM and for the Shadow DOM, though. Therefore, each configuration done in the Shadow DOM via scripts can be easily overwritten from any other script in the document, thus the mode can be changed even if initially set to \texttt{closed}.\cite{shadow_dom_encapsulation} For Web Components, in particular, it is not recommended to use this mode at all, since it would make them less flexible for end users.\cite{wc_shadow_dom_google}
+This behavior is not meant to be used as a measure of security, since it can be overwritten. The Shadow DOM encapsulates every part of its DOM elements, that means HTML, CSS and JavaScript. The \texttt{document} object, available during runtime, remains the same for the regular DOM and for the Shadow DOM, though. Therefore, each configuration done in the Shadow DOM via scripts can be easily overwritten from any other script in the document, thus the mode can be changed even if initially set to \texttt{closed} \cite{shadow_dom_encapsulation}. For Web Components, in particular, it is not recommended to use this mode at all, since it would make them less flexible for end users \cite{wc_shadow_dom_google}.
 
 For the context of this thesis, the Shadow DOM standard offers means to individualize the registered Web Components of a landscape. It can be used to apply customizations or add individual event listeners to specific components. This comes with a trade-off, though. The level of isolation increases through the encapsulation of code elements between the single components. This increase makes it difficult to guarantee that e.g. the same CSS class is not rendered in multiple different Shadow DOMs. Even though the redundancies would occur on code level and not on dependency level, they are redundancies nonetheless.
 
