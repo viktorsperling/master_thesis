@@ -5,7 +5,7 @@
 \lhead{Chapter 7. \emph{Presentation of the results}}
 
 In this chapter it will be explained how and which data was collected using the prototype, and which metrics were defined for comparison.
-Afterwards the landscapes will be compared, using the defined metrics as KPIs. The conclusion based on the results will be given in chapter \ref{Chapter8}.
+Afterwards, the landscapes will be compared, using the defined metrics as KPIs. The conclusion based on the results will be given in chapter \ref{Chapter8}.
 
 \section{Basis of the experiment} 
 
@@ -13,8 +13,8 @@ This section will contain information about the environment in which the experim
 
 \subsection{Testing hardware and environment}
 
-It has to be mentioned, that certain aspects of the environment were not maintained by the tester and are therefore out of reach for influence or configuration. Nonetheless, they are mentioned here for the sake of reproducibility.
-The testing hardware and environment available, were the following:
+It has to be mentioned, that certain aspects of the environment were not maintained by the tester and are therefore out of scope for influence or configuration. Nonetheless, they are mentioned here for the sake of reproducibility.
+The following hardware and environment was used for testing:
 
 \begin{enumerate}
 	\item \textbf{Laptop:}
@@ -42,11 +42,11 @@ The testing hardware and environment available, were the following:
 	\item \textbf{CDN:} Unpkg.com \footnote{This part of the environment was explained in chapter \ref{Chapter6}}
 \end{enumerate}
 
-Additionally to the specified hardware specs, version 1.18.1 of the \texttt{@luigi-project} was used. This dependency enables the Luigi framework and is therefore, used in every implemented version of the prototype.
+In addition to the specified hardware specs, version 1.18.1 of the \texttt{@luigi-project} was used. This dependency enables the Luigi framework and is therefore used in every implemented version of the prototype.
 
 \subsection{Testing process}
 
-Since multiple Nodes were implemented, a unified process was required to collect comparable data. The BPMN diagram \ref{fig:data_collection_process_har}, contains the process steps in detail.
+Since multiple Nodes were implemented, a unified process was required to collect comparable data. The BPMN diagram \ref{fig:data_collection_process_har} contains the process steps in detail.
 
 \begin{figure}[!h]
 	\centering
@@ -55,79 +55,105 @@ Since multiple Nodes were implemented, a unified process was required to collect
 	\label{fig:data_collection_process_har}
 \end{figure}
 
-As it can be seen in \ref{fig:data_collection_process_har}, there were actually two processes executed to collect data. The first one was with caching disabled, the second had it enabled. The intention behind it, was to collect data for an average initial loading time for the picked site, therefore the resources must not be cached. 
-The second process was used to gather information about caching behavior in general. Since, each Node basically contains the same views, the browser should be able to pull already loaded resources from the cache instead via the network. To showcase this behavior and prove the performance gain through caching, this data was gathered too.
-Each process was executed 5 times, therefore 10 HTTP Archive (\texttt{.har}) files were generated per Node. These \texttt{.har} files were then transformed into \texttt{.csv} files using a self-developed script. 
+As it can be seen in \ref{fig:data_collection_process_har}, there were actually two processes executed to collect data. 
+The first one had caching disabled, the second had it enabled. 
+The intention behind the first process was to collect data for an average initial loading time for the picked site, therefore the resources must not be cached. 
+The second process was used to gather information about caching behavior in general. 
+Since each Node basically contains the same views, the browser should be able to pull already loaded resources from the cache, instead via the network. 
+To showcase this behavior and prove the performance gain through caching, this data was gathered too.
+Each process was executed 5 times, therefore 10 HTTP Archive (\texttt{.har}) files were generated per Node. 
+These \texttt{.har} files were then transformed into \texttt{.csv} files using a self-developed script. 
 
-Additionally to the \texttt{.har} files a website performance report was collected, using the Lighthouse tool embedded in the Google Chrome browser. Such a report, provides information about how much of the imported bytes are actually used by a web application, distinguished by resource URL.
+Additionally to the \texttt{.har} files a website performance report was collected, using the Lighthouse tool embedded in the Google Chrome browser. Such a report provides information about how much of the imported bytes are actually used by a web application, distinguished by resource URL.
 
 In summary, for testing:
 
 \begin{itemize}[noitemsep]
 	\item 12 Nodes were developed
-	\item Each Node was loaded 10 times, 5 times with cache enabled and 5 with cache disabled
+	\item Each Node was loaded 10 times, 5 times with cache enabled and 5 times with cache disabled
 	\item Each loading of a Node is represented by a HTTP Archive file
 	\item All in all, the testing procedures were executed 120 times overall
-	\item Generating 120 \texttt{.har} files
-	\item Which then, were aggregated and transformed into 12 \texttt{.csv} files
-	\item Which then again, were copied into one Excel file, where the data was analyzed
-	\item In addition 12 Lighthouse reports where collected (one per Node) and added to the excel
+	\item 120 \texttt{.har} files were generated
+	\item These, were aggregated and transformed into 12 \texttt{.csv} files
+	\item These, were copied into one Excel file, where the data was analyzed
+	\item In addition, 12 Lighthouse reports where collected (one per Node) and added to the excel
 \end{itemize}
 
-The reason why this testing procedure was chosen, was, due to the low variety in the parameters when a Node is loaded. First, it was tested if the parameters would vary when a Node is loaded up to 1000 times, but that case did not occur. Due the constant resource sizes and stable network, not many fluctuations could be observed. Only when changes on technological level were made (e.g. usage of cache, network outage) fluctuations started to appeared. But other than that, it was observed that the results were stable. Therefore, it was decided, that loading a Node 10 times does suffice for the experiment.
+The reason why this testing procedure was chosen, was due to the low variety in the parameters when a Node is loaded. First, it was tested if the parameters would vary when a Node is loaded up to 1000 times, but that was not the case. Due the constant resource sizes and stable network, not many fluctuations could be observed. Only when changes on technological level were made (e.g. usage of cache, network outage), fluctuations started to appear. But, other than that, it was observed that the results were stable. Therefore, it was decided that loading a Node 10 times would suffice for the experiment.
 
-After the collection process, another self-developed script was used to aggregate all the gathered data into one single file. This file, was later used to define and calculate the metrics, which are described next.
+After the collection process, another self-developed script was used to aggregate all the gathered data into one single file. This file was later used to define and calculate the metrics, which are described next.
 
 \subsection{Defined metrics}
 
-The central file, containing all the data, was split into separate sheets in which the metrics for each micro frontend were calculated. The parameters for calculation were:
+The central file, containing all data, was split into separate sheets in which the metrics for each micro frontend were calculated. The parameters for calculation were:
 
-\begin{itemize}
-	\item \textbf{connection} - This is an ID, with which each opened TCP connection is tagged by the browser. This value can be an indicator for the parallelity of the requests. Since the release of HTTP/2, several requests can be handled by a server via the same TCP connection, reducing the time costs for TCP handshakes. It has to be considered, that the application requesting the sources can not implement this HTTP/2 feature. It has to be enabled on server-side and by the browser, which is already the case for most modern browsers \cite{http2}. As of writing this transcript, surge.sh, the web server platform, onto which the prototypes are deployed, does not support HTTP/2.
+\begin{description}
+	\item[connection:] This is an ID with which each opened TCP connection is tagged by the browser. This value can be an indicator for the parallelity of the requests. Since the release of HTTP/2, several requests can be handled by a server via the same TCP connection, reducing the time costs for TCP handshakes. It has to be considered that the application requesting the sources can not implement this HTTP/2 feature. It has to be enabled on server-side and by the browser, which is already the case for most modern browsers \cite{http2}. As of today, surge.sh, the web server platform onto which the prototypes are deployed, does not support HTTP/2.
 	
-	\item \textbf{loadedFromCache} - This is a string value with three possible characteristics, \textit{not loaded from cache, disk} or \textit{memory}, whereas \textit{disk} and \textit{memory} are semantically the same. This value explains, from where the resource was loaded. Either via the network from a remote server or from the local cache. It helps indicating the caching behavior of bundled resources, in comparison with resources loaded from a unified URL (e.g. a CDN). 
+	\item[loadedFromCache:] This is a string value with three possible characteristics, \textit{not loaded from cache, disk} or \textit{memory}, whereas \textit{disk} and \textit{memory} are semantically the same. This value explains from where the resource was loaded. Either via the network from a remote server or from the local cache. It helps to indicate the caching behavior of bundled resources, in comparison with resources loaded from a unified URL (e.g. a CDN). 
 	
-	\item \textbf{startedDateTime} - This is a time stamp given to each request, marking its starting time in a DateTime format. This value can serve as an indicator for parallelity, since multiple TCP connections can be opened at the same time. 
-		
-	\item \textbf{requestUrl} - This is a string value, containing the request URL used by the browser to load the resource. This value is mainly categorizing the calculation results, since neither \textit{connection} nor \textit{pageRef} are valid options to distinguish the loaded resources of a website. 
-			
-	\item \textbf{responseContentSize} - This number value is the byte size of the loaded resource.
+	\item[startedDateTime:] This is a time stamp given to each request, marking its starting time in a DateTime format. This value can serve as an indicator for parallelity, since multiple TCP connections can be opened at the same time. 
 	
-	\item \textbf{timeInMs} - This value represents the RTT of the request in milliseconds. 
-\end{itemize}
+	\item[requestUrl:] This is a string value, containing the request URL used by the browser to load the resource. This value mainly categorizes the calculation results, since neither \textit{connection} nor \textit{pageRef} are valid options to distinguish the loaded resources of a website. 
+	
+	\item[responseContentSize:] This number value is the byte size of the loaded resource.
+	
+	\item[timeInMs:] This value represents the RTT of the request in milliseconds. 
+\end{description}
 
 There were further parameters, available in the \texttt{.har} files, but those could not be used for the calculation. 
-Based on the given metrics from the \texttt{.har} files, following KPIs were calculated.
+Based on the given metrics from the \texttt{.har} files, the following KPIs were calculated.
 
-\begin{itemize}
-	\item \textbf{Avg. Content Size} - Numerical value calculated by averaging the \textbf{responseContentSize} values of all the websites resources
-	\item \textbf{Avg. Time in MS Loaded values} - Numerical value, calculated by averaging the \textbf{timeInMs} values of all the websites resources
-	\item \textbf{Occurrences Connection Duplicates} - Numerical value to represent parallelity, by counting the amount of duplicate/multiple occurring \textbf{connection} values
-	\item \textbf{Connection IDs} - List of all \textbf{connection} characteristics for the website 
-	\item \textbf{Connection IDs occurrence} - Amount of how often the connection occurred during the loading of the website
-	\item \textbf{Parallel start time} - Numerical value, calculated by counting reoccurring \textbf{startedDateTime} values
-	\item \textbf{Avg. Response content size per Loading Type} - Numerical value, calculated by averaging the \textbf{responseContentSize}, differentiated by the characteristics of the \textbf{loadedFromCache} property
-	\item \textbf{URLs loaded} - List of all unique \textbf{requestUrl} values
-	\item \textbf{Avg. Response Time per URL loaded in MS} - Numerical value, representing the average loading time of each loaded resource URL of the website
-	\item \textbf{Avg. Response Size per URL loaded} - Numerical value, representing the average loading byte size of each resource URL
-	\item \textbf{Avg. Response Size per URL loaded via network} - Numerical value, calculated by averaging the \textbf{responseContentSize} differentiated by the \textbf{requestUrl} for all resources with the \textbf{loadedFromCache} value of \textit{not loaded from cache}. For the test scenarios with cache disabled, this value equals the \textbf{Avg. Response Size per URL loaded} KPI
-	\item \textbf{Avg. Response Size per URL loaded from Disk} - Numerical value, calculated by averaging the \textbf{responseContentSize} differentiated by the \textbf{requestUrl}, for all resources with the \textbf{loadedFromCache} value of \textit{disk}
-	\item \textbf{Avg. Response Size per URL loaded from Memory} - Numerical value, calculated by averaging the \textbf{responseContentSize} differentiated by the \textbf{requestUrl}, for all resources with the \textbf{loadedFromCache} value of \textit{memory}
-\end{itemize}
+\begin{description}
+	\item[Avg. Content Size:] Numerical value calculated by averaging the \textbf{responseContentSize} values of all the websites resources.
+	
+	\item[Avg. Time in MS Loaded values:] Numerical value, calculated by averaging the \textbf{timeInMs} values of all the websites resources.
+	
+	\item[Occurrences Connection Duplicates:] Numerical value to represent parallelity, by counting the number of duplicate/multiple occurring \textbf{connection} values.
+	
+	\item[Connection IDs:] List of all \textbf{connection} characteristics for the website.
+	
+	\item[Connection IDs occurrence:] Number of times the connection occurred during the loading of the website.
+	
+	\item[Parallel start time:] Numerical value, calculated by counting reoccurring \textbf{startedDateTime} values.
+	
+	\item[Avg. Response content size per Loading Type:] Numerical value, calculated by averaging the \textbf{responseContentSize}, differentiated by the characteristics of the \textbf{loadedFromCache} property.
+	
+	\item[URLs loaded:] List of all unique \textbf{requestUrl} values.
+	
+	\item[Avg. Response Time per URL loaded in MS:] Numerical value, representing the average loading time of each loaded resource URL of the website.
+	
+	\item[Avg. Response Size per URL loaded:] Numerical value, representing the average loading byte size of each resource URL.
+	
+	\item[Avg. Response Size per URL loaded via networkbel:] - Numerical value, calculated by averaging the \textbf{responseContentSize} differentiated by the \textbf{requestUrl} for all resources with the \textbf{loadedFromCache} value of \textit{not loaded from cache}. For the test scenarios with cache disabled, this value equals the \textbf{Avg. Response Size per URL loaded} KPI.
+	
+	\item[Avg. Response Size per URL loaded from Disk:] Numerical value, calculated by averaging the \textbf{responseContentSize} differentiated by the \textbf{requestUrl}, for all resources with the \textbf{loadedFromCache} value of \textit{disk}.
+	
+	\item[Avg. Response Size per URL loaded from Memory:] Numerical value, calculated by averaging the \textbf{responseContentSize} differentiated by the \textbf{requestUrl}, for all resources with the \textbf{loadedFromCache} value of \textit{memory}.
+\end{description}
 
-The main indicators for, if a technology does successfully reduce redundant libraries in a micro frontend landscapes, were the \textbf{Avg. Time in MS Loaded values} and \textbf{Avg. Content Size}. Therefore, the goal was to optimize these two values. If, by using a technology, these two values decreased, it was considered to be a first success. But for the general evaluation, further aspects were put into consideration. KPIs for those aspects, such as e.g. the complexity of the implemented technology, were hard to measure.  A metric like this, must not be ignored for the context of this transcript, since the benefit of a technology, highly depends on it. Thus, the subjective estimation and impression of the used technologies by the author, is part of the conclusion in chapter \ref{Chapter8}.
+The main indicators for whether a technology successfully reduces redundant libraries in a micro frontend landscapes were the \textbf{Avg. Time in MS Loaded values} and \textbf{Avg. Content Size}. 
+Therefore, the goal was to optimize these two KPIs. If, by using a technology, these two values decreased, it was considered to be a first success. 
+But, for the general evaluation, further aspects were put into consideration. 
+KPIs for those aspects, such as e.g. the complexity of the implemented technology, were hard to measure.  
+A metric like this must not be ignored for the context of this transcript, since the benefit of a technology highly depends on it.
+Thus, the subjective estimation and impression of the used technologies by the author is part of the conclusion in chapter \ref{Chapter8}.
 
-Statistical values, like the median were calculated, but not included in the conclusion, since the meaningfulness of those values was not applicable for the goal. The package size does affect loading time of a resources, that is a matter of fact. But since the packages are application specific, no general statement can be drawn from the median of this parameters. Goal was, to showcase that through the usage of one of the three technologies, the loading times and loaded bytes are reduced on average and not what package is not loaded or loaded faster.
+Statistical values, like the median ,were calculated, but not included in the conclusion, since the meaningfulness of those values was not applicable for the goal. The package size does affect loading time of a resources, that is a matter of fact. But since the packages are application-specific, no general statement can be drawn from the median of this parameters. The goal was to showcase that through the usage of one of the three technologies, the loading times and loaded bytes are reduced in general, not to show what package is not loaded or loaded faster.
 
-In the following sections the results of the introduced metrics for each landscape are showcased. This display is distinguished by the fact, if the collected data was with caching enabled or not. Additionally to the metrics, the individual graphs for the landscapes are referred to in the appendixes \ref{appendix1}, \ref{appendix2} and \ref{appendix3}.
+In the following sections, the results of the introduced metrics for each landscape are showcased. 
+The tables shown, are separated whether or not, the data was collected with caching enabled or disabled. 
+In addition, to the shown metrics, the graphs and Excel tables for the landscapes are referred to in the archive.
+A table of contents of the archive is available in appendix \ref{appendix1}.
 
 \section{CDN/NPM KPI results}
 
-This section will introduce, the KPI results of the CDN/NPM prototype. It is split into two subsections, for a better comparison of the two technologies.
+This section will introduce the KPI results of the CDN/NPM prototype. It is split into two subsections for a better comparison of the two technologies.
 
 \subsection{Implementation with NPM}
 
-The table \ref{tab:cdn_result_table} contains the results for the implemented Nodes with a regular bundler and a package manager, namely NPM. Certain metrics are not added to the table for readability, but a graphical representation can be found in \ref{appendix1}.
+Table \ref{tab:cdn_result_table} contains the results for the implemented Nodes with a regular bundler and a package manager, namely NPM. 
+Certain metrics are not added to the table for readability, but a graphical representation can be found in in the archive.
 
 \scriptsize
 \setlength{\mycolwidth}{\dimexpr \textwidth/5 - 2\tabcolsep}
@@ -191,8 +217,10 @@ The table \ref{tab:cdn_result_table} contains the results for the implemented No
 \end{longtable}
 
 \normalsize
-The results shown in table \ref{tab:cdn_result_table} were collected without caching enabled. This explains for instance, why no resources were loaded from cache and therefore, the values for the \textit{memory} or \textit{disk} characteristics are missing.
-The main takeaway from these results, is an average initial loading time for the Nodes, which differ depending on the framework. It can also be seen, that even though less resources are loaded via URLs by the VueJS Nodes, they have a longer loading time compared to the Angular ones.
+The results shown in table \ref{tab:cdn_result_table} were collected without caching enabled. 
+This explains for instance, why no resources were loaded from cache and therefore, why the values for the \textit{memory} or \textit{disk} characteristics are missing.
+The main takeaway from these results is an average initial loading time for the Nodes, which differs depending on the framework. 
+It can also be seen that even though fewer resources are loaded via URLs by the Vue.js Nodes, they have a longer loading time compared to the Angular ones.
 
 \scriptsize
 \setlength{\mycolwidth}{\dimexpr \textwidth/5 - 2\tabcolsep}
@@ -257,13 +285,15 @@ The main takeaway from these results, is an average initial loading time for the
 \end{longtable}
 
 \normalsize
-The results of table \ref{tab:cdn_result_table_caching} show, the effect caching has on the performance of a site. The average loading time of the site decreases, as do the opened TCP connections.
+The results of table \ref{tab:cdn_result_table_caching} show the effect caching has on the performance of a site. 
+The average loading time of the site decreases, as do the opened TCP connections.
 
-Both environments were implemented using a regular bundler and therefore it can not be ensured that redundant libraries were not loaded.
+Both environments were implemented using a regular bundler, it can therefore not be ensured that redundant libraries were not loaded.
 
 \subsection{Implementation with Unpkg.com}
 
-Table \ref{tab:cdn_result_table_unpkg} contains the results for the implemented Nodes with a use of a public CDN, namely Unpkg.com. Certain metrics are not added to the table for readability, but a graphical representation can be found in \ref{appendix1}. 
+Table \ref{tab:cdn_result_table_unpkg} contains the results for the implemented Nodes with a use of a public CDN, namely Unpkg.com. 
+Certain metrics are not added to the table for readability, but a graphical representation can be found in archive. 
 
 \scriptsize
 \setlength{\mycolwidth}{\dimexpr \textwidth/5 - 2\tabcolsep}
@@ -328,8 +358,12 @@ Table \ref{tab:cdn_result_table_unpkg} contains the results for the implemented 
 \end{longtable}
 
 \normalsize
-The data shown in table \ref{tab:cdn_result_table_unpkg} are again collected without caching enabled. An approximate estimation for the initial loading times can be drawn from this. It is made visible, that the VueJS environment takes longer to load for less content. A similar behavior was observed in the NPM implementations.
-Nonetheless it is an improvement in performance compared to the NPM counterparts for both Nodes. The trade-off of this technology is that single component resources, like a button or a table, were imported via script tags one by one, thus the increase in loaded URLs.
+The data shown in table \ref{tab:cdn_result_table_unpkg} has again been collected without caching enabled.
+An approximate estimation for the initial loading times can be drawn from this. 
+It becomes apparent that the Vue.js environment takes longer to load for less content. 
+A similar behavior was observed in the NPM implementations.
+Nonetheless, it is an improvement in performance compared to the NPM counterparts for both Nodes. 
+The trade-off of this technology is that single component resources, like a button or a table, had to be imported via script tags one by one, thus the increase in loaded URLs.
 
 \scriptsize
 \setlength{\mycolwidth}{\dimexpr \textwidth/5 - 2\tabcolsep}
@@ -394,7 +428,7 @@ Nonetheless it is an improvement in performance compared to the NPM counterparts
 \end{longtable}
 
 \normalsize
-A similar development can be observed in table \ref{tab:cdn_result_table_unpkg_cache} as previously. Primarily with caching enabled, the average loading times decrease, secondly the amount of loaded resources from cache increases significantly and lastly the Angular environments show shorter average loading times, despite more resources were requested via URL by them.
+A similar development can be observed in table \ref{tab:cdn_result_table_unpkg_cache}. Firstly, with caching enabled, the average loading times decrease. Secondly, the number of loaded resources from cache increases significantly, and lastly, the Angular environments show shorter average loading times, despite more resources being requested via URL by them.
 
 \section{Web Components and WMF landscapes}
 
@@ -463,7 +497,7 @@ Table \ref{tab:wmf_compound} shows the KPIs of those environments.
 \end{longtable}
 
 \normalsize
-As the data in table \ref{tab:wmf_compound} shows, the initial loading time for the Web Component environments is significantly lower compared to the WMF counterpart. Also the amount of loaded resources differs. This is due to the fact, that WMF has to be used in combination with the Webpack 5 bundler. Therefore, certain resources might be loaded several times, if not configured as shared dependencies in the Module Federation. 
+As the data in table \ref{tab:wmf_compound} shows, the initial loading time for the Web Component environments is significantly lower compared to the WMF counterpart. Also the number of loaded resources differs. This is due to the fact that WMF has to be used in combination with the Webpack 5 bundler. Therefore, certain resources might be loaded several times, if not configured as shared dependencies in the Module Federation. 
 Table \ref{tab:wmf_compound_cache} showcases the same landscapes, but with caching enabled.
 
 \scriptsize
@@ -528,15 +562,22 @@ Table \ref{tab:wmf_compound_cache} showcases the same landscapes, but with cachi
 \end{longtable}
 
 \normalsize
-The general results appear to be similar for both cases of caching en- or disabled. The only KPI in favor of Web Components is the average content size loaded. Additionally, compared to the Web Component Nodes the WMF ones have little to none cached resources. 
+The general results appear to be similar for both cases of caching en- or disabled. The only KPI in favor of Web Components is the average content size loaded. 
+Additionally, compared to the Web Component Nodes the WMF Nodes cache little to none resources. 
 
-To add further parameters into the decision making process for the final conclusion, the Lighthouse tool was used. Through it, more information about the prototypes was gathered. The next section will showcase and explain the analysis done.
+To add further parameters into the decision making process for the final conclusion, the Lighthouse tool was used. 
+Through it, more information about the prototypes was gathered. 
+The next section will showcase and explain how the analysis was done.
 
 \section{Lighthouse analysis}
 
-For the analysis, it was put into consideration that the reports are application specific. But since the prototypes are considered to representative, it is assumed the a similar results can be expected in general from other micro frontend landscapes. Exception are not excluded from this assumption.
+For the Lighthouse analysis, it was put into consideration that the reports are application-specific. 
+But since the prototypes are considered to be representative, it is assumed that similar results can be expected in general from other micro frontend landscapes. 
+Exception are not excluded from this assumption.
 
-The given data was gathered based on the previously introduced prototypes and their Nodes. It contains the analysis of the imported resources and how much of the corresponding imports were not used by the application, measured in bytes. First a tabular view is provided, following by the corresponding graph.
+The given data was gathered based on the previously introduced prototypes and their Nodes. 
+It contains the analysis of the imported resources and how much of the corresponding imports were not used by the application, measured in bytes. 
+First, a tabular view is provided, followed by the corresponding graph.
 
 \newpage
 
@@ -611,9 +652,16 @@ The given data was gathered based on the previously introduced prototypes and th
 %\end{figure}
 
 \normalsize
-The shown data in table \ref{tab:lighthouse_used_report} and figure \ref{fig:unsed_imported_1} is highly application dependent. As these landscapes are considered to be generally representative, a display in efficiency can be drawn from the charts.
-The Unpkg CDN Nodes show a high unused bytes ratio. But it has to be taken into account, that the overall imported sum of bytes is lower to the NPM counterparts, since only the required resources were requested from the CDN.
-For the WMF Nodes, it can be argued, that due to the bundling with Webpack, a lot of bytes were imported but only a few of them were not used. This can be explained through how the Module Federation works, since every configured shared resource is checked if it should be shared or not.
-Web Components have the lowest unused bytes ratio of all the Nodes. This might be due to the fact, that no UI framework was used for development. Therefore, no unnecessary framework features are present in this landscape.
+The data in table \ref{tab:lighthouse_used_report} and figure \ref{fig:unsed_imported_1} is highly application-dependent. 
+As these landscapes are considered to be generally representative, a display in efficiency can be drawn from the charts.
+The Unpkg CDN Nodes show a high ratio of unused bytes. 
+However, it has to be taken into account that the overall imported sum of bytes is lower compared to the NPM counterparts, since only the required resources were requested from the CDN.
+For the WMF Nodes, it can be argued that due to the bundling with Webpack, a lot of bytes were imported and only a few of them were not used. 
+This can be explained by how the Module Federation was configured for this prototype. 
+To simulate a multi-version landscape, a rather restrictive WMF configuration was required. 
+Therefore, the majority of the bundled dependencies is actually used by the modules in those landscapes.
+Web Components have the lowest unused bytes ratio of all the Nodes. 
+This might be due to the fact that no UI framework was used for development. 
+Therefore, no unnecessary framework features are present in this landscape.
 
-The following chapter will be concluding the displayed data. Detailed tables and information can be found in the appendixes \ref{appendix1}, \ref{appendix2} and \ref{appendix3}.
+The following chapter will draw conclusions based on the displayed data. Detailed tables, code examples and further information can be found in the archive.
