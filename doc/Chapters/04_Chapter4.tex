@@ -4,7 +4,7 @@
 
 \lhead{Chapter 4. \emph{Web Components}}
 
-Another option to address the issue of redundancies are Web Components. Consisting of the following four standards, they provide reusable elements encapsulated in HTML tags.\cite{mdn_web_docs}
+Another option to address the issue of redundancies are WCs. Consisting of the following four standards, they provide reusable elements encapsulated in HTML tags.\cite{mdn_web_docs}
 
 \begin{itemize}[noitemsep]
 	\item Custom Elements
@@ -13,11 +13,11 @@ Another option to address the issue of redundancies are Web Components. Consisti
 	\item ES Modules
 \end{itemize}
 
-The following sections will introduce the four standards of Web Components with their functions and showcase what purpose they can serve for the context of this thesis.
+The following sections will introduce the four standards of WCs with their functions and showcase what purpose they can serve for the context of this thesis.
 
 \section{Custom Elements}
 
-This standard of Web Components provides an API via which new HTML tags can be defined and registered by the \texttt{CustomElementRegistry}. Since a single tag name can only be registered once, multiple registrations of the same element would lead to an exception, thereby making already registered tags reusable for the whole micro frontend landscape without reloading the code of the registered element.\cite{google_reusable_wcs}
+This standard of WCs provides an API via which new HTML tags can be defined and registered by the \texttt{CustomElementRegistry}. Since a single tag name can only be registered once, multiple registrations of the same element would lead to an exception, thereby making already registered tags reusable for the whole micro frontend landscape without reloading the code of the registered element.\cite{google_reusable_wcs}
 
 \begin{figure}[!h]
 	\centering
@@ -26,10 +26,10 @@ This standard of Web Components provides an API via which new HTML tags can be d
 	\label{fig:same_wc_example}
 \end{figure}
 
-Figure \ref{fig:same_wc_example} shows a simple micro frontend landscape with Luigi using Web Components. As displayed, both micro frontends are registering the same tag name \texttt{custom-element} using the \texttt{customElements} object. This object is a read-only property of the \texttt{Window} interface.
+Figure \ref{fig:same_wc_example} shows a simple micro frontend landscape with Luigi using WCs. As displayed, both micro frontends are registering the same tag name \texttt{custom-element} using the \texttt{customElements} object. This object is a read-only property of the \texttt{Window} interface.
 The scenario shown will cause a  \texttt{DOMException}, making it impossible to register the same tag twice.
 
-The registration of Web Components follows the \textit{"first come, first serve"} principle: The first micro frontend to register a tag name defines this tag and cannot be overwritten without reloading the page \cite{mdn_web_docs_define}.
+The registration of WCs follows the \textit{"first come, first serve"} principle: The first micro frontend to register a tag name defines this tag and cannot be overwritten without reloading the page \cite{mdn_web_docs_define}.
 Therefore, this standard is crucial for avoiding redundancies in micro frontend landscapes, by making it impossible to register same components with the same tag name.
 
 \section{Shadow DOM}
@@ -101,9 +101,9 @@ The Shadow DOM, even though separated from the DOM, has an attribute via which i
 	\item \textbf{closed}
 \end{itemize}
 
-This behavior is not meant to be used as a measure of security, since it can be overwritten. The Shadow DOM encapsulates every part of its DOM elements, that means HTML, CSS and JavaScript. The \texttt{document} object, available during runtime, remains the same for the regular DOM and for the Shadow DOM, though. Therefore, each configuration done in the Shadow DOM via scripts can be easily overwritten from any other script in the document, thus the mode can be changed even if initially set to \texttt{closed} \cite{shadow_dom_encapsulation}. For Web Components, in particular, it is not recommended to use this mode at all, since it would make them less flexible for end users \cite{wc_shadow_dom_google}.
+This behavior is not meant to be used as a measure of security, since it can be overwritten. The Shadow DOM encapsulates every part of its DOM elements, that means HTML, CSS and JavaScript. The \texttt{document} object, available during runtime, remains the same for the regular DOM and for the Shadow DOM, though. Therefore, each configuration done in the Shadow DOM via scripts can be easily overwritten from any other script in the document, thus the mode can be changed even if initially set to \texttt{closed} \cite{shadow_dom_encapsulation}. For WCs, in particular, it is not recommended to use this mode at all, since it would make them less flexible for end users \cite{wc_shadow_dom_google}.
 
-For the context of this thesis, the Shadow DOM standard offers means to individualize the registered Web Components of a landscape. It can be used to apply customizations or add individual event listeners to specific components. This comes with a trade-off, though. The level of isolation increases through the encapsulation of code elements between the single components. This increase makes it difficult to guarantee that e.g. the same CSS class is not rendered in multiple different Shadow DOMs. Even though the redundancies would occur on code level and not on dependency level, they are redundancies nonetheless.
+For the context of this thesis, the Shadow DOM standard offers means to individualize the registered WCs of a landscape. It can be used to apply customizations or add individual event listeners to specific components. This comes with a trade-off, though. The level of isolation increases through the encapsulation of code elements between the single components. This increase makes it difficult to guarantee that e.g. the same CSS class is not rendered in multiple different Shadow DOMs. Even though the redundancies would occur on code level and not on dependency level, they are redundancies nonetheless.
 
 \section{HTML Template}
 
@@ -134,6 +134,8 @@ class extends HTMLElement {
 
 It is important to note that the defined template in the listing is not rendered unless somehow included in a DOM (either Shadow DOM or the regular DOM), via JavaScript.
 
+\newpage
+
 \begin{lstlisting}[language=HTML5, caption=Definition and usage of the \texttt{slot} standard \cite{wc_html_template_slots}, label=list:slot_example,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
 <!-- Definition of the slot -->
 <p>
@@ -155,46 +157,46 @@ Other than the templates, slots are always rendered if included in the markup vi
 
 Even though slots are an HTML standard, just as templates, their support for browsers is not always guaranteed. This is due to the fact that compared to templates, it is a rather new standard.
 
-In combination, these two standards offer a way to define flexible, reusable markup code for Web Components.\cite{wc_html_template_slots} 
+In combination, these two standards offer a way to define flexible, reusable markup code for WCs.\cite{wc_html_template_slots} 
 
-When developing new Web Components for a micro frontend landscape, this aspect can be used to reduce repetitive HTML code elements by serving them a template. Similar to the Shadow DOM, this feature could be used to apply more flexibility to the Web Components by adding placeholders for customization. But, contrary to the Shadow DOM, this does not increase the level of isolation, since the rendered elements are not separated from the actual DOM. Redundant code snippets can be defined as reusable templates, thereby reducing the redundancies in the code itself.
+When developing new WCs for a micro frontend landscape, this aspect can be used to reduce repetitive HTML code elements by serving them a template. Similar to the Shadow DOM, this feature could be used to apply more flexibility to the WCs by adding placeholders for customization. But, contrary to the Shadow DOM, this does not increase the level of isolation, since the rendered elements are not separated from the actual DOM. Redundant code snippets can be defined as reusable templates, thereby reducing the redundancies in the code itself.
 
 \section{ES Modules}
 
-The last standard is not referred to by every source, but according to \cite{wc_specifications}, it is a stable part of the Web Components standard, via which JavaScript modules can be defined and reused by other documents.
-Thus the development of Web Components can be done in a modular way, making every component available to other documents, using the \texttt{type="module"} attribute.
+The last standard is not referred to by every source, but according to \cite{wc_specifications}, it is a stable part of the WCs standard, via which JavaScript modules can be defined and reused by other documents.
+Thus the development of WCs can be done in a modular way, making every component available to other documents, using the \texttt{type="module"} attribute.
 
 \begin{lstlisting}[language=HTML5, caption=Importing modular Java Script documents into another \cite{wc_specifications}, label=list:es_modules_example,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
 <!-- Import of the JS Module -->
 <script type="module" src="awesome-explosion.js"></script>
-	...
+	[...]
 <script type="module">
 	import 'awesome-explosion.js';
-	...
+	[...]
 	import {awesomeExplosion} from '@awesome-things/awesome-explosion';
 </script>
 
 <!-- Usage of the newly imported module -->
 <awesome-explosion>
-	...
+	[...]
 </awesome-explosion>
 \end{lstlisting}
 
 Listing \ref{list:es_modules_example} shows such an import. Assuming the \texttt{awesome-explosion.js} files contains the definition of an element called \texttt{awesome-explosion}, these lines enable the document to use this element.\cite{wc_specifications}
 
-This feature is essential for the developed prototype, since via this aspect the components are made available to the landscape. The used Web Components are served as ES Modules to the landscape and are imported similarly as shown in \ref{list:es_modules_example}. Therefore, this aspect enables a component to be imported in multiple micro frontends as a module.
+This feature is essential for the developed prototype, since via this aspect the components are made available to the landscape. The used WCs are served as ES Modules to the landscape and are imported similarly as shown in \ref{list:es_modules_example}. Therefore, this aspect enables a component to be imported in multiple micro frontends as a module.
 
 \section{Additional considerations}
 
-There is a niche case which can be raised as an objection, concerning the Web Component technology. Since the registration and, therefore, the naming of elements is up to the developers, it can occur that two components are registered under the same tag name, but the elements themselves are different. In this case, it is up to the developers to use the standard properly.
+There is a niche case which can be raised as an objection, concerning the WC technology. Since the registration and, therefore, the naming of elements is up to the developers, it can occur that two components are registered under the same tag name, but the elements themselves are different. In this case, it is up to the developers to use the standard properly.
 
-Assuming a common micro frontend landscape where every micro frontend is developed by independent, isolated teams, using heterogenic frameworks, the mentioned issue might occur. Two teams use Web Components and try to register different elements under the same tag name in the same landscape. This requires organizational interference on team level.
+Assuming a common micro frontend landscape where every micro frontend is developed by independent, isolated teams, using heterogenic frameworks, the mentioned issue might occur. Two teams use WCs and try to register different elements under the same tag name in the same landscape. This requires organizational interference on team level.
 
-One way would be to define a namespace for every team when creating Web Components e.g. Team 1 has the namespace \texttt{team-1}, causing a Web Component registered by the micro frontend of Team 1 to be named \texttt{team-1-tagname}. This could lead to redundancies, because there is no way of assuring that the \texttt{team-1-tagname} and \texttt{team-2-tagname} Web Components are not the same.\cite{wc_best_practices}
+One way would be to define a namespace for every team when creating WCs e.g. Team 1 has the namespace \texttt{team-1}, causing a WC registered by the micro frontend of Team 1 to be named \texttt{team-1-tagname}. This could lead to redundancies, because there is no way of assuring that the \texttt{team-1-tagname} and \texttt{team-2-tagname} WCs are not the same.\cite{wc_best_practices}
 
-A better way might be to assign a common Web Components library like \textbf{UI5 Web Components} \cite{ui5_wc_github}. That way, the registered elements are provided by the library and are limited to a set of unique registrable tags. If another micro frontend would try and register an already registered element of the library, a warning is thrown but no error occurs.
+A better way might be to assign a common WCs library like \textbf{UI5 Web Components} \cite{ui5_wc_github}. That way, the registered elements are provided by the library and are limited to a set of unique registrable tags. If another micro frontend would try and register an already registered element of the library, a warning is thrown but no error occurs.
 
-Most Web Component libraries also offer so-called scoping options. This feature is employed when versions of the used components differ between micro frontends. It enables the developers to customize their Web Components and register them under different tags. With this feature, it is made possible to register components according to their respective versions, by adding a version-specific suffix. That, of course, might lead to redundancies again. But it also reduces the dependency of the developer teams to always use the latest version of the component library or the first registered element in the landscape. \cite{ui5_webcomponents_scoping} \cite{openwc_scoping}
+Most WC libraries also offer so-called scoping options. This feature is employed when versions of the used components differ between micro frontends. It enables the developers to customize their WCs and register them under different tags. With this feature, it is made possible to register components according to their respective versions, by adding a version-specific suffix. That, of course, might lead to redundancies again. But it also reduces the dependency of the developer teams to always use the latest version of the component library or the first registered element in the landscape. \cite{ui5_webcomponents_scoping} \cite{openwc_scoping}
 
 
 

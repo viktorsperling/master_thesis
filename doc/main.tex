@@ -133,7 +133,7 @@ parskip=half			% Abstand zwischen Absätzen
 
 % JavaScript
 \lstdefinelanguage{JavaScript}{
-	morekeywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break,class,super,let,const,this,constructor,import,from,export,default,extends,render,for,of,@Component,@Input,implements,private,@ViewChild,await,type,string},
+	morekeywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break,class,super,let,const,this,constructor,import,from,export,default,extends,render,for,of,@Component,@Input,implements,private,@ViewChild,await,type,string,async},
 	morecomment=[s]{/*}{*/},
 	morecomment=[l]//,
 	morestring=[b]",
@@ -314,6 +314,9 @@ parskip=half			% Abstand zwischen Absätzen
 	runcolor=red,		    
 	urlcolor=cyan} 	        % Colors hyperlinks in blue - change to black if annoying
 \title{\ttitle} % Defines the thesis title - don't touch this
+
+\renewcommand{\labelenumii}{\theenumii}
+\renewcommand{\theenumii}{\theenumi.\arabic{enumii}.}
 
 \begin{document}
 	
@@ -571,8 +574,6 @@ parskip=half			% Abstand zwischen Absätzen
 	% Uncomment the lines as you write the Appendices
 	
 	\input{Appendices/Appendix1}
-	\input{Appendices/Appendix2}
-	\input{Appendices/Appendix3}
 	
 	\addtocontents{toc}{\vspace{2em}} % Add a gap in the Contents, for aesthetics
 	

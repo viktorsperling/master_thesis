@@ -23,11 +23,11 @@ This chapter will give further information about the CDN technology, how it func
 
 The basic architecture of a CDN can be split into three different building blocks.
 
-\begin{itemize}
-	\item \textbf{Point of Presence (PoPs)} - Strategically located data centers around the world. Their function is to reduce the round trip time of requests. PoPs usually consist of several caching servers.
-	\item \textbf{Caching servers} - These servers are located in different PoPs and serve the function of caching resources from the origin server. That way website loading times and bandwidth allocations are reduced.
-	\item \textbf{Hardware, like SSD/HDD and RAM} - Located in the cache servers, the purpose of this building block is to provide the necessary storage and computing capacity. Better hardware means faster computing time, which then again improves the overall performance of the designated caching server.
-\end{itemize}
+\begin{description}
+	\item[Point of Presence (PoPs):] Strategically located data centers around the world. Their function is to reduce the round trip time of requests. PoPs usually consist of several caching servers.
+	\item[Caching servers:] These servers are located in different PoPs and serve the function of caching resources from the origin server. That way website loading times and bandwidth allocations are reduced.
+	\item[Hardware, like SSD/HDD and RAM:] Located in the cache servers, the purpose of this building block is to provide the necessary storage and computing capacity. Better hardware means faster computing time, which then again improves the overall performance of the designated caching server.
+\end{description}
 
 Besides the above three building blocks, another one is crucial for the architecture of a CDN: The \textbf{origin server}. In a CDNs topology, the origin server can be compared to the center, or core. This is the server onto which the CDNs content is uploaded, synced with or distributed over the CDNs caching servers.\cite{cdn_origin_server}
 
@@ -47,22 +47,23 @@ It has to be mentioned that the geographical distribution in figure \ref{fig:cdn
 For a CDN to fulfill its purpose, four requirements have to be met. These are not only technical requirements, like necessary hardware, but rather concerning the general design of the CDN.
 The four pillars of CDN design are:
 
-\begin{itemize}
-	\item \textbf{Performance} - First and foremost, the CDN has to provide a benefit when it comes to website performance. When the usage of a CDN increases the loading time of a website, the negative effect on user experience can cause financial harm to the host.\cite{cdn_general}
-	\item \textbf{Scalability} - Since a cache server can serve multiple resources to different websites, it has to be able to handle traffic peaks. Without the aspect of scalability (either horizontal or vertical), this requirement cannot be met which would affect the CDNs performance.
-	\item \textbf{Reliability} -  A website host has to rely on the CDN to deliver the websites resources. An outage on CDN side would cause the same effect to the relying websites, resulting in additional losses for the designated hosts. Therefore, most CDN providers commit to 99.9\% availability in their service level agreements (SLAs).
-	\item \textbf{Responsiveness} -  The aspect of responsiveness targets the issue of synchronization inside the CDN. A CDN has to be capable to react to changes and distribute those to its PoPs over the globe accordingly. Otherwise inconsistencies could occur on the websites relying on the CDN. This is ensured through an automated pull mechanism, via which edge servers pull changes from the origin server.\cite{cdn_origin_server}
-\end{itemize}
+\begin{description}
+	\item[Performance:] First and foremost, the CDN has to provide a benefit when it comes to website performance. When the usage of a CDN increases the loading time of a website, the negative effect on user experience can cause financial harm to the host.\cite{cdn_general}
+	\item[Scalability:] Since a cache server can serve multiple resources to different websites, it has to be able to handle traffic peaks. Without the aspect of scalability (either horizontal or vertical), this requirement cannot be met which would affect the CDNs performance.
+	\item[Reliability:] A website host has to rely on the CDN to deliver the websites resources. An outage on CDN side would cause the same effect to the relying websites, resulting in additional losses for the designated hosts. Therefore, most CDN providers commit to 99.9\% availability in their service level agreements (SLAs).
+	\item[Responsiveness:] The aspect of responsiveness targets the issue of synchronization inside the CDN. A CDN has to be capable to react to changes and distribute those to its PoPs over the globe accordingly. Otherwise inconsistencies could occur on the websites relying on the CDN. This is ensured through an automated pull mechanism, via which edge servers pull changes from the origin server.\cite{cdn_origin_server}
+\end{description}
 
 Additionally to those four requirements, the topology of a CDN has to be considered. There are two options which can be used. Both would serve their purpose, but have different advantages as well as disadvantages. 
 
-\begin{itemize}
-	\item \textbf{The scattered CDN} - This topology focuses on physical proximity. The PoPs are kept rather small in size, but are scattered around the world in greater frequency, thus providing as much proximity to their clients as possible. This topology excels in providing the CDN's resources into low-connectivity regions, since it is not highly dependent on wire infrastructure. When it comes to latency, it does not suffer as much due to the short distance between client and server. The trade-off with this topology is that it accrues more maintenance costs, since more PoPs are required to be maintained. Also, deploying new configurations can be connected to a lot of effort, depending on the number of PoPs scattered across the CDN. 
+\begin{description}
+	\item[The scattered CDN:] This topology focuses on physical proximity. The PoPs are kept rather small in size, but are scattered around the world in greater frequency, thus providing as much proximity to their clients as possible. This topology excels in providing the CDN's resources into low-connectivity regions, since it is not highly dependent on wire infrastructure. When it comes to latency, it does not suffer as much due to the short distance between client and server. The trade-off with this topology is that it accrues more maintenance costs, since more PoPs are required to be maintained. Also, deploying new configurations can be connected to a lot of effort, depending on the number of PoPs scattered across the CDN. 
 	Additionally, this number can also affect the RTT since every PoP inbetween the client and the server is a connection point.
 	
-	\item \textbf{The consolidated CDN} - Contrary to the scattered CDN, this topology is designed to consolidate its resources at strategically located data centers. Since the PoPs are only located in those major data centers, the servers available to the PoPs are highly advanced and provide a lot of hardware capacity. Additionally, since the number of major data centers around the world is rather limited, the number of PoPs is reduced as well, compared to the scattered topology. Following the quality over quantity principle, a PoP in this topology can handle a greater amount of traffic compared to its counterpart, and is also more resilient, specifically when it comes to DDoS attacks. Also, due to the moderate number of PoPs, it is easier and faster for the operators of the CDN to deploy new configurations.
+	\item[The consolidated CDN:] Contrary to the scattered CDN, this topology is designed to consolidate its resources at strategically located data centers. Since the PoPs are only located in those major data centers, the servers available to the PoPs are highly advanced and provide a lot of hardware capacity. Additionally, since the number of major data centers around the world is rather limited, the number of PoPs is reduced as well, compared to the scattered topology. Following the quality over quantity principle, a PoP in this topology can handle a greater amount of traffic compared to its counterpart, and is also more resilient, specifically when it comes to DDoS attacks. Also, due to the moderate number of PoPs, it is easier and faster for the operators of the CDN to deploy new configurations.
 	Nonetheless, the trade-off for this topology is that, even though it can handle a high number of requests, its reach to low-connectivity regions is rather limited. This is due to the proximity difference between the servers and clients. Additionally, deploying a new PoP into this topology requires more effort, since the PoPs are rather complex.	
-\end{itemize}
+\end{description}
+
 
 The design decision is of course dependent on the business case for the CDN, as both topologies are intended to solve specific issues or challenges. \cite{cdn_architecture} 
 
@@ -97,21 +98,22 @@ A CDN can provide improvement to this overhead and decrease the RTT of a request
 
 The term frontend optimization refers to the process of making a website more browser-friendly and reducing loading times. There are multiple ways to optimize a frontend. These will be explained under consideration of the role a CDN plays in them.
 
-\begin{itemize}
-	\item \textbf{Reducing HTTP requests} - When loading a website, the browser opens several HTTP connections, the number of which is actually limited by the browser. If a website requires more connections than a browser can open at the time, the browser has to start queuing the rest. This again leads to longer loading times and affects the user experience. A CDN improves on that by pre-pooling connections and ensuring they remain open throughout a session. Even though this does not reduce the actual number of requests, it does improve the response time for each one, making it so that every request can be processed faster. Additionally, HTTP/2 introduces the method of multiplexing. This allows a single TCP connection to transfer multiple different HTTP requests \cite{http2}.
+
+\begin{description}
+	\item[Reducing HTTP requests:] When loading a website, the browser opens several HTTP connections, the number of which is actually limited by the browser. If a website requires more connections than a browser can open at the time, the browser has to start queuing the rest. This again leads to longer loading times and affects the user experience. A CDN improves on that by pre-pooling connections and ensuring they remain open throughout a session. Even though this does not reduce the actual number of requests, it does improve the response time for each one, making it so that every request can be processed faster. Additionally, HTTP/2 introduces the method of multiplexing. This allows a single TCP connection to transfer multiple different HTTP requests \cite{http2}.
 	
-	\item \textbf{File compression} - Not only do the number of requests or the proximity of the client to the server, affect the responsiveness of a website. The actual content has a major role in this aspect, too. Loading one single resource with a size of 1 GB takes a while, even if the server is close by. Reducing the size of this file or resource might increase the loading process. File compression like gzip is a method of doing exactly that. Most modern CDN providers offer automated file compression with gzip to reduce the actual content size delivered to the client.
+	\item[File compression:] Not only do the number of requests or the proximity of the client to the server, affect the responsiveness of a website. The actual content has a major role in this aspect, too. Loading one single resource with a size of 1 GB takes a while, even if the server is close by. Reducing the size of this file or resource might increase the loading process. File compression like gzip is a method of doing exactly that. Most modern CDN providers offer automated file compression with gzip to reduce the actual content size delivered to the client.
 	
-	\item \textbf{Cache optimization} - Via caching, static files are stored either on the client device or in the cache of a nearby cache server. Locally stored static files do not have to be loaded via the network and are available to the browser for rendering almost immediately. The only question remaining is how long does a resource have to be cached. This information is necessary to optimize the use of the client's cache. The caching time is usually defined in the cache header of the request. Modern CDNs offer cache control options, which help in defining rules for exactly that header.
+	\item[Cache optimization:] Via caching, static files are stored either on the client device or in the cache of a nearby cache server. Locally stored static files do not have to be loaded via the network and are available to the browser for rendering almost immediately. The only question remaining is how long does a resource have to be cached. This information is necessary to optimize the use of the client's cache. The caching time is usually defined in the cache header of the request. Modern CDNs offer cache control options, which help in defining rules for exactly that header.
 	CDNs have also started to use machine learning techniques to follow and understand content usage patterns and automatically optimize caching policies.
-	 
-	\item \textbf{Code minification} - Similar to the file compression method, the process of code minification offers a way of reducing file sizes too. Whereas a developer writes code in a humanly readable way, with spaces and line breaks, a machine does not need this kind of formatting. By removing comments, spaces and line breaks, the size of a code file can be reduced by 30\%. CDNs use methods like gzip, minify or a combination of these two to reduce the size of JavaScript, HTML or CSS files.
 	
-	\item \textbf{Image optimization} - Images can be immense in size and require a long time to load. The best way to display an image on a website would be to cache it first and then load it from the cache to reduce actual loading time through the network. Another option could be to reduce the actual size of the image and thus the loading time.
+	\item[Code minification:] Similar to the file compression method, the process of code minification offers a way of reducing file sizes too. Whereas a developer writes code in a humanly readable way, with spaces and line breaks, a machine does not need this kind of formatting. By removing comments, spaces and line breaks, the size of a code file can be reduced by 30\%. CDNs use methods like gzip, minify or a combination of these two to reduce the size of JavaScript, HTML or CSS files.
+	
+	\item[Image optimization:] Images can be immense in size and require a long time to load. The best way to display an image on a website would be to cache it first and then load it from the cache to reduce actual loading time through the network. Another option could be to reduce the actual size of the image and thus the loading time.
 	However, other than code files, images are already compressed when loaded, therefore compressing them further to reduce file size might cause a loss of image quality. This is called lossy compression. If this trade-off is not an option, caching would be more effective.
 	CDNs offer exactly that solution, caching images and providing them from the nearest source available to the client. If this does not suffice, CDNs also offer a progressive rendering option for images. On initially loading the page, the CDN would provide a lossy compressed version of the image quickly and then progressively replace it with higher-resolution variants.
 	Alternatively, a website host could use vector or raster images. These are resolution independent, smaller in size and highly responsive.\cite{cdn_fe_opt_img_opt}
-\end{itemize}
+\end{description}
 
 These methods in combination with the CDN technology provide a possible gain in user experience for a website host. \cite{cdn_fe_opt}
 

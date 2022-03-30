@@ -51,7 +51,7 @@ The goals with this environment were to show:
 
 This landscape fulfills 4 out of the 5 requirements, missing the aspect of different versions. The reason behind this is that, even though it is possible to request different versions of a resource from the CDN, the CDN itself does not offer any means to resolve multiple versions inside the landscape. That means that the library is imported 2 times in different versions. That only increases the redundancies inside the landscape. Due to this predictability, this aspect was not considered for prototype 1.
 
-\subsection{Prototype 2 - WMF/Web Components}
+\subsection{Prototype 2 - Web Components/WMF}
 
 The second prototype developed was the WMF and Web Components landscape. It contains 36 micro frontends in total, which are split over 6 Luigi Nodes.
 Each Luigi Node, is therefore a compound of micro frontends.
@@ -162,7 +162,7 @@ At line 45 the actual compound elements or micro frontends are defined as an arr
 Other than the Web Component Nodes, the WMF Nodes are actually embedded as iFrames into the Luigi dashboard.
 Therefore, the Luigi configuration for that landscape is similar to the CDN/NPM environements. 
 Listing \ref{list:wmf_luigi_config} shows how it was achieved.
-
+\newpage
 \begin{lstlisting}[caption=Example configuration to embed a WMF micro frontend compound as a Node in Luigi, label=list:wmf_luigi_config,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
 	Luigi.setConfig({
 		navigation: {
@@ -226,7 +226,7 @@ In the case of the given example, the resource is a JavaScript module type. To e
 
 \section{Web Components - UI5 Web Components} 
 
-The Web Components standard was partially used in the development of the second prototype. 
+The Web Component standard was partially used in the development of the second prototype. 
 For development itself no UI application framework was used, which means all three compounds were developed using plain JavaScript. 
 The actual components used in the micro frontends of the compounds were taken from a component library called UI5 Web Components. 
 Each element in that library is, in fact, a Web Component \cite{ui5_wc_github}.
@@ -470,6 +470,7 @@ This proxy plugin creates the container as a kind of placeholder for the remotes
 		private cfr: ComponentFactoryResolver) { }
 		
 		@Input() options: PluginOptions;
+		
 		
 		async ngOnChanges() {
 			this.viewContainer.clear();
