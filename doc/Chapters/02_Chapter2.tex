@@ -15,16 +15,16 @@ Luigi is an open-source JavaScript framework for micro frontends, consisting of 
 
 The \textbf{Luigi Core} is the basis of the whole landscape. It defines the main app, which will serve as an entry point for the user. The possibilities for, applicable configurations of this part are the following:
 
-\begin{itemize}[noitemsep]
-	\item Navigation - enables navigation between micro frontends
-	\item Authorization - enables authorization for the landscape
-	\item Localization - providing translations to display its applications in multiple languages
-	\item General settings - e.g. header display configurations, enable loading indicators for the micro frontends, etc.
-	\item Luigi Core API - providing functions for the core app to interact with the framework and access its features
-\end{itemize} 
+\begin{description}
+	\item[Navigation:] Enables navigation between micro frontends.
+	\item[Authorization:] Enables authorization for the landscape.
+	\item[Localization:] This feature is used to display applications in different languages.
+	\item[General settings:] Provides e.g. header display configurations or enables loading indicators for the micro frontends and further more.
+	\item[Luigi Core API:] Provides functions for the Core app to interact with the framework and access its features.
+\end{description}
 
-The core application inside the landscape is determined via the \texttt{luigi.config.js}. Any project containing it can fulfill this role, which is the only prerequisite. In the context of the framework, this app is later referred to as the \textbf{Core}.
-Following this principle, the project structure of the \textbf{Core} could look as shown in listing \ref{list:luigi_core_structure}.\footnote{This example is taken directly from the implemented core project.}
+The Core application inside the landscape is determined via the \texttt{luigi.config.js}. Any project containing it can fulfill this role, which is the only prerequisite. In the context of the framework, this app is later referred to as the \textbf{Core}.
+Following this principle, the project structure of the \textbf{Core} could look as shown in listing \ref{list:luigi_core_structure}.\footnote{This example is taken directly from the implemented Core project.}
 
 \begin{lstlisting}[language=Bash, caption=Project structure for a Luigi Core application including the \texttt{luigi.config.js} , label=list:luigi_core_structure,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
 	- react-core-mf

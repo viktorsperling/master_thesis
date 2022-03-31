@@ -21,7 +21,7 @@ This standard of WCs provides an API via which new HTML tags can be defined and 
 
 \begin{figure}[!h]
 	\centering
-	\includegraphics[width=0.6\textwidth]{Figures/customElements_registered.drawio.png}
+	\includegraphics[width=0.8\textwidth]{Figures/customElements_registered_2.drawio.png}
 	\caption{Simple micro frontend landscape using Web Components}
 	\label{fig:same_wc_example}
 \end{figure}
@@ -46,6 +46,7 @@ To understand the relationship between the two connected DOMs, the following ter
 	\item[Shadow root:] Just like a regular DOM, a Shadow DOM has a root from where it originates.
 \end{description}
 
+\newpage
 Figure \ref{fig:shadow_dom} visualizes the relations between the newly introduced terms.
 
 \begin{figure}[!h]
@@ -56,43 +57,6 @@ Figure \ref{fig:shadow_dom} visualizes the relations between the newly introduce
 \end{figure}
 
 Through the isolation of the Shadow DOM's code, this standard offers a way to provide scoped HTML and CSS code to custom elements. As mentioned before, the nodes of the Shadow DOM are rendered separately. Therefore, styles, ids, names or even CSS classes and other configurations applied to a tag inside the Shadow DOM are not applied to the actual DOM.
-
-%Listing \ref{list:shadow_dom_definition} provides be a simple example.
-%
-%\begin{lstlisting}[caption=Definition of a custom element using the Shadow DOM \cite{simon_thesis}, label=list:shadow_dom_definition,  xleftmargin=.0\textwidth, xrightmargin=.0\textwidth]
-%<!DOCTYPE html> 
-%	...
-%	<body>
-%		<p>Plain</p> 
-%		<custom-element></custom-element>
-%		
-%		<script>
-%			class CustomElement extends HTMLElement {
-%				constructor() { 
-%					super();
-%					const shadow = this.attachShadow({mode: 'open'}); 
-%					shadow.innerHTML = `<style> p {color: red;} </style>`; 
-%					const shadowParagraph = document.createElement('p'); 
-%					shadowParagraph.textContent = 'Blue'; 
-%					shadow.appendChild(shadowParagraph);
-%				}
-%			}
-%			customElements.define('custom-element', CustomElement); 
-%			customElement = new CustomElement(); 
-%			console.log(customElement.shadowRoot)
-%		</script>
-%	</body>
-%</html>
-%\end{lstlisting}
-%
-%The listing shows the usage of the Shadow DOM in combination with registering a custom element (named \texttt{custom-element}) using the customElements API.
-%The \texttt{script} tag of the snippet starts with creating a new HTML element called CustomElement. It is an extension to the HTMLElement class. This new element has the Shadow DOM attached to it. Therefore, it is the Shadow host in the DOM tree. Via the \texttt{innerHTML} attribute a Shadow DOM Node is created. In this case it is a styling for paragraphs,followed by the creation of a paragraph onto which the styling is applied. Additionally the text color of the paragraph is set to blue and lastly it is attached to the Shadow root.
-%The last three lines of the script, are the definition and registration of the new \texttt{custom-element}, the creation of a new \texttt{customElement} object and the output of the attached Shadow DOM in the console.
-%
-%Now when looking at the body of the above snippet, it becomes visible that beside the \texttt{custom-element} another paragraph is defined in the document. Usually the styles defined in the \texttt{script} below would apply to this paragraph, too. Through the encapsulation of the two separate DOMs this is not the case. The paragraph defined in the body of the document will be completely unaffected by the changes applied to the paragraphs in the Shadow DOM.\cite{simon_thesis}
-%
-%Now another configuration which is shown in the snippet is the \texttt{this.attachShadow({mode: 'open'})}. This mode property defines the visibility of the Shadow DOM to the browser. If set to \texttt{open}, the elements of the Shadow DOM can be inspected inside the sources. Thus, the \texttt{console.log(customElement.shadowRoot)} line would work if executed. 
-%If the mode would be set to \texttt{closed}  the \texttt{console.log()} command in line 20 would return \texttt{null}.\cite{simon_thesis}
 
 The Shadow DOM, even though separated from the DOM, has an attribute via which it can be made accessible. By adding the \texttt{mode} attribute to the \texttt{this.attachShadow()} method, the visibility of the Shadow DOM to the document can be defined \cite{simon_thesis}. Possible values for the \texttt{mode} property are:
 
